@@ -10,7 +10,7 @@ void	dlerror_wrapper() {
 int		main(int ac, char **av) {
 	int		dl_index;
 	void	*dl_handle;
-	void	(*my_func_ptr)(void);
+	// void	(*my_func_ptr)(void);
 
 	if (ac != 4) {
 		std::cout << "Need 3 din_lib path..!" << std::endl;
@@ -26,30 +26,21 @@ int		main(int ac, char **av) {
 			if (!dl_handle)
 				dlerror_wrapper();
 
-			if (dl_index != 3) {
-				IDynamicLibrary	*(*LibraryCreator)(void);
+			IDynamicLibrary	*(*LibraryCreator)(void);
 
-				LibraryCreator = (IDynamicLibrary *(*)(void)) dlsym(dl_handle, "getTest");
-				if (!LibraryCreator)
-					dlerror_wrapper();
-				
-				IDynamicLibrary	*newLibrary = LibraryCreator();
-				newLibrary->my_func();
+			LibraryCreator = (IDynamicLibrary *(*)(void)) dlsym(dl_handle, "getTest");
+			if (!LibraryCreator)
+				dlerror_wrapper();
+			
+			IDynamicLibrary	*newLibrary = LibraryCreator();
+			newLibrary->my_func();
 
-				void	*(*LibraryDestructor)(IDynamicLibrary *);
-				LibraryDestructor = (void *(*)(IDynamicLibrary*)) dlsym(dl_handle, "deleteTest");
-				if (!LibraryDestructor)
-					dlerror_wrapper();
+			void	*(*LibraryDestructor)(IDynamicLibrary *);
+			LibraryDestructor = (void *(*)(IDynamicLibrary*)) dlsym(dl_handle, "deleteTest");
+			if (!LibraryDestructor)
+				dlerror_wrapper();
 
-				LibraryDestructor(newLibrary);
-			}
-			else {
-				my_func_ptr = (void (*)(void)) dlsym(dl_handle, "my_func");
-				if (!my_func_ptr)
-					dlerror_wrapper();
-
-				my_func_ptr();
-			}
+			LibraryDestructor(newLibrary);
 
 			dlclose(dl_handle);
 		}

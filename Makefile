@@ -48,7 +48,9 @@ DL1_FLAGS = $(DLFLAGS) `pkg-config --libs sdl2`
 
 DL2_FLAGS = $(DLFLAGS) `pkg-config --libs glfw3` -framework OpenGL
 
-DL3_FLAGS = $(DLFLAGS) `pkg-config --libs sfml-all`
+DL3_FLAGS = $(DLFLAGS) `fltk-config --ldflags --cxxflags`
+
+# DL3_FLAGS = $(DLFLAGS) `pkg-config --libs sfml-all`
 
 CC = clang++
 
