@@ -3,7 +3,7 @@
 #include "IDynamicLibrary.hpp"
 
 void	dlerror_wrapper() {
-	std::cerr << "Error: " << dlerror() << std::endl;
+	std::cerr << "My Custom Error: " << dlerror() << std::endl;
 	exit(EXIT_FAILURE);
 }
 

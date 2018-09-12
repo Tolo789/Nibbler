@@ -48,6 +48,8 @@ DL1_FLAGS = $(DLFLAGS) `pkg-config --libs sdl2`
 
 DL2_FLAGS = $(DLFLAGS) `pkg-config --libs glfw3`
 
+DL3_FLAGS = $(DLFLAGS) `pkg-config --libs sfml-all`
+
 CC = clang++
 
 all: $(ALL)
@@ -61,7 +63,7 @@ $(DL2_NAME): $(OBJ_DL2)
 	@echo "				$(DL2_NAME) created"
 
 $(DL3_NAME): $(OBJ_DL3)
-	$(CC) $(DLFLAGS) -o $(DL3_NAME) $(OBJ_DL3)
+	$(CC) $(DL3_FLAGS) -o $(DL3_NAME) $(OBJ_DL3)
 	@echo "				$(DL3_NAME) created"
 
 $(NAME): $(OBJ_MAIN)
