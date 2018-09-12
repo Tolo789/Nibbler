@@ -1,5 +1,6 @@
 #include <dlfcn.h>
 #include <iostream>
+#include "IDynamicLibrary.hpp"
 
 void	dlerror_wrapper() {
 	std::cerr << "Error: " << dlerror() << std::endl;
@@ -22,11 +23,33 @@ int		main(int ac, char **av) {
 			std::cout << "Wrong number given..!" << std::endl;
 		else {
 			dl_handle = dlopen(av[dl_index], RTLD_LAZY | RTLD_LOCAL);
-			my_func_ptr = (void (*)(void)) dlsym(dl_handle, "my_func");
-			if (!my_func_ptr)
+			if (!dl_handle)
 				dlerror_wrapper();
 
-			my_func_ptr();
+			if (dl_index == 1) {
+				IDynamicLibrary	*(*LibraryCreator)(void);
+
+				LibraryCreator = (IDynamicLibrary *(*)(void)) dlsym(dl_handle, "getTest");
+				if (!LibraryCreator)
+					dlerror_wrapper();
+				
+				IDynamicLibrary	*newLibrary = LibraryCreator();
+				newLibrary->my_func();
+
+				void	*(*LibraryDestructor)(IDynamicLibrary *);
+				LibraryDestructor = (void *(*)(IDynamicLibrary*)) dlsym(dl_handle, "deleteTest");
+				if (!LibraryDestructor)
+					dlerror_wrapper();
+
+				LibraryDestructor(newLibrary);
+			}
+			else {
+				my_func_ptr = (void (*)(void)) dlsym(dl_handle, "my_func");
+				if (!my_func_ptr)
+					dlerror_wrapper();
+
+				my_func_ptr();
+			}
 
 			dlclose(dl_handle);
 		}
