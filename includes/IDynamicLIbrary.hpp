@@ -3,6 +3,8 @@
 
 class IDynamicLibrary {
 	public:
+		IDynamicLibrary() {};
+		virtual ~IDynamicLibrary() {};
 		virtual void	my_func () = 0;
 };
 
