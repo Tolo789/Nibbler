@@ -23,7 +23,7 @@ SRC_MAIN = 	$(SDIR_MAIN)main.cpp
 
 SRC_DL1 = 	$(SDIR_DL1)test1.cpp
 
-SRC_DL2 = 	$(SDIR_DL2)test2.cpp
+SRC_DL2 = 	$(SDIR_DL2)glfwGUI.cpp
 
 SRC_DL3 = 	$(SDIR_DL3)test3.cpp
 
@@ -46,7 +46,7 @@ DLFLAGS = $(CFLAGS) -shared -fPIC
 
 DL1_FLAGS = $(DLFLAGS) `pkg-config --libs sdl2`
 
-DL2_FLAGS = $(DLFLAGS) `pkg-config --libs glfw3`
+DL2_FLAGS = $(DLFLAGS) `pkg-config --libs glfw3` -framework OpenGL
 
 CC = clang++
 

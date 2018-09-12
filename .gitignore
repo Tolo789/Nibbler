@@ -33,3 +33,4 @@
 
 # Dynamic Libraries includes
 includes/SDL2
+includes/GLFW

@@ -26,7 +26,7 @@ int		main(int ac, char **av) {
 			if (!dl_handle)
 				dlerror_wrapper();
 
-			if (dl_index == 1) {
+			if (dl_index != 3) {
 				IDynamicLibrary	*(*LibraryCreator)(void);
 
 				LibraryCreator = (IDynamicLibrary *(*)(void)) dlsym(dl_handle, "getTest");
