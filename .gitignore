@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+
+# Dynamic Libraries includes
+includes/SDL2
