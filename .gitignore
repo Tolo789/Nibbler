@@ -27,6 +27,7 @@
 *.lib
 
 # Executables
+nibbler
 *.exe
 *.out
 *.app
