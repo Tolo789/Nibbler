@@ -52,7 +52,7 @@ void	GlfwGUI::refresh_window()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	this->window = glfwCreateWindow(640, 480, "Nibbler GLFW", NULL, NULL);	// size of screen will change
+	this->window = glfwCreateWindow(400, 400, "Nibbler GLFW", NULL, NULL);	// size of screen will change
 	if (!this->window)
 	{
 		glfwTerminate();
@@ -60,36 +60,34 @@ void	GlfwGUI::refresh_window()
 		// return (-1);	//throw exception
 	}
 
-	glfwSetWindowUserPointer(window, this);
-	glfwSetKeyCallback(window, key_callback);
-
 	glfwMakeContextCurrent(this->window);
 	while(!glfwWindowShouldClose(this->window))
 	{
 		// wipe the drawing surface clear
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		// update other events like input handling 
+		// // update other events like input handling 
 		glfwPollEvents();
-		// glfwSetKeyCallback(window, key_callback);
-
-		// put the stuff we've been drawing onto the display
+		glfwSetWindowUserPointer(window, this);
+		glfwSetKeyCallback(window, key_callback);
+		// // put the stuff we've been drawing onto the display
 		glfwSwapBuffers(this->window);
 	}
-	// glfwTerminate();
+	glfwDestroyWindow(this->window);
+	glfwTerminate();
 	// return (0);
 }
 
 void GlfwGUI::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    if (key == GLFW_KEY_1 && action == GLFW_PRESS)
+    if (action == GLFW_RELEASE)
 	{
-		std::cout << "Key1 pressed" << std::endl;
-		MainGame::get_instance().button_pressed('1');
+		MainGame::get_instance().button_pressed(glfwGetKeyName(key, scancode));
 	}
-	window = NULL;
-	scancode = 0;
-	mods = 0;
+	(void)key;
+	(void)scancode;
+	(void)action;
+	(void)window;
+	(void)mods;
 }
 
 void	GlfwGUI::close_window() {

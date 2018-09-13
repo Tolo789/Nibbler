@@ -8,6 +8,13 @@
 		"new": "cpp",
 		"stdexcept": "cpp",
 		"typeinfo": "cpp",
-		"algorithm": "cpp"
+		"algorithm": "cpp",
+		"__bit_reference": "cpp",
+		"__hash_table": "cpp",
+		"iterator": "cpp",
+		"string": "cpp",
+		"string_view": "cpp",
+		"unordered_map": "cpp",
+		"list": "cpp"
 	}
 }

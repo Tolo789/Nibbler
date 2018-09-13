@@ -103,10 +103,25 @@ int		MainGame::run(void) {
 	return EXIT_SUCCESS;
 }
 
-void	MainGame::button_pressed(char button)
+void	MainGame::button_pressed(const char *button)
 {
-	std::cout << "this is the button pressed: " << button << std::endl;
+	std::string key = !button ? KEY_ESCAPE : std::string(button); // GLFW sends NULL pointer for Escape key..
+	std::list<std::string>::const_iterator iter = std::find(change_library_keys.begin(), change_library_keys.end(), key);
 	
+	if (iter != change_library_keys.end()) {
+		change_library_request(key);
+	}
+	else {
+		std::cout << "value not useful.." << std::endl;
+
+		// iter = change_direction_keys.find(button_pressed);
+	}
+}
+
+void	MainGame::change_library_request(std::string key_code) {
+	int		requested_index = std::stoi(key_code) - 1;
+
+	std::cout << "Change index of library to: " << requested_index << std::endl;
 }
 
 // === END PUBLIC FUNCS ========================================================
@@ -121,6 +136,15 @@ static std::string *generate_dlNames() {	// static here is "internal linkage"
    return p;
 }
 const std::string *MainGame::dlNames = generate_dlNames();
+
+static std::list<std::string> generate_library_keys() {	// static here is "internal linkage"
+   std::list<std::string> p;
+	p.push_front(KEY_1);
+	p.push_front(KEY_2);
+	p.push_front(KEY_3);
+   return p;
+}
+const std::list<std::string> MainGame::change_library_keys = generate_library_keys();
 
 MainGame MainGame::instance = MainGame();
 
