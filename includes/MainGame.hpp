@@ -49,6 +49,7 @@ class MainGame {
 
 		int		run();
 		void	button_pressed(const char *button);
+
 		bool	running;
 };
 

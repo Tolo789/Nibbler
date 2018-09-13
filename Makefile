@@ -21,7 +21,7 @@ INCLUDES_DIR = includes
 
 SRC_MAIN = 	$(SDIR_MAIN)MainGame.cpp
 
-SRC_DL1 = 	$(SDIR_DL1)SdlGUI.cpp
+SRC_DL1 = 	$(SDIR_DL1)SdlGUI.cpp $(SRC_MAIN)
 
 SRC_DL2 = 	$(SDIR_DL2)GlfwGUI.cpp $(SRC_MAIN)
 
