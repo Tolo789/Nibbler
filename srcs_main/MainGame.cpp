@@ -103,10 +103,10 @@ int		MainGame::run(void) {
 	return EXIT_SUCCESS;
 }
 
-void	MainGame::button_pressed(char button)
+void	MainGame::button_pressed(std::string button)
 {
 	std::cout << "this is the button pressed: " << button << std::endl;
-	
+
 }
 
 // === END PUBLIC FUNCS ========================================================

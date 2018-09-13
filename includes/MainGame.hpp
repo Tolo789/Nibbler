@@ -33,7 +33,7 @@ class MainGame {
 		~MainGame(void);
 
 		int		run();
-		void	button_pressed(char button);
+		void	button_pressed(std::string button);
 		bool	running;
 };
 
