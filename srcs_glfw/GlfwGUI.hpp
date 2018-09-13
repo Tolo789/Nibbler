@@ -21,6 +21,8 @@
 class GlfwGUI: public IDynamicLibrary
 {
     private:
+		static void	key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
 		GlfwGUI(GlfwGUI const & src);
 
 		GlfwGUI& operator=(GlfwGUI const & rhs);
