@@ -27,6 +27,13 @@ MainGame::~MainGame(void) {
 
 // === ENDCONSTRUCTOR ==========================================================
 
+// === GETTER ===============================================================
+
+MainGame	MainGame::get_instance()
+{
+	return (instance);
+}
+
 // === OPERATORS ===============================================================
 
 MainGame& MainGame::operator=(MainGame const & rhs) {
@@ -96,6 +103,12 @@ int		MainGame::run(void) {
 	return EXIT_SUCCESS;
 }
 
+void	MainGame::button_pressed(char button)
+{
+	std::cout << "this is the button pressed: " << button << std::endl;
+	
+}
+
 // === END PUBLIC FUNCS ========================================================
 
 // === STATICVARS ==============================================================
@@ -109,6 +122,8 @@ static std::string *generate_dlNames() {	// static here is "internal linkage"
 }
 const std::string *MainGame::dlNames = generate_dlNames();
 
+MainGame MainGame::instance = MainGame();
+
 // === END STATICVARS ==========================================================
 
 // === OTHERS ==================================================================
@@ -116,8 +131,9 @@ const std::string *MainGame::dlNames = generate_dlNames();
 int		main(int ac, char **av) {
 	int	ret;
 
-	MainGame mainGame(ac, av);
-	ret = mainGame.run();
+	(void)ac;
+	(void)av;
+	ret = MainGame::get_instance().run();
 	return ret;
 }
 

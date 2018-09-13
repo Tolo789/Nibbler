@@ -17,6 +17,7 @@
 
 class MainGame {
 	private:
+		static MainGame		instance;
 		MainGame(void);
 		MainGame(MainGame const & src);
 
@@ -25,13 +26,14 @@ class MainGame {
 		int		dlerror_wrapper();
 
 	public:
-		static const std::string *dlNames;
+		static const std::string 	*dlNames;
+		static MainGame				get_instance(void);
 
 		MainGame(int ac, char **av);
 		~MainGame(void);
 
-		int	run();
-
+		int		run();
+		void	button_pressed(char button);
 		bool	running;
 };
 

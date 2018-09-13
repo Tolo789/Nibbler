@@ -6,7 +6,7 @@
 /*   By: jichen-m <jichen-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/12 19:46:17 by jichen-m          #+#    #+#             */
-/*   Updated: 2018/09/13 15:16:17 by jichen-m         ###   ########.fr       */
+/*   Updated: 2018/09/13 17:10:09 by jichen-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <iostream>
 # include "IDynamicLibrary.hpp"
-#include "GLFW/glfw3.h"
+# include "GLFW/glfw3.h"
 
 
 class GlfwGUI: public IDynamicLibrary

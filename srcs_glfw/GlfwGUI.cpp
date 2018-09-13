@@ -6,7 +6,7 @@
 /*   By: jichen-m <jichen-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/12 19:46:10 by jichen-m          #+#    #+#             */
-/*   Updated: 2018/09/13 15:26:58 by jichen-m         ###   ########.fr       */
+/*   Updated: 2018/09/13 16:55:20 by jichen-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,10 @@ void	GlfwGUI::refresh_window()
 void GlfwGUI::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if (key == GLFW_KEY_1 && action == GLFW_PRESS)
+	{
 		std::cout << "Key1 pressed" << std::endl;
+		MainGame::get_instance().button_pressed('1');
+	}
 	window = NULL;
 	scancode = 0;
 	mods = 0;
