@@ -41,15 +41,27 @@ void	SdlGUI::refresh_window() {
  
     while (!quit)
     {
-        SDL_WaitEvent(&event);
- 
-        switch (event.type)
+       /* Poll for events */
+        while( SDL_PollEvent( &event ) )
         {
-            case SDL_QUIT:
-                quit = true;
-                break;
+            switch( event.type )
+            {
+                /* Keyboard event */
+                /* Pass the event data onto PrintKeyInfo() */
+                case SDL_KEYDOWN:
+                    std::cout << "Key pressed" << std::endl;
+                    break;
+
+                /* SDL_QUIT event (window close) */
+                case SDL_QUIT:
+                    quit = 1;
+                    break;
+
+                default:
+                    break;
+            }
         }
-	} 
+    } 
 }
 
 void	SdlGUI::close_window() {
