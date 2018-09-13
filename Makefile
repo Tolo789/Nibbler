@@ -54,8 +54,10 @@ DL3_FLAGS = $(DLFLAGS) `fltk-config --ldflags --cxxflags`
 
 CC = clang++
 
-brew_reset:
-	rm -rf $HOME/.brew && git clone --depth=1 https://github.com/Homebrew/brew $HOME/.brew && export PATH=$HOME/.brew/bin:$PATH && brew update && echo "export PATH=$HOME/.brew/bin:$PATH" >> ~/.zshrc
+all: $(ALL)
+
+# brew_reset:
+# 	rm -rf $HOME/.brew && git clone --depth=1 https://github.com/Homebrew/brew $HOME/.brew && export PATH=$HOME/.brew/bin:$PATH && brew update && echo "export PATH=$HOME/.brew/bin:$PATH" >> ~/.zshrc
 
 install:
 	brew install pkg-config
@@ -67,8 +69,7 @@ install:
 	cp -r /Users/cmutti/.brew/Cellar/fltk/1.3.4-2/include/FL ./$(INCLUDES_DIR)
 
 reinstall_all: brew_reset install
-
-all: $(ALL)
+	@echo "				reinstall all"
 
 $(DL1_NAME): $(OBJ_DL1)
 	$(CC) $(DL1_FLAGS) -o $(DL1_NAME) $(OBJ_DL1)

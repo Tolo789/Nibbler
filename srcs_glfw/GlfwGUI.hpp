@@ -6,7 +6,7 @@
 /*   By: cmutti <cmutti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/12 19:46:17 by jichen-m          #+#    #+#             */
-/*   Updated: 2018/09/13 11:57:10 by cmutti           ###   ########.fr       */
+/*   Updated: 2018/09/13 12:49:00 by cmutti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ class GlfwGUI: public IDynamicLibrary
         GlfwGUI(void);
         ~GlfwGUI(void);
 
-        void    my_func();
+		void	refresh_window();
+		void	close_window();
 
         bool    active;
 };

@@ -30,7 +30,9 @@ Test3& Test3::operator=(Test3 const & rhs) {
 
 // === ENDOPERATORS ============================================================
 
-void	Test3::my_func() {
+// === OVERRIDES ===============================================================
+
+void	Test3::refresh_window() {
 	std::cout << "DL func called" << std::endl;
 	
     // sf::Window window(sf::VideoMode(800, 600), "My window");
@@ -65,6 +67,14 @@ void	Test3::my_func() {
 	Fl::run();
 }
 
+void	Test3::close_window() {
+    std::cout << "Destroing Test3 window" << std::endl;
+	// SDL_DestroyWindow(screen);
+    // SDL_Quit();
+}
+// === END OVERRIDES ===========================================================
+
+// === OTHERS ==================================================================
 Test3	*getGUI() {
 	return new Test3;
 }
@@ -72,3 +82,4 @@ Test3	*getGUI() {
 void	deleteGUI(Test3 *test) {
 	delete test;
 }
+// === END OTHERS ==============================================================

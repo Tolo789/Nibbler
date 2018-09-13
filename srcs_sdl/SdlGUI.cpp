@@ -1,5 +1,4 @@
 #include "SdlGUI.hpp"
-#include "SDL2/SDL.h"
 
 // === CONSTRUCTOR =============================================================
 
@@ -27,7 +26,8 @@ SdlGUI& SdlGUI::operator=(SdlGUI const & rhs) {
 
 // === ENDOPERATORS ============================================================
 
-void	SdlGUI::my_func() {
+// === OVERRIDES ===============================================================
+void	SdlGUI::refresh_window() {
 	std::cout << "SDL window" << std::endl;
 
 	bool quit = false;
@@ -35,8 +35,9 @@ void	SdlGUI::my_func() {
  
     SDL_Init(SDL_INIT_VIDEO);
  
-    SDL_Window * screen = SDL_CreateWindow("My SDL Empty Window",
+    screen = SDL_CreateWindow("My SDL Empty Window",
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, 0);
+    
  
     while (!quit)
     {
@@ -48,13 +49,18 @@ void	SdlGUI::my_func() {
                 quit = true;
                 break;
         }
-	}
-	
-	SDL_DestroyWindow(screen);
- 
-    SDL_Quit();
+	} 
 }
 
+void	SdlGUI::close_window() {
+    std::cout << "Destroing SDL window" << std::endl;
+	// SDL_DestroyWindow(screen);
+    // SDL_Quit();
+}
+
+// === END OVERRIDES ===========================================================
+
+// === OTHERS ==================================================================
 SdlGUI	*getGUI() {
 	return new SdlGUI;
 }
@@ -62,3 +68,4 @@ SdlGUI	*getGUI() {
 void	deleteGUI(SdlGUI *test) {
 	delete test;
 }
+// === END OTHERS ==============================================================

@@ -12,6 +12,8 @@
 
 # define GUI_CREATOR_FUNC "getGUI"
 # define GUI_DESTRUCTOR_FUNC "deleteGUI"
+# define REFRESH_WINDOW_FUNC refresh_window
+# define CLOSE_WINDOW_FUNC close_window
 
 class MainGame {
 	private:
@@ -21,9 +23,6 @@ class MainGame {
 		MainGame& operator=(MainGame const & rhs);
 
 		int		dlerror_wrapper();
-
-		int		dl_index;
-		void	*dl_handle;
 
 	public:
 		static const std::string *dlNames;

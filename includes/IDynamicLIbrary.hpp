@@ -5,7 +5,9 @@ class IDynamicLibrary {
 	public:
 		IDynamicLibrary() {};
 		virtual ~IDynamicLibrary() {};
-		virtual void	my_func () = 0;
+
+		virtual void	refresh_window () = 0;
+		virtual void	close_window () = 0;
 };
 
 #endif // !I_DYNAMIC_LIBRARY_HPP

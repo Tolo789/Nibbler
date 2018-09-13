@@ -15,7 +15,8 @@ class Test3 : public IDynamicLibrary {
 		Test3(void);
 		~Test3(void);
 
-		void	my_func();
+		void	refresh_window();
+		void	close_window();
 
         bool    active;
 };

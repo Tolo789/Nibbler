@@ -49,8 +49,14 @@ int		MainGame::dlerror_wrapper() {
 
 // === PUBLIC FUNCS ============================================================
 int		MainGame::run(void) {
-	running = true;
+	IDynamicLibrary	*(*LibraryCreator)(void);
+	void	*(*LibraryDestructor)(IDynamicLibrary *);
+	IDynamicLibrary	*currentLibrary;
+	int		dl_index;
+	void	*dl_handle;
+	int		pastIndex = -1;
 
+	running = true;
 	while (running) {
 		std::cout << "Enter library choice (1 / 2 / 3): ";
 		std::cin >> dl_index;
@@ -58,28 +64,32 @@ int		MainGame::run(void) {
 			running = false;
 		else if (dl_index < 0 || dl_index > DL_COUNT)
 			std::cout << "Wrong number given..!" << std::endl;
-		else {
+		else if (pastIndex != dl_index) {
+			if (pastIndex != -1) {
+				// Close previous window
+				currentLibrary->CLOSE_WINDOW_FUNC();
+				LibraryDestructor = (void *(*)(IDynamicLibrary*)) dlsym(dl_handle, GUI_DESTRUCTOR_FUNC);
+				if (!LibraryDestructor)
+					return dlerror_wrapper();
+
+				LibraryDestructor(currentLibrary);
+
+				dlclose(dl_handle);
+			}
+
+			// Open dynamic library
 			dl_handle = dlopen(dlNames[dl_index - 1].c_str(), RTLD_LAZY | RTLD_LOCAL);
 			if (!dl_handle)
 				return dlerror_wrapper();
 
-			IDynamicLibrary	*(*LibraryCreator)(void);
-
+			// Create interface class
 			LibraryCreator = (IDynamicLibrary *(*)(void)) dlsym(dl_handle, GUI_CREATOR_FUNC);
 			if (!LibraryCreator)
 				return dlerror_wrapper();
-			
-			IDynamicLibrary	*newLibrary = LibraryCreator();
-			newLibrary->my_func();
+			currentLibrary = LibraryCreator();
 
-			void	*(*LibraryDestructor)(IDynamicLibrary *);
-			LibraryDestructor = (void *(*)(IDynamicLibrary*)) dlsym(dl_handle, GUI_DESTRUCTOR_FUNC);
-			if (!LibraryDestructor)
-				return dlerror_wrapper();
-
-			LibraryDestructor(newLibrary);
-
-			dlclose(dl_handle);
+			// Draw window with game infos
+			currentLibrary->REFRESH_WINDOW_FUNC();
 		}
 	}
 	return EXIT_SUCCESS;
@@ -101,7 +111,6 @@ const std::string *MainGame::dlNames = generate_dlNames();
 // === END STATICVARS ==========================================================
 
 // === OTHERS ==================================================================
-
 // Entry point of the program
 int		main(int ac, char **av) {
 	int	ret;

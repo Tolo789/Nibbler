@@ -6,7 +6,7 @@
 /*   By: cmutti <cmutti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/12 19:46:10 by jichen-m          #+#    #+#             */
-/*   Updated: 2018/09/13 11:57:59 by cmutti           ###   ########.fr       */
+/*   Updated: 2018/09/13 12:55:12 by cmutti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,9 @@ GlfwGUI& GlfwGUI::operator=(GlfwGUI const & rhs) {
 
 // === ENDOPERATORS ============================================================
 
-void	GlfwGUI::my_func()
+// === OVERRIDES ===============================================================
+
+void	GlfwGUI::refresh_window()
 {
 	GLFWwindow*	window;
 
@@ -74,6 +76,14 @@ void	GlfwGUI::my_func()
 	// return (0);
 }
 
+void	GlfwGUI::close_window() {
+    std::cout << "Destroing Glfw window" << std::endl;
+	// SDL_DestroyWindow(screen);
+    // SDL_Quit();
+}
+// === END OVERRIDES ===========================================================
+
+// === OTHERS ==================================================================
 GlfwGUI	*getGUI() {
 	return new GlfwGUI;
 }
@@ -81,3 +91,4 @@ GlfwGUI	*getGUI() {
 void	deleteGUI(GlfwGUI *test) {
 	delete test;
 }
+// === END OTHERS ==============================================================
