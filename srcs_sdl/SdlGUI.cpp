@@ -30,8 +30,8 @@ SdlGUI& SdlGUI::operator=(SdlGUI const & rhs) {
 void	SdlGUI::refresh_window() {
 	std::cout << "SDL window" << std::endl;
 
-	bool quit = false;
-    SDL_Event event;
+	// bool quit = false;
+    // SDL_Event event;
  
     SDL_Init(SDL_INIT_VIDEO);
  
@@ -39,6 +39,7 @@ void	SdlGUI::refresh_window() {
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, 0);
     
  
+<<<<<<< HEAD
     while (!quit)
     {
        /* Poll for events */
@@ -62,6 +63,19 @@ void	SdlGUI::refresh_window() {
             }
         }
     } 
+=======
+    // while (!quit)
+    // {
+    //     SDL_WaitEvent(&event);
+ 
+    //     switch (event.type)
+    //     {
+    //         case SDL_QUIT:
+    //             quit = true;
+    //             break;
+    //     }
+	// } 
+>>>>>>> 7019c87deea48529d9f870304ff8c7db913d7142
 }
 
 void	SdlGUI::close_window() {

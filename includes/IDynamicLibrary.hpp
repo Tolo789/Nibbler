@@ -1,6 +1,8 @@
 #ifndef I_DYNAMIC_LIBRARY_HPP
 # define I_DYNAMIC_LIBRARY_HPP
 
+# include "MainGame.hpp"
+
 class IDynamicLibrary {
 	public:
 		IDynamicLibrary() {};

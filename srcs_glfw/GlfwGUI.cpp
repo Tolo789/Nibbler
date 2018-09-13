@@ -59,18 +59,34 @@ void	GlfwGUI::refresh_window()
 		std::cout << "Failed to create windows GLFW" << std::endl;
 		// return (-1);	//throw exception
 	}
+
+	glfwSetWindowUserPointer(window, this);
+	glfwSetKeyCallback(window, key_callback);
+
 	glfwMakeContextCurrent(this->window);
 	while(!glfwWindowShouldClose(this->window))
 	{
 		// wipe the drawing surface clear
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 		// update other events like input handling 
 		glfwPollEvents();
+		// glfwSetKeyCallback(window, key_callback);
+
 		// put the stuff we've been drawing onto the display
 		glfwSwapBuffers(this->window);
 	}
 	// glfwTerminate();
 	// return (0);
+}
+
+void GlfwGUI::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (key == GLFW_KEY_1 && action == GLFW_PRESS)
+		std::cout << "Key1 pressed" << std::endl;
+	window = NULL;
+	scancode = 0;
+	mods = 0;
 }
 
 void	GlfwGUI::close_window() {
