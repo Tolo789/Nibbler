@@ -10,4 +10,4 @@ class IDynamicLibrary {
 		virtual void	close_window () = 0;
 };
 
-#endif // !I_DYNAMIC_LIBRARY_HPP
+#endif // !I_DYNAMIC_LIBRARY_HPPmake 

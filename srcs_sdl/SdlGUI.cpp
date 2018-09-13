@@ -54,8 +54,8 @@ void	SdlGUI::refresh_window() {
 
 void	SdlGUI::close_window() {
     std::cout << "Destroing SDL window" << std::endl;
-	// SDL_DestroyWindow(screen);
-    // SDL_Quit();
+	SDL_DestroyWindow(screen);
+    SDL_Quit();
 }
 
 // === END OVERRIDES ===========================================================

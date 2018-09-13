@@ -66,7 +66,7 @@ install:
 	brew install glfw
 	cp -r ~/.brew/Cellar/glfw/3.2.1/include/GLFW ./$(INCLUDES_DIR)
 	brew install fltk
-	cp -r /Users/cmutti/.brew/Cellar/fltk/1.3.4-2/include/FL ./$(INCLUDES_DIR)
+	cp -r ~/.brew/Cellar/fltk/1.3.4-2/include/FL ./$(INCLUDES_DIR)
 
 reinstall_all: brew_reset install
 	@echo "				reinstall all"

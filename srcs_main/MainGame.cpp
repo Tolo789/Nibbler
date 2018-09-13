@@ -76,6 +76,7 @@ int		MainGame::run(void) {
 
 				dlclose(dl_handle);
 			}
+			pastIndex = dl_index;
 
 			// Open dynamic library
 			dl_handle = dlopen(dlNames[dl_index - 1].c_str(), RTLD_LAZY | RTLD_LOCAL);

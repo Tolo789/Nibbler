@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   GlfwGUI.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmutti <cmutti@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jichen-m <jichen-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/12 19:46:10 by jichen-m          #+#    #+#             */
-/*   Updated: 2018/09/13 12:55:12 by cmutti           ###   ########.fr       */
+/*   Updated: 2018/09/13 15:26:58 by jichen-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "GlfwGUI.hpp"
-#include "GLFW/glfw3.h"
 
 // === CONSTRUCTOR =============================================================
 
@@ -43,8 +42,6 @@ GlfwGUI& GlfwGUI::operator=(GlfwGUI const & rhs) {
 
 void	GlfwGUI::refresh_window()
 {
-	GLFWwindow*	window;
-
 	std::cout << "GLFW window" << std::endl;
 	if (!glfwInit())
 	{
@@ -55,29 +52,31 @@ void	GlfwGUI::refresh_window()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	window = glfwCreateWindow(640, 480, "Nibbler GLFW", NULL, NULL);	// size of screen will change
-	if (!window)
+	this->window = glfwCreateWindow(640, 480, "Nibbler GLFW", NULL, NULL);	// size of screen will change
+	if (!this->window)
 	{
 		glfwTerminate();
 		std::cout << "Failed to create windows GLFW" << std::endl;
 		// return (-1);	//throw exception
 	}
-	glfwMakeContextCurrent(window);
-	while(!glfwWindowShouldClose(window))
+	glfwMakeContextCurrent(this->window);
+	while(!glfwWindowShouldClose(this->window))
 	{
 		// wipe the drawing surface clear
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		// update other events like input handling 
 		glfwPollEvents();
 		// put the stuff we've been drawing onto the display
-		glfwSwapBuffers(window);
+		glfwSwapBuffers(this->window);
 	}
-	glfwTerminate();
+	// glfwTerminate();
 	// return (0);
 }
 
 void	GlfwGUI::close_window() {
     std::cout << "Destroing Glfw window" << std::endl;
+	glfwDestroyWindow(this->window);
+	glfwTerminate();
 	// SDL_DestroyWindow(screen);
     // SDL_Quit();
 }
