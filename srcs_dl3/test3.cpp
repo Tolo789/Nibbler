@@ -13,7 +13,7 @@ Test3::~Test3(void) {
 }
 
 void	Test3::my_func() {
-	std::cout << "SFML window" << std::endl;
+	std::cout << "DL func called" << std::endl;
 	
     // sf::Window window(sf::VideoMode(800, 600), "My window");
 
@@ -42,14 +42,15 @@ void	Test3::my_func() {
 	str = (char**)malloc(sizeof(char**) * 4);
 	*str = (char*)malloc(sizeof(char*) * 4);
 	str[0][1] = 'a';
+	str[0][1] = 0;
 	window->show(0, str);
 	Fl::run();
 }
 
-Test3	*getTest() {
+Test3	*getGUI() {
 	return new Test3;
 }
 
-void	deleteTest(Test3 *test) {
+void	deleteGUI(Test3 *test) {
 	delete test;
 }

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   glfwGUI.cpp                                        :+:      :+:    :+:   */
+/*   GlfwGUI.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jichen-m <jichen-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmutti <cmutti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/12 19:46:10 by jichen-m          #+#    #+#             */
-/*   Updated: 2018/09/12 20:27:35 by jichen-m         ###   ########.fr       */
+/*   Updated: 2018/09/13 11:17:11 by cmutti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "glfwGUI.hpp"
+#include "GlfwGUI.hpp"
 #include "GLFW/glfw3.h"
 
 GlfwGUI::GlfwGUI(void){}
@@ -21,7 +21,7 @@ void	GlfwGUI::my_func()
 {
 	GLFWwindow*	window;
 
-	std::cout << "DL2 (class) func called" << std::endl;
+	std::cout << "GLFW window" << std::endl;
 	if (!glfwInit())
 	{
 		std::cout << "Failed to initialize GLFW" << std::endl;
@@ -52,10 +52,10 @@ void	GlfwGUI::my_func()
 	// return (0);
 }
 
-GlfwGUI	*getTest() {
+GlfwGUI	*getGUI() {
 	return new GlfwGUI;
 }
 
-void	deleteTest(GlfwGUI *test) {
+void	deleteGUI(GlfwGUI *test) {
 	delete test;
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   glfwGUI.hpp                                        :+:      :+:    :+:   */
+/*   GlfwGUI.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jichen-m <jichen-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmutti <cmutti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/12 19:46:17 by jichen-m          #+#    #+#             */
-/*   Updated: 2018/09/12 20:26:10 by jichen-m         ###   ########.fr       */
+/*   Updated: 2018/09/13 11:17:21 by cmutti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ class GlfwGUI: public IDynamicLibrary
 
 extern "C"
 {
-	GlfwGUI	*getTest(void);
-	void	deleteTest(GlfwGUI *test);
+	GlfwGUI	*getGUI(void);
+	void	deleteGUI(GlfwGUI *test);
 }
 
 #endif

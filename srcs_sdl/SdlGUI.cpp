@@ -1,16 +1,16 @@
-#include "test1.hpp"
+#include "SdlGUI.hpp"
 #include "SDL2/SDL.h"
 
-Test1::Test1(void) {
+SdlGUI::SdlGUI(void) {
 
 }
 
-Test1::~Test1(void) {
+SdlGUI::~SdlGUI(void) {
 	
 }
 
-void	Test1::my_func() {
-	std::cout << "DL1 (class) func called" << std::endl;
+void	SdlGUI::my_func() {
+	std::cout << "SDL window" << std::endl;
 
 	bool quit = false;
     SDL_Event event;
@@ -37,10 +37,10 @@ void	Test1::my_func() {
     SDL_Quit();
 }
 
-Test1	*getTest() {
-	return new Test1;
+SdlGUI	*getGUI() {
+	return new SdlGUI;
 }
 
-void	deleteTest(Test1 *test) {
+void	deleteGUI(SdlGUI *test) {
 	delete test;
 }

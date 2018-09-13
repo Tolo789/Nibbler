@@ -1,6 +1,13 @@
 {
 	"files.associations": {
 		"iostream": "cpp",
-		"exception": "cpp"
+		"exception": "cpp",
+		"__config": "cpp",
+		"__nullptr": "cpp",
+		"initializer_list": "cpp",
+		"new": "cpp",
+		"stdexcept": "cpp",
+		"typeinfo": "cpp",
+		"algorithm": "cpp"
 	}
 }

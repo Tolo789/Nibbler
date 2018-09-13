@@ -14,8 +14,8 @@ class Test3 : public IDynamicLibrary {
 };
 
 extern "C" {
-	Test3	*getTest(void);
-	void	deleteTest(Test3 *test);
+	Test3	*getGUI(void);
+	void	deleteGUI(Test3 *test);
 }
 
 #endif // !TEST3_HPP

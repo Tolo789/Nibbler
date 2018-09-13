@@ -1,17 +1,17 @@
 NAME = nibbler
 
-DL1_NAME = dl1.so
+DL1_NAME = dl_sdl.so
 
-DL2_NAME = dl2.so
+DL2_NAME = dl_glfw.so
 
 DL3_NAME = dl3.so
 
 
 SDIR_MAIN = ./srcs_main/
 
-SDIR_DL1 = ./srcs_dl1/
+SDIR_DL1 = ./srcs_sdl/
 
-SDIR_DL2 = ./srcs_dl2/
+SDIR_DL2 = ./srcs_glfw/
 
 SDIR_DL3 = ./srcs_dl3/
 
@@ -19,11 +19,11 @@ SDIR_DL3 = ./srcs_dl3/
 INCLUDES_DIR = includes
 
 
-SRC_MAIN = 	$(SDIR_MAIN)main.cpp
+SRC_MAIN = 	$(SDIR_MAIN)MainGame.cpp
 
-SRC_DL1 = 	$(SDIR_DL1)test1.cpp
+SRC_DL1 = 	$(SDIR_DL1)SdlGUI.cpp
 
-SRC_DL2 = 	$(SDIR_DL2)glfwGUI.cpp
+SRC_DL2 = 	$(SDIR_DL2)GlfwGUI.cpp
 
 SRC_DL3 = 	$(SDIR_DL3)test3.cpp
 
@@ -54,6 +54,20 @@ DL3_FLAGS = $(DLFLAGS) `fltk-config --ldflags --cxxflags`
 
 CC = clang++
 
+brew_reset:
+	rm -rf $HOME/.brew && git clone --depth=1 https://github.com/Homebrew/brew $HOME/.brew && export PATH=$HOME/.brew/bin:$PATH && brew update && echo "export PATH=$HOME/.brew/bin:$PATH" >> ~/.zshrc
+
+install:
+	brew install pkg-config
+	brew install sdl2
+	cp -r ~/.brew/Cellar/sdl2/2.0.8/include/ ./$(INCLUDES_DIR)
+	brew install glfw
+	cp -r ~/.brew/Cellar/glfw/3.2.1/include/GLFW ./$(INCLUDES_DIR)
+	brew install fltk
+	cp -r /Users/cmutti/.brew/Cellar/fltk/1.3.4-2/include/FL ./$(INCLUDES_DIR)
+
+reinstall_all: brew_reset install
+
 all: $(ALL)
 
 $(DL1_NAME): $(OBJ_DL1)
@@ -73,7 +87,7 @@ $(NAME): $(OBJ_MAIN)
 	@echo "				$(NAME) created"
 
 .cpp.o:
-	$(CC) $(CFLAGS) -c $< -o $@ -I $(INCLUDES_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	@/bin/rm -f $(OBJ_MAIN) $(OBJ_DL1) $(OBJ_DL2) $(OBJ_DL3)
