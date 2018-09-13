@@ -16,10 +16,12 @@
 class MainGame {
 	private:
 		MainGame(void);
+		MainGame(MainGame const & src);
+
+		MainGame& operator=(MainGame const & rhs);
 
 		int		dlerror_wrapper();
 
-		bool	running;
 		int		dl_index;
 		void	*dl_handle;
 
@@ -27,9 +29,11 @@ class MainGame {
 		static const std::string *dlNames;
 
 		MainGame(int ac, char **av);
-		~MainGame(void) {};
+		~MainGame(void);
 
 		int	run();
+
+		bool	running;
 };
 
 #endif // !MAIN_GAME_HPP

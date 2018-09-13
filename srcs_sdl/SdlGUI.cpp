@@ -1,13 +1,31 @@
 #include "SdlGUI.hpp"
 #include "SDL2/SDL.h"
 
-SdlGUI::SdlGUI(void) {
+// === CONSTRUCTOR =============================================================
 
+SdlGUI::SdlGUI(void) {
+	return ;
+}
+
+SdlGUI::SdlGUI(SdlGUI const & src) {
+	*this = src;
+	return ;
 }
 
 SdlGUI::~SdlGUI(void) {
-	
+	return ;
 }
+
+// === ENDCONSTRUCTOR ==========================================================
+
+// === OPERATORS ===============================================================
+
+SdlGUI& SdlGUI::operator=(SdlGUI const & rhs) {
+    this->active = rhs.active;
+	return *this;
+}
+
+// === ENDOPERATORS ============================================================
 
 void	SdlGUI::my_func() {
 	std::cout << "SDL window" << std::endl;

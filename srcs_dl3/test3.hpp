@@ -6,11 +6,18 @@
 
 
 class Test3 : public IDynamicLibrary {
+    private:
+		Test3(Test3 const & src);
+
+		Test3& operator=(Test3 const & rhs);
+
 	public:
 		Test3(void);
 		~Test3(void);
 
 		void	my_func();
+
+        bool    active;
 };
 
 extern "C" {

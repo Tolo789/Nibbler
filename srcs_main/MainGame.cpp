@@ -3,6 +3,11 @@
 #include "MainGame.hpp"
 
 // === CONSTRUCTOR =============================================================
+
+MainGame::MainGame(void) {
+	return ;
+}
+
 MainGame::MainGame(int ac, char **av) {
 	// TODO parse options
 	ac = 0;
@@ -11,9 +16,24 @@ MainGame::MainGame(int ac, char **av) {
 	running = false;
 }
 
+MainGame::MainGame(MainGame const & src) {
+	*this = src;
+	return ;
+}
+
+MainGame::~MainGame(void) {
+	return ;
+}
+
 // === ENDCONSTRUCTOR ==========================================================
 
 // === OPERATORS ===============================================================
+
+MainGame& MainGame::operator=(MainGame const & rhs) {
+	this->running = rhs.running;
+	return *this;
+}
+
 // === ENDOPERATORS ============================================================
 
 // === PRIVATE FUNCS ===========================================================
@@ -86,7 +106,7 @@ const std::string *MainGame::dlNames = generate_dlNames();
 int		main(int ac, char **av) {
 	int	ret;
 
-	MainGame mainGame = MainGame(ac, av);
+	MainGame mainGame(ac, av);
 	ret = mainGame.run();
 	return ret;
 }

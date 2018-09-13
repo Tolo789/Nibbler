@@ -6,16 +6,38 @@
 /*   By: cmutti <cmutti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/12 19:46:10 by jichen-m          #+#    #+#             */
-/*   Updated: 2018/09/13 11:17:11 by cmutti           ###   ########.fr       */
+/*   Updated: 2018/09/13 11:57:59 by cmutti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "GlfwGUI.hpp"
 #include "GLFW/glfw3.h"
 
-GlfwGUI::GlfwGUI(void){}
+// === CONSTRUCTOR =============================================================
 
-GlfwGUI::~GlfwGUI(void){}
+GlfwGUI::GlfwGUI(void) {
+	return ;
+}
+
+GlfwGUI::GlfwGUI(GlfwGUI const & src) {
+	*this = src;
+	return ;
+}
+
+GlfwGUI::~GlfwGUI(void) {
+	return ;
+}
+
+// === ENDCONSTRUCTOR ==========================================================
+
+// === OPERATORS ===============================================================
+
+GlfwGUI& GlfwGUI::operator=(GlfwGUI const & rhs) {
+    this->active = rhs.active;
+	return *this;
+}
+
+// === ENDOPERATORS ============================================================
 
 void	GlfwGUI::my_func()
 {

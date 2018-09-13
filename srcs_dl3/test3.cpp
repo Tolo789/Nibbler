@@ -4,13 +4,31 @@
 #include "FL/Fl_Window.H"
 #include "FL/Fl_Box.H"
 
-Test3::Test3(void) {
+// === CONSTRUCTOR =============================================================
 
+Test3::Test3(void) {
+	return ;
+}
+
+Test3::Test3(Test3 const & src) {
+	*this = src;
+	return ;
 }
 
 Test3::~Test3(void) {
-	
+	return ;
 }
+
+// === ENDCONSTRUCTOR ==========================================================
+
+// === OPERATORS ===============================================================
+
+Test3& Test3::operator=(Test3 const & rhs) {
+    this->active = rhs.active;
+	return *this;
+}
+
+// === ENDOPERATORS ============================================================
 
 void	Test3::my_func() {
 	std::cout << "DL func called" << std::endl;
