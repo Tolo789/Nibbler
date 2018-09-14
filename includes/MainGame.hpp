@@ -4,6 +4,11 @@
 # include <dlfcn.h>
 # include <iostream>
 # include <list>
+# include <thread>
+# include <dlfcn.h>
+# include <iostream>
+# include <time.h>
+# include <chrono>         // std::chrono::seconds
 # include "IDynamicLibrary.hpp"
 
 # define DL_COUNT 3
@@ -16,6 +21,7 @@
 # define REFRESH_WINDOW_FUNC refresh_window
 # define CLOSE_WINDOW_FUNC close_window
 
+# define KEY_0 "0"
 # define KEY_1 "1"
 # define KEY_2 "2"
 # define KEY_3 "3"
@@ -25,11 +31,16 @@
 # define KEY_D "D"
 # define KEY_ESCAPE "Escape"
 
+# define FRAME_TIME	1.0
+
+typedef int intCustom;
+
 class MainGame {
 	private:
 		static MainGame		instance;
 		static const std::string 	*dlNames;
 		static const std::list<std::string> change_library_keys;
+		// static const std::list<std::string> change_direction_keys;
 
 		MainGame(void);
 		MainGame(MainGame const & src);
@@ -38,8 +49,16 @@ class MainGame {
 
 		int		dlerror_wrapper();
 		void	change_library_request(std::string key_code);
+		void	update_game_state(void);
+		int		update_gui(void);
+		void	regulate_frame_sleep(void);
 
-		// std::list<std::string> change_snake_keys;
+		IDynamicLibrary	*currentLibrary;
+		void	*dl_handle;
+		int		dl_index;
+		int		dl_pastIndex;
+		time_t	timer;
+		double	past_frame_length;
 
 	public:
 		static MainGame				get_instance(void);

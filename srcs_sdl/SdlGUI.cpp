@@ -3,6 +3,19 @@
 // === CONSTRUCTOR =============================================================
 
 SdlGUI::SdlGUI(void) {
+	std::cout << "SDL window" << std::endl;
+
+	SDL_Init(SDL_INIT_VIDEO);
+
+	screen = SDL_CreateWindow("My SDL Empty Window",
+		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, 0);
+	quit = false;
+
+	// start  event thread
+	// slave_thread = std::thread(events_thread());
+	// slave_thread = std::thread([this] { this->events_thread(); });
+	// slave_thread = std::thread(&SdlGUI::events_thread, this);
+
 	return ;
 }
 
@@ -26,24 +39,17 @@ SdlGUI& SdlGUI::operator=(SdlGUI const & rhs) {
 
 // === ENDOPERATORS ============================================================
 
-// === OVERRIDES ===============================================================
-void	SdlGUI::refresh_window() {
-	std::cout << "SDL window" << std::endl;
-
-	bool quit = false;
+// === PRIVATE FUNCS ===========================================================
+void	SdlGUI::events_thread(void) {
 	SDL_Event	event;
- 
-	SDL_Init(SDL_INIT_VIDEO);
- 
-	screen = SDL_CreateWindow("My SDL Empty Window",
-		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, 0);
-	
- 
+
 	while (!quit)
 	{
 	   /* Poll for events */
 		while( SDL_PollEvent( &event ) )
 		{
+			if (quit)
+				break;
 			switch( event.type )
 			{
 				case SDL_KEYDOWN:
@@ -63,12 +69,19 @@ void	SdlGUI::refresh_window() {
 			}
 		}
 	}
-	SDL_DestroyWindow(screen);
-	SDL_Quit(); 
+}
+// === END PRIVATE FUNCS =======================================================
+
+// === OVERRIDES ===============================================================
+void	SdlGUI::refresh_window() {
+	// add/update/remove elems (snake, fruits, points) from window
+	events_thread();
 }
 
 void	SdlGUI::close_window() {
 	std::cout << "Destroing SDL window" << std::endl;
+	quit = true; // stop event thread
+	slave_thread.join();
 	SDL_DestroyWindow(screen);
 	SDL_Quit();
 }

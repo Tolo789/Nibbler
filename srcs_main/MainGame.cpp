@@ -1,5 +1,3 @@
-#include <dlfcn.h>
-#include <iostream>
 #include "MainGame.hpp"
 
 // === CONSTRUCTOR =============================================================
@@ -51,54 +49,91 @@ int		MainGame::dlerror_wrapper() {
 	return EXIT_FAILURE;
 }
 
+void	MainGame::change_library_request(std::string key_code) {
+	int		requested_index = std::stoi(key_code) - 1;
+
+	std::cout << "Change index of library to: " << requested_index << std::endl;
+	if (requested_index > 0 && requested_index < DL_COUNT)
+		dl_index = requested_index;
+}
+
+void	MainGame::update_game_state(void) {
+	// TODO: snake movement, collision detection, food spawn, etc
+	if (dl_index == 0)
+		running = false;
+}
+
+int		MainGame::update_gui(void) {
+	// GUI logic
+	// std::cout << "Enter library choice (1 / 2 / 3): ";
+	// std::cin >> dl_index;
+	if (dl_index < 0 || dl_index > DL_COUNT)
+		std::cout << "Wrong number given..!" << std::endl;
+	else if (dl_pastIndex != dl_index) {
+		if (dl_pastIndex != -1) {
+			// Close previous window
+			currentLibrary->CLOSE_WINDOW_FUNC();
+			void	*(*LibraryDestructor)(IDynamicLibrary *);
+			LibraryDestructor = (void *(*)(IDynamicLibrary*)) dlsym(dl_handle, GUI_DESTRUCTOR_FUNC);
+			if (!LibraryDestructor)
+				return dlerror_wrapper();
+
+			LibraryDestructor(currentLibrary);
+
+			dlclose(dl_handle);
+		}
+		dl_pastIndex = dl_index;
+
+		// Open dynamic library
+		dl_handle = dlopen(dlNames[dl_index - 1].c_str(), RTLD_LAZY | RTLD_LOCAL);
+		if (!dl_handle)
+			return dlerror_wrapper();
+
+		// Create interface class
+		IDynamicLibrary	*(*LibraryCreator)(void);
+		LibraryCreator = (IDynamicLibrary *(*)(void)) dlsym(dl_handle, GUI_CREATOR_FUNC);
+		if (!LibraryCreator)
+			return dlerror_wrapper();
+		currentLibrary = LibraryCreator();
+
+	}
+
+	// Draw window with game infos
+	currentLibrary->REFRESH_WINDOW_FUNC(); // TODO: give new snake pos + other infos
+
+	return EXIT_SUCCESS;
+}
+
+void	MainGame::regulate_frame_sleep(void) {
+	// Timer logic, make thread sleep if needed
+	past_frame_length = difftime(timer, time(NULL));
+	if (past_frame_length < FRAME_TIME) {
+		std::this_thread::sleep_for (std::chrono::milliseconds(static_cast<int>((FRAME_TIME - past_frame_length) * 1000)));
+	}
+	std::cout << "frame" << std::endl;
+	timer = time(NULL);
+}
+
 // === END PRIVATE FUNCS =======================================================
 
 
 // === PUBLIC FUNCS ============================================================
 int		MainGame::run(void) {
-	IDynamicLibrary	*(*LibraryCreator)(void);
-	void	*(*LibraryDestructor)(IDynamicLibrary *);
-	IDynamicLibrary	*currentLibrary;
-	int		dl_index;
-	void	*dl_handle;
-	int		pastIndex = -1;
-
+	// init vars
 	running = true;
+	dl_index = 1; // TODO let choose starting library with argv
+	dl_pastIndex = -1;
+	timer = time(NULL);
+
+	// Start game loop
 	while (running) {
-		std::cout << "Enter library choice (1 / 2 / 3): ";
-		std::cin >> dl_index;
-		if (dl_index == 0)
-			running = false;
-		else if (dl_index < 0 || dl_index > DL_COUNT)
-			std::cout << "Wrong number given..!" << std::endl;
-		else if (pastIndex != dl_index) {
-			if (pastIndex != -1) {
-				// Close previous window
-				currentLibrary->CLOSE_WINDOW_FUNC();
-				LibraryDestructor = (void *(*)(IDynamicLibrary*)) dlsym(dl_handle, GUI_DESTRUCTOR_FUNC);
-				if (!LibraryDestructor)
-					return dlerror_wrapper();
+		update_game_state();
 
-				LibraryDestructor(currentLibrary);
+		int gui_ret = update_gui();
+		if (gui_ret != EXIT_SUCCESS)
+			return gui_ret;
 
-				dlclose(dl_handle);
-			}
-			pastIndex = dl_index;
-
-			// Open dynamic library
-			dl_handle = dlopen(dlNames[dl_index - 1].c_str(), RTLD_LAZY | RTLD_LOCAL);
-			if (!dl_handle)
-				return dlerror_wrapper();
-
-			// Create interface class
-			LibraryCreator = (IDynamicLibrary *(*)(void)) dlsym(dl_handle, GUI_CREATOR_FUNC);
-			if (!LibraryCreator)
-				return dlerror_wrapper();
-			currentLibrary = LibraryCreator();
-
-			// Draw window with game infos
-			currentLibrary->REFRESH_WINDOW_FUNC();
-		}
+		regulate_frame_sleep();
 	}
 	return EXIT_SUCCESS;
 }
@@ -106,8 +141,8 @@ int		MainGame::run(void) {
 void	MainGame::button_pressed(const char *button)
 {
 	std::string key = !button ? KEY_ESCAPE : std::string(button); // GLFW sends NULL pointer for Escape key..
+
 	std::list<std::string>::const_iterator iter = std::find(change_library_keys.begin(), change_library_keys.end(), key);
-	
 	if (iter != change_library_keys.end()) {
 		change_library_request(key);
 	}
@@ -116,12 +151,6 @@ void	MainGame::button_pressed(const char *button)
 
 		// iter = change_direction_keys.find(button_pressed);
 	}
-}
-
-void	MainGame::change_library_request(std::string key_code) {
-	int		requested_index = std::stoi(key_code) - 1;
-
-	std::cout << "Change index of library to: " << requested_index << std::endl;
 }
 
 // === END PUBLIC FUNCS ========================================================
@@ -139,6 +168,7 @@ const std::string *MainGame::dlNames = generate_dlNames();
 
 static std::list<std::string> generate_library_keys() {	// static here is "internal linkage"
    std::list<std::string> p;
+	p.push_front(KEY_0);
 	p.push_front(KEY_1);
 	p.push_front(KEY_2);
 	p.push_front(KEY_3);

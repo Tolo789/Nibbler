@@ -15,6 +15,7 @@
 
 # include <iostream>
 # include "IDynamicLibrary.hpp"
+# include "MainGame.hpp"
 # include "GLFW/glfw3.h"
 
 

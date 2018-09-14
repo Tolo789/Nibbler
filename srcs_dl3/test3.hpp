@@ -3,6 +3,7 @@
 
 # include <iostream>
 # include "IDynamicLibrary.hpp"
+# include "MainGame.hpp"
 
 
 class Test3 : public IDynamicLibrary {
