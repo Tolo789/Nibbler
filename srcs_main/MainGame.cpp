@@ -83,6 +83,7 @@ int		MainGame::run(void) {
 
 				dlclose(dl_handle);
 			}
+			std::cout << pastIndex << std::endl;
 			pastIndex = dl_index;
 
 			// Open dynamic library
@@ -118,9 +119,10 @@ void	MainGame::button_pressed(const char *button)
 	}
 }
 
-void	MainGame::change_library_request(std::string key_code) {
-	int		requested_index = std::stoi(key_code) - 1;
-
+void	MainGame::change_library_request(std::string key_code)
+{
+	int		requested_index = std::stoi(key_code);
+	
 	std::cout << "Change index of library to: " << requested_index << std::endl;
 }
 

@@ -13,6 +13,7 @@ class SdlGUI : public IDynamicLibrary {
 		SdlGUI& operator=(SdlGUI const & rhs);
 
 		SDL_Window *screen;
+		bool quit = false;
 
 	public:
 		SdlGUI(void);
@@ -20,6 +21,7 @@ class SdlGUI : public IDynamicLibrary {
 
 		void	refresh_window();
 		void	close_window();
+		void	set_quit_loop();
 
         bool    active;
 };

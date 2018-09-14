@@ -39,6 +39,8 @@ class MainGame {
 		int		dlerror_wrapper();
 		void	change_library_request(std::string key_code);
 
+		int		dl_index;
+
 		// std::list<std::string> change_snake_keys;
 
 	public:
