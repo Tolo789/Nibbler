@@ -14,7 +14,8 @@
 
 // === CONSTRUCTOR =============================================================
 
-GlfwGUI::GlfwGUI(MainGame *mainGame) : mainGame(mainGame) {
+GlfwGUI::GlfwGUI(MainGame *_mainGame) {
+	(void)_mainGame;
 	return ;
 }
 GlfwGUI::GlfwGUI(void) {
@@ -87,7 +88,7 @@ void GlfwGUI::key_callback(GLFWwindow* window, int key, int scancode, int action
 	{
 		if (key == GLFW_KEY_ESCAPE)
 	        glfwSetWindowShouldClose(window, GL_TRUE);
-		MainGame::get_instance().button_pressed(glfwGetKeyName(key, scancode));
+		// mainGame->button_pressed(glfwGetKeyName(key, scancode));
 	}
 	(void)key;
 	(void)scancode;

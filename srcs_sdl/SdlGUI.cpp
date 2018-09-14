@@ -62,7 +62,6 @@ void	SdlGUI::get_user_input(void) {
 		{
 			case SDL_KEYDOWN:
 				std::cout << SDL_GetKeyName( event.key.keysym.sym ) << std::endl;
-				std::cout << "check1 get_instance: " << mainGame << std::endl;
 				mainGame->button_pressed(SDL_GetKeyName(event.key.keysym.sym));
 				break;
 			default:

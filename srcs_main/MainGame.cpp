@@ -27,10 +27,6 @@ MainGame::~MainGame(void) {
 
 // === GETTER ===============================================================
 
-MainGame	&MainGame::get_instance()
-{
-	return (instance);
-}
 
 // === OPERATORS ===============================================================
 
@@ -55,8 +51,6 @@ void	MainGame::change_library_request(std::string key_code) {
 	std::cout << "Change index of library to: " << requested_index << std::endl;
 	if (requested_index >= 0 && requested_index <= DL_COUNT) {
 		dl_index = requested_index;
-		std::cout << "SUCCESS (" << dl_index << ")" << std::endl;
-		std::cout << "check name: " << this << std::endl;
 	}
 }
 
@@ -65,10 +59,8 @@ void	MainGame::update_game_state(void) {
 	std::cout << "Updating with user input" << dl_index << std::endl;
 	if (currentLibrary) {
 		currentLibrary->GET_INPUT_FUNC();
-		// change_library_request("0");
 	}
 
-	std::cout << "index check: " << dl_index << std::endl;
 	if (dl_index == 0) {
 		std::cout << "Need to close.." << std::endl;
 		running = false;
@@ -195,8 +187,6 @@ static std::list<std::string> generate_library_keys() {	// static here is "inter
 }
 const std::list<std::string> MainGame::change_library_keys = generate_library_keys();
 
-MainGame MainGame::instance = MainGame();
-
 // === END STATICVARS ==========================================================
 
 // === OTHERS ==================================================================
@@ -204,10 +194,8 @@ MainGame MainGame::instance = MainGame();
 int		main(int ac, char **av) {
 	int	ret = 0;
 
-	(void)ac;
-	(void)av;
-	std::cout << "check2 get_instance: " << &MainGame::get_instance() << std::endl;
-	ret = MainGame::get_instance().run();
+	MainGame mainGame(ac, av);
+	ret = mainGame.run();
 	return ret;
 }
 

@@ -39,7 +39,7 @@ class GlfwGUI: public IDynamicLibrary
 		void	refresh_window();
 		void	close_window();
 
-		MainGame *mainGame;
+		static MainGame *mainGame;
         bool    active;
 };
 

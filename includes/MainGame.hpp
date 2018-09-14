@@ -61,8 +61,6 @@ class MainGame {
 		double	past_frame_length;
 
 	public:
-		static MainGame				&get_instance(void);
-
 		MainGame(int ac, char **av);
 		~MainGame(void);
 
