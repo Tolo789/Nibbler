@@ -14,25 +14,27 @@ class SdlGUI : public IDynamicLibrary {
 
 		SdlGUI& operator=(SdlGUI const & rhs);
 
-		void	events_thread(void);
 
 		SDL_Window *screen;
-		std::thread	slave_thread;
+		SDL_Surface* screenSurface;
 		bool quit;
+		int counter;
 
 	public:
+		SdlGUI(MainGame *mainGame);
 		SdlGUI(void);
 		~SdlGUI(void);
 
+		void	get_user_input(void);
 		void	refresh_window();
 		void	close_window();
-		void	set_quit_loop();
 
         bool    active;
+		MainGame *mainGame;
 };
 
 extern "C" {
-	SdlGUI	*getGUI(void);
+	SdlGUI	*getGUI(MainGame *mainGame);
 	void	deleteGUI(SdlGUI *test);
 }
 

@@ -18,6 +18,7 @@
 
 # define GUI_CREATOR_FUNC "getGUI"
 # define GUI_DESTRUCTOR_FUNC "deleteGUI"
+# define GET_INPUT_FUNC get_user_input
 # define REFRESH_WINDOW_FUNC refresh_window
 # define CLOSE_WINDOW_FUNC close_window
 
@@ -37,7 +38,6 @@ typedef int intCustom;
 
 class MainGame {
 	private:
-		static MainGame		instance;
 		static const std::string 	*dlNames;
 		static const std::list<std::string> change_library_keys;
 		// static const std::list<std::string> change_direction_keys;
@@ -61,7 +61,7 @@ class MainGame {
 		double	past_frame_length;
 
 	public:
-		static MainGame				get_instance(void);
+		static MainGame				&get_instance(void);
 
 		MainGame(int ac, char **av);
 		~MainGame(void);

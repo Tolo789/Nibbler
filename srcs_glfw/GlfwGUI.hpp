@@ -31,18 +31,21 @@ class GlfwGUI: public IDynamicLibrary
 		GLFWwindow*	window;
 
     public:
+        GlfwGUI(MainGame *mainGame);
         GlfwGUI(void);
         ~GlfwGUI(void);
 
+		void	get_user_input(void);
 		void	refresh_window();
 		void	close_window();
 
+		MainGame *mainGame;
         bool    active;
 };
 
 extern "C"
 {
-	GlfwGUI	*getGUI(void);
+	GlfwGUI	*getGUI(MainGame *mainGame);
 	void	deleteGUI(GlfwGUI *test);
 }
 

@@ -2,6 +2,20 @@
 
 // === CONSTRUCTOR =============================================================
 
+SdlGUI::SdlGUI(MainGame *mainGame) : mainGame(mainGame) {
+	std::cout << "SDL window" << std::endl;
+
+	SDL_Init(SDL_INIT_VIDEO);
+
+	screen = SDL_CreateWindow("My SDL Empty Window",
+		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, 0);
+	screenSurface = SDL_GetWindowSurface( screen );
+	quit = false;
+	counter = 0;
+
+	return ;
+}
+
 SdlGUI::SdlGUI(void) {
 	std::cout << "SDL window" << std::endl;
 
@@ -9,12 +23,9 @@ SdlGUI::SdlGUI(void) {
 
 	screen = SDL_CreateWindow("My SDL Empty Window",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, 0);
+	screenSurface = SDL_GetWindowSurface( screen );
 	quit = false;
-
-	// start  event thread
-	// slave_thread = std::thread(events_thread());
-	// slave_thread = std::thread([this] { this->events_thread(); });
-	// slave_thread = std::thread(&SdlGUI::events_thread, this);
+	counter = 0;
 
 	return ;
 }
@@ -30,12 +41,6 @@ SdlGUI::~SdlGUI(void) {
 
 // === ENDCONSTRUCTOR ==========================================================
 
-// === SETTER ==================================================================
-
-void	SdlGUI::set_quit_loop()
-{
-	this->quit = true;
-}
 
 // === OPERATORS ===============================================================
 
@@ -47,33 +52,21 @@ SdlGUI& SdlGUI::operator=(SdlGUI const & rhs) {
 // === ENDOPERATORS ============================================================
 
 // === PRIVATE FUNCS ===========================================================
-void	SdlGUI::events_thread(void) {
+void	SdlGUI::get_user_input(void) {
 	SDL_Event	event;
 
-	while (!quit)
+	/* Poll for events */
+	while( SDL_PollEvent( &event ) )
 	{
-	   /* Poll for events */
-		while( SDL_PollEvent( &event ) )
+		switch( event.type )
 		{
-			if (quit)
+			case SDL_KEYDOWN:
+				std::cout << SDL_GetKeyName( event.key.keysym.sym ) << std::endl;
+				std::cout << "check1 get_instance: " << mainGame << std::endl;
+				mainGame->button_pressed(SDL_GetKeyName(event.key.keysym.sym));
 				break;
-			switch( event.type )
-			{
-				case SDL_KEYDOWN:
-					std::cout << SDL_GetKeyName( event.key.keysym.sym ) << std::endl;
-					MainGame::get_instance().button_pressed(SDL_GetKeyName(event.key.keysym.sym));
-					if (strcmp(SDL_GetKeyName(event.key.keysym.sym), "Escape") == 0) //tmp
-						quit = true;
-					break;
-
-				/* SDL_QUIT event (window close) */
-				case SDL_QUIT:
-					quit = true;
-					break;
-
-				default:
-					break;
-			}
+			default:
+				break;
 		}
 	}
 }
@@ -82,13 +75,15 @@ void	SdlGUI::events_thread(void) {
 // === OVERRIDES ===============================================================
 void	SdlGUI::refresh_window() {
 	// add/update/remove elems (snake, fruits, points) from window
-	events_thread();
+	counter = (counter + 30) % 255;
+	SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, counter, counter, counter ) );
+	
+	//Update the surface
+	SDL_UpdateWindowSurface( screen );
 }
 
 void	SdlGUI::close_window() {
 	std::cout << "Destroing SDL window" << std::endl;
-	quit = true; // stop event thread
-	slave_thread.join();
 	SDL_DestroyWindow(screen);
 	SDL_Quit();
 }
@@ -96,8 +91,8 @@ void	SdlGUI::close_window() {
 // === END OVERRIDES ===========================================================
 
 // === OTHERS ==================================================================
-SdlGUI	*getGUI() {
-	return new SdlGUI;
+SdlGUI	*getGUI(MainGame *mainGame) {
+	return new SdlGUI(mainGame);
 }
 
 void	deleteGUI(SdlGUI *test) {

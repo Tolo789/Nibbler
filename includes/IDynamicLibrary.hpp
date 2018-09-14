@@ -6,6 +6,7 @@ class IDynamicLibrary {
 		IDynamicLibrary() {};
 		virtual ~IDynamicLibrary() {};
 
+		virtual void	get_user_input () = 0;
 		virtual void	refresh_window () = 0;
 		virtual void	close_window () = 0;
 };

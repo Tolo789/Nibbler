@@ -16,6 +16,8 @@
 		"string_view": "cpp",
 		"unordered_map": "cpp",
 		"list": "cpp",
-		"ios": "cpp"
+		"ios": "cpp",
+		"chrono": "cpp",
+		"bitset": "cpp"
 	}
 }

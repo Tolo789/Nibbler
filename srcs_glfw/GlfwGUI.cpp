@@ -14,6 +14,9 @@
 
 // === CONSTRUCTOR =============================================================
 
+GlfwGUI::GlfwGUI(MainGame *mainGame) : mainGame(mainGame) {
+	return ;
+}
 GlfwGUI::GlfwGUI(void) {
 	return ;
 }
@@ -39,6 +42,8 @@ GlfwGUI& GlfwGUI::operator=(GlfwGUI const & rhs) {
 // === ENDOPERATORS ============================================================
 
 // === OVERRIDES ===============================================================
+void	GlfwGUI::get_user_input(void) {
+}
 
 void	GlfwGUI::refresh_window()
 {
@@ -101,8 +106,8 @@ void	GlfwGUI::close_window() {
 // === END OVERRIDES ===========================================================
 
 // === OTHERS ==================================================================
-GlfwGUI	*getGUI() {
-	return new GlfwGUI;
+GlfwGUI	*getGUI(MainGame *mainGame) {
+	return new GlfwGUI(mainGame);
 }
 
 void	deleteGUI(GlfwGUI *test) {

@@ -13,17 +13,20 @@ class Test3 : public IDynamicLibrary {
 		Test3& operator=(Test3 const & rhs);
 
 	public:
+		Test3(MainGame *mainGame);
 		Test3(void);
 		~Test3(void);
 
+		void	get_user_input(void);
 		void	refresh_window();
 		void	close_window();
 
+		MainGame *mainGame;
         bool    active;
 };
 
 extern "C" {
-	Test3	*getGUI(void);
+	Test3	*getGUI(MainGame *mainGame);
 	void	deleteGUI(Test3 *test);
 }
 

@@ -6,6 +6,9 @@
 
 // === CONSTRUCTOR =============================================================
 
+Test3::Test3(MainGame *mainGame) : mainGame(mainGame) {
+	return ;
+}
 Test3::Test3(void) {
 	return ;
 }
@@ -31,6 +34,9 @@ Test3& Test3::operator=(Test3 const & rhs) {
 // === ENDOPERATORS ============================================================
 
 // === OVERRIDES ===============================================================
+
+void	Test3::get_user_input(void) {
+}
 
 void	Test3::refresh_window() {
 	std::cout << "DL func called" << std::endl;
@@ -75,8 +81,8 @@ void	Test3::close_window() {
 // === END OVERRIDES ===========================================================
 
 // === OTHERS ==================================================================
-Test3	*getGUI() {
-	return new Test3;
+Test3	*getGUI(MainGame *mainGame) {
+	return new Test3(mainGame);
 }
 
 void	deleteGUI(Test3 *test) {

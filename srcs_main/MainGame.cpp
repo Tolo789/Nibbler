@@ -27,7 +27,7 @@ MainGame::~MainGame(void) {
 
 // === GETTER ===============================================================
 
-MainGame	MainGame::get_instance()
+MainGame	&MainGame::get_instance()
 {
 	return (instance);
 }
@@ -50,27 +50,37 @@ int		MainGame::dlerror_wrapper() {
 }
 
 void	MainGame::change_library_request(std::string key_code) {
-	int		requested_index = std::stoi(key_code) - 1;
+	int		requested_index = std::stoi(key_code);
 
 	std::cout << "Change index of library to: " << requested_index << std::endl;
-	if (requested_index > 0 && requested_index < DL_COUNT)
+	if (requested_index >= 0 && requested_index <= DL_COUNT) {
 		dl_index = requested_index;
+		std::cout << "SUCCESS (" << dl_index << ")" << std::endl;
+		std::cout << "check name: " << this << std::endl;
+	}
 }
 
 void	MainGame::update_game_state(void) {
 	// TODO: snake movement, collision detection, food spawn, etc
-	if (dl_index == 0)
+	std::cout << "Updating with user input" << dl_index << std::endl;
+	if (currentLibrary) {
+		currentLibrary->GET_INPUT_FUNC();
+		// change_library_request("0");
+	}
+
+	std::cout << "index check: " << dl_index << std::endl;
+	if (dl_index == 0) {
+		std::cout << "Need to close.." << std::endl;
 		running = false;
+	}
 }
 
 int		MainGame::update_gui(void) {
-	// GUI logic
-	// std::cout << "Enter library choice (1 / 2 / 3): ";
-	// std::cin >> dl_index;
 	if (dl_index < 0 || dl_index > DL_COUNT)
 		std::cout << "Wrong number given..!" << std::endl;
 	else if (dl_pastIndex != dl_index) {
-		if (dl_pastIndex != -1) {
+		if (dl_pastIndex > 0) {
+			std::cout << "Closing old GUI" << std::endl;
 			// Close previous window
 			currentLibrary->CLOSE_WINDOW_FUNC();
 			void	*(*LibraryDestructor)(IDynamicLibrary *);
@@ -79,27 +89,31 @@ int		MainGame::update_gui(void) {
 				return dlerror_wrapper();
 
 			LibraryDestructor(currentLibrary);
+			currentLibrary = NULL;
 
 			dlclose(dl_handle);
 		}
+		if (dl_index != 0) {
+			std::cout << "Opening new GUI" << std::endl;
+
+			// Open dynamic library
+			dl_handle = dlopen(dlNames[dl_index - 1].c_str(), RTLD_LAZY | RTLD_LOCAL);
+			if (!dl_handle)
+				return dlerror_wrapper();
+
+			// Create interface class
+			IDynamicLibrary	*(*LibraryCreator)(MainGame*);
+			LibraryCreator = (IDynamicLibrary *(*)(MainGame*)) dlsym(dl_handle, GUI_CREATOR_FUNC);
+			if (!LibraryCreator)
+				return dlerror_wrapper();
+			currentLibrary = LibraryCreator(this);
+		}
 		dl_pastIndex = dl_index;
-
-		// Open dynamic library
-		dl_handle = dlopen(dlNames[dl_index - 1].c_str(), RTLD_LAZY | RTLD_LOCAL);
-		if (!dl_handle)
-			return dlerror_wrapper();
-
-		// Create interface class
-		IDynamicLibrary	*(*LibraryCreator)(void);
-		LibraryCreator = (IDynamicLibrary *(*)(void)) dlsym(dl_handle, GUI_CREATOR_FUNC);
-		if (!LibraryCreator)
-			return dlerror_wrapper();
-		currentLibrary = LibraryCreator();
-
 	}
 
 	// Draw window with game infos
-	currentLibrary->REFRESH_WINDOW_FUNC(); // TODO: give new snake pos + other infos
+	if (currentLibrary)
+		currentLibrary->REFRESH_WINDOW_FUNC(); // TODO: give new snake pos + other infos
 
 	return EXIT_SUCCESS;
 }
@@ -119,23 +133,28 @@ void	MainGame::regulate_frame_sleep(void) {
 
 // === PUBLIC FUNCS ============================================================
 int		MainGame::run(void) {
+	int gui_ret;
+
 	// init vars
+	currentLibrary = NULL;
 	running = true;
 	dl_index = 1; // TODO let choose starting library with argv
 	dl_pastIndex = -1;
 	timer = time(NULL);
 
+	std::cout << "check name: " << this << std::endl;
+
 	// Start game loop
 	while (running) {
 		update_game_state();
 
-		int gui_ret = update_gui();
-		if (gui_ret != EXIT_SUCCESS)
+		gui_ret = update_gui();
+		if (gui_ret != EXIT_SUCCESS || !running)
 			return gui_ret;
 
 		regulate_frame_sleep();
 	}
-	return EXIT_SUCCESS;
+	return gui_ret;
 }
 
 void	MainGame::button_pressed(const char *button)
@@ -183,10 +202,11 @@ MainGame MainGame::instance = MainGame();
 // === OTHERS ==================================================================
 // Entry point of the program
 int		main(int ac, char **av) {
-	int	ret;
+	int	ret = 0;
 
 	(void)ac;
 	(void)av;
+	std::cout << "check2 get_instance: " << &MainGame::get_instance() << std::endl;
 	ret = MainGame::get_instance().run();
 	return ret;
 }
