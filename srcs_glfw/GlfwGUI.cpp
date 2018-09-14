@@ -6,7 +6,7 @@
 /*   By: jichen-m <jichen-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/12 19:46:10 by jichen-m          #+#    #+#             */
-/*   Updated: 2018/09/13 17:35:57 by jichen-m         ###   ########.fr       */
+/*   Updated: 2018/09/14 11:31:02 by jichen-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,16 +59,15 @@ void	GlfwGUI::refresh_window()
 		std::cout << "Failed to create windows GLFW" << std::endl;
 		// return (-1);	//throw exception
 	}
-
 	glfwMakeContextCurrent(this->window);
 	while(!glfwWindowShouldClose(this->window))
 	{
 		// wipe the drawing surface clear
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		// // update other events like input handling 
-		glfwPollEvents();
 		glfwSetWindowUserPointer(window, this);
 		glfwSetKeyCallback(window, key_callback);
+		glfwPollEvents();
 		// // put the stuff we've been drawing onto the display
 		glfwSwapBuffers(this->window);
 	}
@@ -81,6 +80,8 @@ void GlfwGUI::key_callback(GLFWwindow* window, int key, int scancode, int action
 {
     if (action == GLFW_RELEASE)
 	{
+		if (key == GLFW_KEY_ESCAPE)
+	        glfwSetWindowShouldClose(window, GL_TRUE);
 		MainGame::get_instance().button_pressed(glfwGetKeyName(key, scancode));
 	}
 	(void)key;

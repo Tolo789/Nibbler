@@ -30,6 +30,13 @@ SdlGUI::~SdlGUI(void) {
 
 // === ENDCONSTRUCTOR ==========================================================
 
+// === SETTER ==================================================================
+
+void	SdlGUI::set_quit_loop()
+{
+	this->quit = true;
+}
+
 // === OPERATORS ===============================================================
 
 SdlGUI& SdlGUI::operator=(SdlGUI const & rhs) {
@@ -61,7 +68,7 @@ void	SdlGUI::events_thread(void) {
 
 				/* SDL_QUIT event (window close) */
 				case SDL_QUIT:
-					quit = 1;
+					quit = true;
 					break;
 
 				default:
