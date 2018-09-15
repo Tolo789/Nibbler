@@ -58,7 +58,7 @@ void	MainGame::update_game_state(void) {
 	// TODO: snake movement, collision detection, food spawn, etc
 	std::cout << "Updating with user input" << dl_index << std::endl;
 	if (currentLibrary) {
-		currentLibrary->GET_INPUT_FUNC();
+		currentLibrary->GET_USER_INPUT_FUNC();
 	}
 
 	if (dl_index == 0) {

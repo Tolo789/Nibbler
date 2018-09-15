@@ -29,8 +29,11 @@ class GlfwGUI: public IDynamicLibrary
 		GlfwGUI& operator=(GlfwGUI const & rhs);
 
 		GLFWwindow*	window;
+		float		counter;
 
     public:
+		static MainGame *mainGame;
+
         GlfwGUI(MainGame *mainGame);
         GlfwGUI(void);
         ~GlfwGUI(void);
@@ -39,7 +42,6 @@ class GlfwGUI: public IDynamicLibrary
 		void	refresh_window();
 		void	close_window();
 
-		static MainGame *mainGame;
         bool    active;
 };
 

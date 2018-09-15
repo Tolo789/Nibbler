@@ -17,7 +17,7 @@ class SdlGUI : public IDynamicLibrary {
 
 		SDL_Window *screen;
 		SDL_Surface* screenSurface;
-		bool quit;
+		// bool quit;
 		int counter;
 
 	public:

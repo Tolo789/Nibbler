@@ -18,7 +18,7 @@
 
 # define GUI_CREATOR_FUNC "getGUI"
 # define GUI_DESTRUCTOR_FUNC "deleteGUI"
-# define GET_INPUT_FUNC get_user_input
+# define GET_USER_INPUT_FUNC get_user_input
 # define REFRESH_WINDOW_FUNC refresh_window
 # define CLOSE_WINDOW_FUNC close_window
 

@@ -18,6 +18,8 @@
 		"list": "cpp",
 		"ios": "cpp",
 		"chrono": "cpp",
-		"bitset": "cpp"
+		"bitset": "cpp",
+		"cstddef": "cpp",
+		"type_traits": "cpp"
 	}
 }

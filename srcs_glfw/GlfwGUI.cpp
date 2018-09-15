@@ -14,8 +14,29 @@
 
 // === CONSTRUCTOR =============================================================
 
-GlfwGUI::GlfwGUI(MainGame *_mainGame) {
+GlfwGUI::GlfwGUI(MainGame *_mainGame) //: tmpMainGame(_mainGame)
+{
 	(void)_mainGame;
+	// this->mainGame = _mainGame;
+	std::cout << "GLFW window" << std::endl;
+	if (!glfwInit())
+	{
+		std::cout << "Failed to initialize GLFW" << std::endl;
+		// return (-1);	//throw exception
+	}
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	this->window = glfwCreateWindow(400, 400, "Nibbler GLFW", NULL, NULL);	// size of screen will change
+	if (!this->window)
+	{
+		glfwTerminate();
+		std::cout << "Failed to create windows GLFW" << std::endl;
+		// return (-1);	//throw exception
+	}
+	glfwMakeContextCurrent(this->window);
+	this->counter = 0.0f;
 	return ;
 }
 GlfwGUI::GlfwGUI(void) {
@@ -43,51 +64,29 @@ GlfwGUI& GlfwGUI::operator=(GlfwGUI const & rhs) {
 // === ENDOPERATORS ============================================================
 
 // === OVERRIDES ===============================================================
-void	GlfwGUI::get_user_input(void) {
+void	GlfwGUI::get_user_input(void)
+{
+	glfwSetWindowUserPointer(window, this);
+	glfwSetKeyCallback(window, key_callback);
+	glfwPollEvents();
 }
 
 void	GlfwGUI::refresh_window()
 {
-	std::cout << "GLFW window" << std::endl;
-	if (!glfwInit())
-	{
-		std::cout << "Failed to initialize GLFW" << std::endl;
-		// return (-1);	//throw exception
-	}
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	this->window = glfwCreateWindow(400, 400, "Nibbler GLFW", NULL, NULL);	// size of screen will change
-	if (!this->window)
-	{
-		glfwTerminate();
-		std::cout << "Failed to create windows GLFW" << std::endl;
-		// return (-1);	//throw exception
-	}
-	glfwMakeContextCurrent(this->window);
-	while(!glfwWindowShouldClose(this->window))
-	{
-		// wipe the drawing surface clear
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		// // update other events like input handling 
-		glfwSetWindowUserPointer(window, this);
-		glfwSetKeyCallback(window, key_callback);
-		glfwPollEvents();
-		// // put the stuff we've been drawing onto the display
-		glfwSwapBuffers(this->window);
-	}
-	glfwDestroyWindow(this->window);
-	glfwTerminate();
-	// return (0);
+	//only for test to see if each frame change color
+	this->counter = this->counter + 0.2f;
+	if (this->counter == 1.0f)
+		this->counter = 0.0f;
+	glClearColor(this->counter, this->counter, this->counter,1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glfwSwapBuffers(this->window);
 }
 
 void GlfwGUI::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if (action == GLFW_RELEASE)
 	{
-		if (key == GLFW_KEY_ESCAPE)
-	        glfwSetWindowShouldClose(window, GL_TRUE);
+		std::cout << "key was pressed" << std::endl;
 		// mainGame->button_pressed(glfwGetKeyName(key, scancode));
 	}
 	(void)key;
@@ -97,12 +96,11 @@ void GlfwGUI::key_callback(GLFWwindow* window, int key, int scancode, int action
 	(void)mods;
 }
 
-void	GlfwGUI::close_window() {
+void	GlfwGUI::close_window()
+{
     std::cout << "Destroing Glfw window" << std::endl;
 	glfwDestroyWindow(this->window);
 	glfwTerminate();
-	// SDL_DestroyWindow(screen);
-    // SDL_Quit();
 }
 // === END OVERRIDES ===========================================================
 
@@ -115,3 +113,4 @@ void	deleteGUI(GlfwGUI *test) {
 	delete test;
 }
 // === END OTHERS ==============================================================
+
