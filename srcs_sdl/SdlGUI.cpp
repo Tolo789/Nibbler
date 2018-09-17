@@ -9,24 +9,17 @@ SdlGUI::SdlGUI(MainGame *mainGame) : mainGame(mainGame) {
 
 	screen = SDL_CreateWindow("My SDL Empty Window",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, 0);
+	if (!screen) {
+		std::cout << "Failed to initialize SDL" << std::endl;
+		throw new IDynamicLibrary::DynamicLibraryException();
+	}
 	screenSurface = SDL_GetWindowSurface( screen );
-	quit = false;
 	counter = 0;
 
 	return ;
 }
 
 SdlGUI::SdlGUI(void) {
-	std::cout << "SDL window" << std::endl;
-
-	SDL_Init(SDL_INIT_VIDEO);
-
-	screen = SDL_CreateWindow("My SDL Empty Window",
-		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, 0);
-	screenSurface = SDL_GetWindowSurface( screen );
-	quit = false;
-	counter = 0;
-
 	return ;
 }
 
@@ -83,7 +76,8 @@ void	SdlGUI::refresh_window() {
 
 void	SdlGUI::close_window() {
 	std::cout << "Destroing SDL window" << std::endl;
-	SDL_DestroyWindow(screen);
+	if (screen)
+		SDL_DestroyWindow(screen);
 	SDL_Quit();
 }
 

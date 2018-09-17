@@ -98,7 +98,14 @@ int		MainGame::update_gui(void) {
 			LibraryCreator = (IDynamicLibrary *(*)(MainGame*)) dlsym(dl_handle, GUI_CREATOR_FUNC);
 			if (!LibraryCreator)
 				return dlerror_wrapper();
-			currentLibrary = LibraryCreator(this);
+			try {
+				currentLibrary = LibraryCreator(this);
+			}
+			catch (IDynamicLibrary::DynamicLibraryException e) {
+				std::cerr << "Error while constructing Library" << std::endl;
+				running = false;
+				return EXIT_FAILURE;
+			}
 		}
 		dl_pastIndex = dl_index;
 	}
@@ -116,7 +123,7 @@ void	MainGame::regulate_frame_sleep(void) {
 	if (past_frame_length < FRAME_TIME) {
 		std::this_thread::sleep_for (std::chrono::milliseconds(static_cast<int>((FRAME_TIME - past_frame_length) * 1000)));
 	}
-	std::cout << "frame" << std::endl;
+	// std::cout << "frame" << std::endl;
 	timer = time(NULL);
 }
 
@@ -133,8 +140,6 @@ int		MainGame::run(void) {
 	dl_index = 1; // TODO let choose starting library with argv
 	dl_pastIndex = -1;
 	timer = time(NULL);
-
-	std::cout << "check name: " << this << std::endl;
 
 	// Start game loop
 	while (running) {

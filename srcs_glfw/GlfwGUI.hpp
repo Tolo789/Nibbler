@@ -14,9 +14,9 @@
 # define GLFWGUI_HPP
 
 # include <iostream>
+# include "GLFW/glfw3.h"
 # include "IDynamicLibrary.hpp"
 # include "MainGame.hpp"
-# include "GLFW/glfw3.h"
 
 
 class GlfwGUI: public IDynamicLibrary

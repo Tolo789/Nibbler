@@ -16,13 +16,12 @@
 
 GlfwGUI::GlfwGUI(MainGame *_mainGame) //: tmpMainGame(_mainGame)
 {
-	(void)_mainGame;
-	// this->mainGame = _mainGame;
+	this->mainGame = _mainGame;
 	std::cout << "GLFW window" << std::endl;
 	if (!glfwInit())
 	{
 		std::cout << "Failed to initialize GLFW" << std::endl;
-		// return (-1);	//throw exception
+		throw new IDynamicLibrary::DynamicLibraryException();
 	}
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
@@ -33,9 +32,12 @@ GlfwGUI::GlfwGUI(MainGame *_mainGame) //: tmpMainGame(_mainGame)
 	{
 		glfwTerminate();
 		std::cout << "Failed to create windows GLFW" << std::endl;
-		// return (-1);	//throw exception
+		throw new IDynamicLibrary::DynamicLibraryException();
 	}
 	glfwMakeContextCurrent(this->window);
+	glfwSetWindowUserPointer(window, this);
+	glfwSetKeyCallback(window, key_callback);
+	glfwPollEvents();
 	this->counter = 0.0f;
 	return ;
 }
@@ -66,8 +68,6 @@ GlfwGUI& GlfwGUI::operator=(GlfwGUI const & rhs) {
 // === OVERRIDES ===============================================================
 void	GlfwGUI::get_user_input(void)
 {
-	glfwSetWindowUserPointer(window, this);
-	glfwSetKeyCallback(window, key_callback);
 	glfwPollEvents();
 }
 
@@ -87,7 +87,7 @@ void GlfwGUI::key_callback(GLFWwindow* window, int key, int scancode, int action
     if (action == GLFW_RELEASE)
 	{
 		std::cout << "key was pressed" << std::endl;
-		// mainGame->button_pressed(glfwGetKeyName(key, scancode));
+		mainGame->button_pressed(glfwGetKeyName(key, scancode));
 	}
 	(void)key;
 	(void)scancode;
@@ -99,7 +99,8 @@ void GlfwGUI::key_callback(GLFWwindow* window, int key, int scancode, int action
 void	GlfwGUI::close_window()
 {
     std::cout << "Destroing Glfw window" << std::endl;
-	glfwDestroyWindow(this->window);
+	if (window)
+		glfwDestroyWindow(this->window);
 	glfwTerminate();
 }
 // === END OVERRIDES ===========================================================
@@ -114,3 +115,4 @@ void	deleteGUI(GlfwGUI *test) {
 }
 // === END OTHERS ==============================================================
 
+MainGame *GlfwGUI::mainGame = NULL;
