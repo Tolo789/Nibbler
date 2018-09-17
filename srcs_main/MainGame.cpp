@@ -143,6 +143,7 @@ int		MainGame::run(void) {
 
 	// Start game loop
 	while (running) {
+		std::cout << "-- Frame --" << std::endl;
 		update_game_state();
 
 		gui_ret = update_gui();
@@ -199,8 +200,15 @@ const std::list<std::string> MainGame::change_library_keys = generate_library_ke
 int		main(int ac, char **av) {
 	int	ret = 0;
 
-	MainGame mainGame(ac, av);
-	ret = mainGame.run();
+	try {
+		MainGame mainGame(ac, av);
+		ret = mainGame.run();
+	}
+	catch (...) {
+		std::cerr << "Unkown error occurred when running game" << std::endl;
+		return EXIT_FAILURE;
+
+	}
 	return ret;
 }
 

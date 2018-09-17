@@ -7,6 +7,20 @@
 // === CONSTRUCTOR =============================================================
 
 Test3::Test3(MainGame *mainGame) : mainGame(mainGame) {
+	Fl_Window *window = new Fl_Window(300,180);
+	Fl_Box *box = new Fl_Box(20,40,260,100,"Hello, World!");
+	box->box(FL_UP_BOX);
+	box->labelsize(36);
+	box->labelfont(FL_BOLD+FL_ITALIC);
+	box->labeltype(FL_SHADOW_LABEL);
+	window->end();
+	char **str;
+	str = (char**)malloc(sizeof(char**) * 4);
+	*str = (char*)malloc(sizeof(char*) * 4);
+	str[0][1] = 'a';
+	str[0][1] = 0;
+	window->show(0, str);
+	Fl::ready();
 	return ;
 }
 Test3::Test3(void) {
@@ -36,6 +50,7 @@ Test3& Test3::operator=(Test3 const & rhs) {
 // === OVERRIDES ===============================================================
 
 void	Test3::get_user_input(void) {
+	std::cout << "Key '" <<  Fl::event_text() << "' was pressed" << std::endl;
 }
 
 void	Test3::refresh_window() {
@@ -57,20 +72,8 @@ void	Test3::refresh_window() {
 	// }
 
 
-	Fl_Window *window = new Fl_Window(300,180);
-	Fl_Box *box = new Fl_Box(20,40,260,100,"Hello, World!");
-	box->box(FL_UP_BOX);
-	box->labelsize(36);
-	box->labelfont(FL_BOLD+FL_ITALIC);
-	box->labeltype(FL_SHADOW_LABEL);
-	window->end();
-	char **str;
-	str = (char**)malloc(sizeof(char**) * 4);
-	*str = (char*)malloc(sizeof(char*) * 4);
-	str[0][1] = 'a';
-	str[0][1] = 0;
-	window->show(0, str);
-	Fl::run();
+	// Fl::run();e
+	// Fl::redraw();
 }
 
 void	Test3::close_window() {
