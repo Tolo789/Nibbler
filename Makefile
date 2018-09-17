@@ -25,7 +25,7 @@ SRC_DL1 = 	$(SDIR_DL1)SdlGUI.cpp $(SRC_MAIN)
 
 SRC_DL2 = 	$(SDIR_DL2)GlfwGUI.cpp $(SRC_MAIN)
 
-SRC_DL3 = 	$(SDIR_DL3)test3.cpp
+SRC_DL3 = 	$(SDIR_DL3)test3.cpp $(SRC_MAIN)
 
 
 OBJ_MAIN = $(SRC_MAIN:.cpp=.o)
@@ -48,9 +48,11 @@ DL1_FLAGS = $(DLFLAGS) `pkg-config --libs sdl2`
 
 DL2_FLAGS = $(DLFLAGS) `pkg-config --libs glfw3` -framework OpenGL
 
-DL3_FLAGS = $(DLFLAGS) `fltk-config --ldflags --cxxflags`
+# DL3_FLAGS = $(DLFLAGS) `fltk-config --ldflags --cxxflags`
 
-# DL3_FLAGS = $(DLFLAGS) `pkg-config --libs sfml-all`
+DL3_FLAGS = $(DLFLAGS) `pkg-config --libs sfml-all`
+
+# DL3_FLAGS = $(DLFLAGS) -L ~/.brew/Cellar/sfml/2.4.2_1/lib -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system
 
 CC = clang++
 
@@ -65,8 +67,12 @@ install:
 	cp -r ~/.brew/Cellar/sdl2/2.0.8/include/ ./$(INCLUDES_DIR)
 	brew install glfw
 	cp -r ~/.brew/Cellar/glfw/3.2.1/include/GLFW ./$(INCLUDES_DIR)
-	brew install fltk
-	cp -r ~/.brew/Cellar/fltk/1.3.4-2/include/FL ./$(INCLUDES_DIR)
+	# brew install fltk
+	# cp -r ~/.brew/Cellar/fltk/1.3.4-2/include/FL ./$(INCLUDES_DIR)
+	brew install sfml
+	cp -r ~/.brew/Cellar/sfml/2.4.2_1/include/SFML ./$(INCLUDES_DIR)
+	export LD_LIBRARY_PATH=~/.brew/Cellar/sfml/2.4.2_1/lib
+	echo "export LD_LIBRARY_PATH=~/.brew/Cellar/sfml/2.4.2_1/lib" >> ~/.zshrc
 
 reinstall_all: brew_reset install
 	@echo "				reinstall all"

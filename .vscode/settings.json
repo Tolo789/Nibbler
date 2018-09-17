@@ -20,6 +20,13 @@
 		"chrono": "cpp",
 		"bitset": "cpp",
 		"cstddef": "cpp",
-		"type_traits": "cpp"
+		"type_traits": "cpp",
+		"__split_buffer": "cpp",
+		"__tree": "cpp",
+		"atomic": "cpp",
+		"map": "cpp",
+		"set": "cpp",
+		"system_error": "cpp",
+		"vector": "cpp"
 	}
 }

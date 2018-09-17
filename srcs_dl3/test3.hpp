@@ -2,9 +2,11 @@
 # define TEST3_HPP
 
 # include <iostream>
-#include "FL/Fl.H"
-#include "FL/Fl_Window.H"
-#include "FL/Fl_Box.H"
+# include "FL/Fl.H"
+# include "FL/Fl_Window.H"
+# include "FL/Fl_Box.H"
+# include "SFML/Window.hpp"
+# include "SFML/Graphics.hpp"
 # include "IDynamicLibrary.hpp"
 # include "MainGame.hpp"
 
@@ -16,14 +18,17 @@ class Test3 : public IDynamicLibrary {
 
 		Test3& operator=(Test3 const & rhs);
 
+		MainGame *mainGame;
+		sf::RenderWindow window;
+
 	public:
-		class MyFLWindow : public Fl_Window {
-		public:
-			MyFLWindow(int a, int b);
-			MyFLWindow(void);
-			~MyFLWindow(void) {};
-			int handle(int event);
-		};
+		// class MyFLWindow : public Fl_Window {
+		// public:
+		// 	MyFLWindow(int a, int b);
+		// 	MyFLWindow(void);
+		// 	~MyFLWindow(void) {};
+		// 	// int handle(int event);
+		// };
 		Test3(MainGame *mainGame);
 		Test3(void);
 		~Test3(void);
@@ -32,8 +37,6 @@ class Test3 : public IDynamicLibrary {
 		void	refresh_window();
 		void	close_window();
 
-		MainGame *mainGame;
-		MyFLWindow *window;
 		bool active;
 };
 
