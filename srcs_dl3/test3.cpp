@@ -1,18 +1,24 @@
 #include "test3.hpp"
 // #include "SFML/Window.hpp"
-#include "FL/Fl.H"
-#include "FL/Fl_Window.H"
-#include "FL/Fl_Box.H"
 
 // === CONSTRUCTOR =============================================================
 
+
+Test3::MyFLWindow::MyFLWindow(int a, int b) : Fl_Window(a, b) {
+	return ;
+}
+
+Test3::MyFLWindow::MyFLWindow(void) : Fl_Window(300, 500) {
+	return ;
+}
+
 Test3::Test3(MainGame *mainGame) : mainGame(mainGame) {
-	Fl_Window *window = new Fl_Window(300,180);
-	Fl_Box *box = new Fl_Box(20,40,260,100,"Hello, World!");
-	box->box(FL_UP_BOX);
-	box->labelsize(36);
-	box->labelfont(FL_BOLD+FL_ITALIC);
-	box->labeltype(FL_SHADOW_LABEL);
+	window = new Test3::MyFLWindow(300,180);
+	// Fl_Box *box = new Fl_Box(20,40,260,100,"Hello, World!");
+	// box->box(FL_UP_BOX);
+	// box->labelsize(36);
+	// box->labelfont(FL_BOLD+FL_ITALIC);
+	// box->labeltype(FL_SHADOW_LABEL);
 	window->end();
 	char **str;
 	str = (char**)malloc(sizeof(char**) * 4);
@@ -20,7 +26,7 @@ Test3::Test3(MainGame *mainGame) : mainGame(mainGame) {
 	str[0][1] = 'a';
 	str[0][1] = 0;
 	window->show(0, str);
-	Fl::ready();
+	Fl::run();
 	return ;
 }
 Test3::Test3(void) {
@@ -50,7 +56,35 @@ Test3& Test3::operator=(Test3 const & rhs) {
 // === OVERRIDES ===============================================================
 
 void	Test3::get_user_input(void) {
-	std::cout << "Key '" <<  Fl::event_text() << "' was pressed" << std::endl;
+	// std::cout << "Key '" << Fl::event_text() << "' was pressed" << std::endl;
+
+}
+
+
+int Test3::MyFLWindow::handle(int event) {
+   switch (event)
+   {
+		std::cout << "Handling event '" << event << "'" << std::endl;
+      case FL_FOCUS:
+      case FL_UNFOCUS:
+         return 1;
+
+      case FL_KEYBOARD:
+         int key = Fl::event_key();
+		std::cout << "Key '" << key << "' was pressed: " << Fl::event_text() << std::endl;
+         switch (key)
+         {
+            case FL_Left:
+               redraw();
+               return 1;
+
+            case FL_Right:
+               redraw();
+               return 1;
+         }
+   }
+
+   return Fl_Window::handle(event);
 }
 
 void	Test3::refresh_window() {
