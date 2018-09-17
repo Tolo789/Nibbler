@@ -20,6 +20,9 @@ class SdlGUI : public IDynamicLibrary {
 		// bool quit;
 		int counter;
 
+		SDL_Renderer *renderer;
+
+
 	public:
 		SdlGUI(MainGame *mainGame);
 		SdlGUI(void);
