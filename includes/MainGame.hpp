@@ -14,7 +14,10 @@
 # define DL_COUNT 3
 # define DL1_NAME "dl_sdl.so"
 # define DL2_NAME "dl_glfw.so"
-# define DL3_NAME "dl_sfml.so" // TODO
+# define DL3_NAME "dl_sfml.so"
+
+# define MAP_H 50
+# define MAP_W 50
 
 # define GUI_CREATOR_FUNC "getGUI"
 # define GUI_DESTRUCTOR_FUNC "deleteGUI"
@@ -31,6 +34,7 @@
 # define KEY_S "S"
 # define KEY_D "D"
 # define KEY_ESCAPE "Escape"
+
 
 # define FRAME_TIME	1.0
 
@@ -53,12 +57,17 @@ class MainGame {
 		int		update_gui(void);
 		void	regulate_frame_sleep(void);
 
+		void	init_snake(void);
+
 		IDynamicLibrary	*currentLibrary;
 		void	*dl_handle;
 		int		dl_index;
 		int		dl_pastIndex;
 		time_t	timer;
 		double	past_frame_length;
+
+		//list snake body
+		std::vector<std::tuple<int, int>>	snake_body;
 
 
 	public:

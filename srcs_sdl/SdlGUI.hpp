@@ -30,7 +30,7 @@ class SdlGUI : public IDynamicLibrary {
 		~SdlGUI(void);
 
 		void	get_user_input(void);
-		void	refresh_window();
+		void	refresh_window(std::vector<std::tuple<int, int>>);
 		void	close_window();
 
         bool    active;

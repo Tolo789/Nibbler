@@ -112,7 +112,7 @@ int		MainGame::update_gui(void) {
 
 	// Draw window with game infos
 	if (currentLibrary)
-		currentLibrary->REFRESH_WINDOW_FUNC(); // TODO: give new snake pos + other infos
+		currentLibrary->REFRESH_WINDOW_FUNC(snake_body); // TODO: give new snake pos + other infos
 
 	return EXIT_SUCCESS;
 }
@@ -125,6 +125,15 @@ void	MainGame::regulate_frame_sleep(void) {
 	}
 	// std::cout << "frame" << std::endl;
 	timer = time(NULL);
+}
+
+void	MainGame::init_snake(void)
+{
+	snake_body = std::vector<std::tuple<int, int>>();
+	snake_body.push_back(std::make_tuple(MAP_H / 2, MAP_W / 2));
+	snake_body.push_back(std::make_tuple(MAP_H / 2, (MAP_W / 2) - 1));
+	snake_body.push_back(std::make_tuple(MAP_H / 2, (MAP_W / 2) - 2));
+	snake_body.push_back(std::make_tuple(MAP_H / 2, (MAP_W / 2) - 3));
 }
 
 // === END PRIVATE FUNCS =======================================================
@@ -140,6 +149,9 @@ int		MainGame::run(void) {
 	dl_index = 1; // TODO let choose starting library with argv
 	dl_pastIndex = -1;
 	timer = time(NULL);
+
+	//init body snake
+	init_snake();
 
 	// Start game loop
 	while (running) {

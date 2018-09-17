@@ -6,7 +6,7 @@
 /*   By: jichen-m <jichen-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/12 19:46:17 by jichen-m          #+#    #+#             */
-/*   Updated: 2018/09/13 17:10:09 by jichen-m         ###   ########.fr       */
+/*   Updated: 2018/09/17 17:31:42 by jichen-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ class GlfwGUI: public IDynamicLibrary
         ~GlfwGUI(void);
 
 		void	get_user_input(void);
-		void	refresh_window();
+		void	refresh_window(std::vector<std::tuple<int, int>>);
 		void	close_window();
 
         bool    active;

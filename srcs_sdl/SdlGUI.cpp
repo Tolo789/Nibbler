@@ -66,21 +66,27 @@ void	SdlGUI::get_user_input(void) {
 // === END PRIVATE FUNCS =======================================================
 
 // === OVERRIDES ===============================================================
-void	SdlGUI::refresh_window() {
+void	SdlGUI::refresh_window(std::vector<std::tuple<int, int>> snake_body) {
 	//add/update/remove elems (snake, fruits, points) from window
 	counter = (counter + 30) % 255;
 	//set background color
 	SDL_SetRenderDrawColor( renderer, counter, counter, counter, 255 );
 	SDL_RenderClear(renderer);
-	//create a rect at pos 50,50 with a W=50/H=50
-	pos.x = 50;
-	pos.y = 50;
-	pos.w = 50;
-	pos.h = 50;
-	//set background color for the "Snake"
-	SDL_SetRenderDrawColor( renderer, 255, 55, 255, 255 );
-	//render Rect
-	SDL_RenderFillRect(renderer, &pos);
+
+	for (std::tuple<int, int> &body_part : snake_body) // access by reference to avoid copying
+	{  
+		std::cout << "A" << std::endl;
+		//create a rect at pos 50,50 with a W=50/H=50
+		pos.x = std::get<0>(body_part);
+		pos.y = std::get<1>(body_part);
+		pos.w = SQUARE_SIZE;
+		pos.h = SQUARE_SIZE;
+		//set background color for the "Snake"
+		SDL_SetRenderDrawColor( renderer, 255, 55, 255, 255 );
+		//render Rect
+		SDL_RenderFillRect(renderer, &pos);	
+	}
+	
 	//render Rect to the screen
 	SDL_RenderPresent(renderer);	
 }

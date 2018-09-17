@@ -6,7 +6,7 @@
 /*   By: jichen-m <jichen-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/12 19:46:10 by jichen-m          #+#    #+#             */
-/*   Updated: 2018/09/14 11:31:02 by jichen-m         ###   ########.fr       */
+/*   Updated: 2018/09/17 17:30:58 by jichen-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,9 @@ void	GlfwGUI::get_user_input(void)
 	glfwPollEvents();
 }
 
-void	GlfwGUI::refresh_window()
+void	GlfwGUI::refresh_window(std::vector<std::tuple<int, int>> snake_body)
 {
+	(void) snake_body;
 	//only for test to see if each frame change color
 	this->counter = this->counter + 0.2f;
 	if (this->counter == 1.0f)

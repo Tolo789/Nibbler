@@ -40,7 +40,7 @@ OBJ_DL3 = $(SRC_DL3:.cpp=.o)
 ALL = $(DL1_NAME) $(DL2_NAME) $(DL3_NAME) $(NAME)
 
 
-CFLAGS = -Wall -Wextra -Werror -I $(INCLUDES_DIR)
+CFLAGS = -Wall -Wextra -Werror -I $(INCLUDES_DIR) -std=c++11
 
 DLFLAGS = $(CFLAGS) -shared -fPIC
 

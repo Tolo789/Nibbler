@@ -58,7 +58,8 @@ void	SfmlGUI::get_user_input(void) {
     }
 }
 
-void	SfmlGUI::refresh_window() {
+void	SfmlGUI::refresh_window(std::vector<std::tuple<int, int>> snake_body) {
+    (void) snake_body;
 	std::cout << "SFML func called" << std::endl;
 
     window.clear();
