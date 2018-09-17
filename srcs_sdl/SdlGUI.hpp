@@ -16,11 +16,12 @@ class SdlGUI : public IDynamicLibrary {
 
 
 		SDL_Window *screen;
-		SDL_Surface* screenSurface;
+		// SDL_Surface* screenSurface;
 		// bool quit;
 		int counter;
 
-		SDL_Renderer *renderer;
+		SDL_Renderer	*renderer;
+		SDL_Rect		pos;
 
 
 	public:

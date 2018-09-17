@@ -60,6 +60,7 @@ class MainGame {
 		time_t	timer;
 		double	past_frame_length;
 
+
 	public:
 		MainGame(int ac, char **av);
 		~MainGame(void);

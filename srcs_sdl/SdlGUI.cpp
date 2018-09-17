@@ -14,23 +14,9 @@ SdlGUI::SdlGUI(MainGame *mainGame) : mainGame(mainGame) {
 		std::cout << "Failed to initialize SDL" << std::endl;
 		throw new IDynamicLibrary::DynamicLibraryException();
 	}
-
 	renderer = SDL_CreateRenderer(screen, -1, SDL_RENDERER_ACCELERATED);
-	SDL_SetRenderDrawColor(renderer, 172, 119, 120, 22);
-    SDL_Rect screenfill;
-	
-	screenfill.x = 1;
-	screenfill.y = 1;
-	screenfill.h = 640;
-	screenfill.w = 480;
-	
-    SDL_RenderFillRect(renderer, &screenfill);
-
-
-
-	screenSurface = SDL_GetWindowSurface( screen );
+	// screenSurface = SDL_GetWindowSurface( screen );
 	counter = 0;
-
 	return ;
 }
 
@@ -81,12 +67,22 @@ void	SdlGUI::get_user_input(void) {
 
 // === OVERRIDES ===============================================================
 void	SdlGUI::refresh_window() {
-	// add/update/remove elems (snake, fruits, points) from window
+	//add/update/remove elems (snake, fruits, points) from window
 	counter = (counter + 30) % 255;
-	SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, counter, counter, counter ) );
-	
-	//Update the surface
-	SDL_UpdateWindowSurface( screen );
+	//set background color
+	SDL_SetRenderDrawColor( renderer, counter, counter, counter, 255 );
+	SDL_RenderClear(renderer);
+	//create a rect at pos 50,50 with a W=50/H=50
+	pos.x = 50;
+	pos.y = 50;
+	pos.w = 50;
+	pos.h = 50;
+	//set background color for the "Snake"
+	SDL_SetRenderDrawColor( renderer, 255, 55, 255, 255 );
+	//render Rect
+	SDL_RenderFillRect(renderer, &pos);
+	//render Rect to the screen
+	SDL_RenderPresent(renderer);	
 }
 
 void	SdlGUI::close_window() {
