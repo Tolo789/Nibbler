@@ -60,11 +60,25 @@ void	MainGame::update_game_state(void) {
 	if (currentLibrary) {
 		currentLibrary->GET_USER_INPUT_FUNC();
 	}
-
 	if (dl_index == 0) {
 		std::cout << "Need to close.." << std::endl;
 		running = false;
 	}
+
+	//snake moving forward
+	// for (std::vector<std::tuple<int, int>>::iterator it = snake_body.end() ; it != snake_body.begin(); --it)
+	// {
+	// 	if (it == snake_body.begin())
+	// 	{
+	// 		std::get<0>(*(it)) = std::get<0>(*(it)) + 1;
+	// 	}
+	// 	else
+	// 	{
+	// 		std::get<0>(*(it)) = std::get<0>(*(--it));
+	// 		std::get<1>(*(it)) = std::get<1>(*(--it));
+	// 	}
+		
+	// }
 }
 
 int		MainGame::update_gui(void) {
@@ -114,7 +128,7 @@ int		MainGame::update_gui(void) {
 	if (currentLibrary)
 		currentLibrary->REFRESH_WINDOW_FUNC(snake_body); // TODO: give new snake pos + other infos
 
-	return EXIT_SUCCESS;
+	return EXIT_SUCCESS; 
 }
 
 void	MainGame::regulate_frame_sleep(void) {
@@ -131,9 +145,10 @@ void	MainGame::init_snake(void)
 {
 	snake_body = std::vector<std::tuple<int, int>>();
 	snake_body.push_back(std::make_tuple(MAP_H / 2, MAP_W / 2));
-	snake_body.push_back(std::make_tuple(MAP_H / 2, (MAP_W / 2) - 1));
 	snake_body.push_back(std::make_tuple(MAP_H / 2, (MAP_W / 2) - 2));
-	snake_body.push_back(std::make_tuple(MAP_H / 2, (MAP_W / 2) - 3));
+	snake_body.push_back(std::make_tuple(MAP_H / 2, (MAP_W / 2) - 4));
+	snake_body.push_back(std::make_tuple(MAP_H / 2, (MAP_W / 2) - 6));
+
 }
 
 // === END PRIVATE FUNCS =======================================================
@@ -150,7 +165,7 @@ int		MainGame::run(void) {
 	dl_pastIndex = -1;
 	timer = time(NULL);
 
-	//init body snake
+	//init snake
 	init_snake();
 
 	// Start game loop
