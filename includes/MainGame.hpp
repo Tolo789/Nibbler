@@ -8,13 +8,13 @@
 # include <dlfcn.h>
 # include <iostream>
 # include <time.h>
-# include <chrono>         // std::chrono::seconds
+# include <chrono>
 # include "IDynamicLibrary.hpp"
 
 # define DL_COUNT 3
 # define DL1_NAME "dl_sdl.so"
 # define DL2_NAME "dl_glfw.so"
-# define DL3_NAME "dl3.so" // TODO
+# define DL3_NAME "dl_sfml.so" // TODO
 
 # define GUI_CREATOR_FUNC "getGUI"
 # define GUI_DESTRUCTOR_FUNC "deleteGUI"

@@ -1,5 +1,5 @@
-#ifndef TEST3_HPP
-# define TEST3_HPP
+#ifndef SFMLGUI_HPP
+# define SFMLGUI_HPP
 
 # include <iostream>
 # include "FL/Fl.H"
@@ -11,12 +11,12 @@
 # include "MainGame.hpp"
 
 
-class Test3 : public IDynamicLibrary {
+class SfmlGUI : public IDynamicLibrary {
 
     private:
-		Test3(Test3 const & src);
+		SfmlGUI(SfmlGUI const & src);
 
-		Test3& operator=(Test3 const & rhs);
+		SfmlGUI& operator=(SfmlGUI const & rhs);
 
 		MainGame *mainGame;
 		sf::RenderWindow window;
@@ -29,9 +29,9 @@ class Test3 : public IDynamicLibrary {
 		// 	~MyFLWindow(void) {};
 		// 	// int handle(int event);
 		// };
-		Test3(MainGame *mainGame);
-		Test3(void);
-		~Test3(void);
+		SfmlGUI(MainGame *mainGame);
+		SfmlGUI(void);
+		~SfmlGUI(void);
 
 		void	get_user_input(void);
 		void	refresh_window();
@@ -41,8 +41,8 @@ class Test3 : public IDynamicLibrary {
 };
 
 extern "C" {
-	Test3	*getGUI(MainGame *mainGame);
-	void	deleteGUI(Test3 *test);
+	SfmlGUI	*getGUI(MainGame *mainGame);
+	void	deleteGUI(SfmlGUI *test);
 }
 
-#endif // !TEST3_HPP
+#endif // !SFMLGUI_HPP
