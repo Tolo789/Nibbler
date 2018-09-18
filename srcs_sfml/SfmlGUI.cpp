@@ -2,7 +2,7 @@
 
 // === CONSTRUCTOR =============================================================
 
-SfmlGUI::SfmlGUI(MainGame *mainGame) : mainGame(mainGame), window(sf::VideoMode(WINDOW_W, WINDOW_H), "Nibbler SFML") {
+SfmlGUI::SfmlGUI(MainGame *mainGame) : mainGame(mainGame), window(sf::VideoMode(WINDOW_W, WINDOW_H), "Nibbler SFML", sf::Style::Titlebar) {
 	window.setKeyRepeatEnabled(false);
 	window.setPosition(sf::Vector2i(
 		(sf::VideoMode::getDesktopMode().width/2) - (WINDOW_W / 2),
