@@ -4,6 +4,10 @@
 
 SfmlGUI::SfmlGUI(MainGame *mainGame) : mainGame(mainGame), window(sf::VideoMode(WINDOW_W, WINDOW_H), "Nibbler SFML") {
 	window.setKeyRepeatEnabled(false);
+	window.setPosition(sf::Vector2i(
+		(sf::VideoMode::getDesktopMode().width/2) - (WINDOW_W / 2),
+		(sf::VideoMode::getDesktopMode().height/2)- (WINDOW_H / 2))
+	);
 
 	square_size = mainGame->get_square_size();
 	x_offset = mainGame->get_x_offset();

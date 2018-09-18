@@ -35,6 +35,8 @@ GlfwGUI::GlfwGUI(MainGame *_mainGame)
 		std::cout << "Failed to create windows GLFW" << std::endl;
 		throw new IDynamicLibrary::DynamicLibraryException();
 	}
+	const GLFWvidmode *mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+	glfwSetWindowPos(window, (mode->width / 2) - (WINDOW_W / 2), (mode->height / 2) - (WINDOW_H / 2));
 	glfwMakeContextCurrent(this->window);
 	glfwSetWindowUserPointer(window, this);
 	glfwSetKeyCallback(window, key_callback);
@@ -43,6 +45,7 @@ GlfwGUI::GlfwGUI(MainGame *_mainGame)
 	square_size = mainGame->get_square_size();
 	x_offset = mainGame->get_x_offset();
 	y_offset = mainGame->get_y_offset();
+
 	
 	this->counter = 0.0f;
 	return ;

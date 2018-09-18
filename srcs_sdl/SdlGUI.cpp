@@ -9,7 +9,7 @@ SdlGUI::SdlGUI(MainGame *mainGame) : mainGame(mainGame) {
 	SDL_Init(SDL_INIT_VIDEO);
 
 	screen = SDL_CreateWindow("Nibbler SDL",
-		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_W, WINDOW_H, 0);
+		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_W, WINDOW_H, 0);
 	if (!screen) {
 		std::cout << "Failed to initialize SDL" << std::endl;
 		throw new IDynamicLibrary::DynamicLibraryException();
