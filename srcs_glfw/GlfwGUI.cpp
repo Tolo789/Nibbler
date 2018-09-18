@@ -14,7 +14,7 @@
 
 // === CONSTRUCTOR =============================================================
 
-GlfwGUI::GlfwGUI(MainGame *_mainGame) //: tmpMainGame(_mainGame)
+GlfwGUI::GlfwGUI(MainGame *_mainGame)
 {
 	this->mainGame = _mainGame;
 	std::cout << "GLFW window" << std::endl;
@@ -28,7 +28,7 @@ GlfwGUI::GlfwGUI(MainGame *_mainGame) //: tmpMainGame(_mainGame)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	this->window = glfwCreateWindow(600, 600, "Nibbler GLFW", NULL, NULL);	// size of screen will change
+	this->window = glfwCreateWindow(WINDOW_W, WINDOW_H, "Nibbler GLFW", NULL, NULL);	// size of screen will change
 	if (!this->window)
 	{
 		glfwTerminate();
@@ -39,6 +39,11 @@ GlfwGUI::GlfwGUI(MainGame *_mainGame) //: tmpMainGame(_mainGame)
 	glfwSetWindowUserPointer(window, this);
 	glfwSetKeyCallback(window, key_callback);
 	glfwPollEvents();
+
+	square_size = mainGame->get_square_size();
+	x_offset = mainGame->get_x_offset();
+	y_offset = mainGame->get_y_offset();
+	
 	this->counter = 0.0f;
 	return ;
 }

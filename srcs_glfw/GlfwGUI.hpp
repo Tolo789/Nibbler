@@ -31,6 +31,9 @@ class GlfwGUI: public IDynamicLibrary
 
 		GLFWwindow*	window;
 		float		counter;
+		int		x_offset;
+		int		y_offset;
+		int		square_size;
 
     public:
 		static MainGame *mainGame;

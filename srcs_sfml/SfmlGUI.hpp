@@ -21,6 +21,10 @@ class SfmlGUI : public IDynamicLibrary {
 		MainGame *mainGame;
 		sf::RenderWindow window;
 
+		int		x_offset;
+		int		y_offset;
+		int		square_size;
+
 	public:
 		// class MyFLWindow : public Fl_Window {
 		// public:

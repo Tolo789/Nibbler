@@ -11,13 +11,26 @@
 # include <chrono>
 # include "IDynamicLibrary.hpp"
 
-# define DL_COUNT 3
-# define DL1_NAME "dl_sdl.so"
-# define DL2_NAME "dl_glfw.so"
-# define DL3_NAME "dl_sfml.so"
+# define MIN_ARGC 3
 
-# define MAP_H 50
-# define MAP_W 50
+# define DL_COUNT 3
+# define DL1_NAME "sdl"
+# define DL2_NAME "glfw"
+# define DL3_NAME "sfml"
+# define DL_PREFIX "dl_"
+# define DL_POSTFIX ".so"
+
+# define MIN_MAP_W 44
+# define MIN_MAP_H 36
+# define MAX_MAP_W 110
+# define MAX_MAP_H 90
+
+# define WINDOW_W 1200
+# define WINDOW_H 1000
+# define WINDOW_MIN_X_OFFSET 50
+# define WINDOW_MIN_Y_OFFSET 50
+# define MIN_SQUARE_SIZE 10
+# define MAX_SQUARE_SIZE 25
 
 # define GUI_CREATOR_FUNC "getGUI"
 # define GUI_DESTRUCTOR_FUNC "deleteGUI"
@@ -35,13 +48,13 @@
 # define KEY_D "D"
 # define KEY_ESCAPE "Escape"
 
-
 # define FRAME_TIME	1.0
 
 typedef int intCustom;
 
 class MainGame {
 	private:
+		static const std::string 	*dlArgvNames;
 		static const std::string 	*dlNames;
 		static const std::list<std::string> change_library_keys;
 		// static const std::list<std::string> change_direction_keys;
@@ -59,6 +72,10 @@ class MainGame {
 
 		void	init_snake(void);
 
+		// Graphic libraries vars
+		int		square_size;
+		int		x_offset;
+		int		y_offset;
 		IDynamicLibrary	*currentLibrary;
 		void	*dl_handle;
 		int		dl_index;
@@ -66,9 +83,11 @@ class MainGame {
 		time_t	timer;
 		double	past_frame_length;
 
-		//list snake body
+		// Game model vars
+		bool	running;
+		int		map_w;
+		int		map_h;
 		std::vector<std::tuple<int, int>>	snake_body;
-
 
 	public:
 		MainGame(int ac, char **av);
@@ -77,7 +96,11 @@ class MainGame {
 		int		run();
 		void	button_pressed(const char *button);
 
-		bool	running;
+		int		get_square_size(void);
+		int		get_x_offset(void);
+		int		get_y_offset(void);
+
+		bool	canRun;
 };
 
 #endif // !MAIN_GAME_HPP

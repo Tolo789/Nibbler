@@ -4,8 +4,6 @@
 # include <vector>
 # include <tuple>
 
-# define SQUARE_SIZE 10
-
 class IDynamicLibrary {
 	public:
 		IDynamicLibrary() {};

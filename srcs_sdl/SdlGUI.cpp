@@ -8,14 +8,19 @@ SdlGUI::SdlGUI(MainGame *mainGame) : mainGame(mainGame) {
 	renderer = NULL;
 	SDL_Init(SDL_INIT_VIDEO);
 
-	screen = SDL_CreateWindow("My SDL Empty Window",
-		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, 0);
+	screen = SDL_CreateWindow("Nibbler SDL",
+		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_W, WINDOW_H, 0);
 	if (!screen) {
 		std::cout << "Failed to initialize SDL" << std::endl;
 		throw new IDynamicLibrary::DynamicLibraryException();
 	}
 	renderer = SDL_CreateRenderer(screen, -1, SDL_RENDERER_ACCELERATED);
 	// screenSurface = SDL_GetWindowSurface( screen );
+
+	square_size = mainGame->get_square_size();
+	x_offset = mainGame->get_x_offset();
+	y_offset = mainGame->get_y_offset();
+
 	counter = 0;
 	return ;
 }
@@ -76,10 +81,10 @@ void	SdlGUI::refresh_window(std::vector<std::tuple<int, int>> snake_body) {
 	for (std::tuple<int, int> &body_part : snake_body) // access by reference to avoid copying
 	{  
 		//create a rect at pos 50,50 with a W=50/H=50
-		pos.x = std::get<0>(body_part) * SQUARE_SIZE;
-		pos.y = std::get<1>(body_part) * SQUARE_SIZE;
-		pos.w = SQUARE_SIZE;
-		pos.h = SQUARE_SIZE;
+		pos.x = x_offset + std::get<0>(body_part) * square_size;
+		pos.y = y_offset + std::get<1>(body_part) * square_size;
+		pos.w = square_size;
+		pos.h = square_size;
 		//set background color for the "Snake"
 		SDL_SetRenderDrawColor( renderer, 255, 55, 255, 255 );
 		//render Rect

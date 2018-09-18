@@ -2,9 +2,12 @@
 
 // === CONSTRUCTOR =============================================================
 
-SfmlGUI::SfmlGUI(MainGame *mainGame) : mainGame(mainGame), window(sf::VideoMode(600, 600), "SFML works!") {
+SfmlGUI::SfmlGUI(MainGame *mainGame) : mainGame(mainGame), window(sf::VideoMode(WINDOW_W, WINDOW_H), "Nibbler SFML") {
 	window.setKeyRepeatEnabled(false);
 
+	square_size = mainGame->get_square_size();
+	x_offset = mainGame->get_x_offset();
+	y_offset = mainGame->get_y_offset();
 	return ;
 }
 
@@ -64,12 +67,18 @@ void	SfmlGUI::refresh_window(std::vector<std::tuple<int, int>> snake_body) {
 
 	window.clear(sf::Color::Black); // Can set background color here
 	
+	// Add map outline
+	sf::Vertex lineUp[] = {sf::Vertex(sf::Vector2f(x_offset, y_offset)), sf::Vertex(sf::Vector2f(WINDOW_W - x_offset, y_offset))};
+	window.draw(lineUp, 2, sf::Lines);
+	// sf::Vertex lineDown = {sf::Vertex(sf::Vector2f(x_offset, y_offset)), sf::Vertex(sf::Vector2f(WINDOW_W - x_offset, WINDOW_H - y_offset))};
+	// window.draw(lineDown, 2, sf::Lines);
 
+	// Add snake
 	for (std::tuple<int, int> &body_part : snake_body) // access by reference to avoid copying
 	{
-		sf::RectangleShape rectangle(sf::Vector2f(20, 20));
+		sf::RectangleShape rectangle(sf::Vector2f(square_size, square_size));
 		rectangle.setFillColor(sf::Color::Green);
-		rectangle.setPosition(std::get<0>(body_part) * 20, std::get<1>(body_part) * 20);
+		rectangle.setPosition(x_offset + std::get<0>(body_part) * square_size, y_offset + std::get<1>(body_part) * square_size);
 		window.draw(rectangle);
 	}
 

@@ -7,11 +7,29 @@ MainGame::MainGame(void) {
 }
 
 MainGame::MainGame(int ac, char **av) {
-	// TODO parse options
-	ac = 0;
-	if (!av)
+	// TODO set message if smth is wrong
+	canRun = false;
+	if (ac < MIN_ARGC) {
+		std::cerr << "Not enough arguments ! (Usage: ./nibbler map_width map_height)" << std::endl;
 		return ;
+	}
+	map_w = atoi(av[1]);
+	map_h = atoi(av[2]);
+	if (map_w < MIN_MAP_W || map_w > MAX_MAP_W) {
+		std::cerr << "Map Width must be between " << MIN_MAP_W << " and " << MAX_MAP_W << " squares" << std::endl;
+		return ;
+	}
+	if (map_h < MIN_MAP_H || map_h > MAX_MAP_H) {
+		std::cerr << "Map Height must be between " << MIN_MAP_H << " and " << MAX_MAP_H << " squares" << std::endl;
+		return ;
+	}
+	int maxSizeW = (WINDOW_W - 2 * WINDOW_MIN_X_OFFSET) / map_w;
+	int maxSizeH = (WINDOW_H - 2 * WINDOW_MIN_Y_OFFSET) / map_h;
+	square_size = (maxSizeH < maxSizeW) ? maxSizeH : maxSizeW;
+	x_offset = (WINDOW_W - square_size * map_w) / 2;
+	y_offset = (WINDOW_H - square_size * map_h) / 2;
 	running = false;
+	canRun = true;
 }
 
 MainGame::MainGame(MainGame const & src) {
@@ -25,13 +43,25 @@ MainGame::~MainGame(void) {
 
 // === ENDCONSTRUCTOR ==========================================================
 
-// === GETTER ===============================================================
+// === GETTER ==================================================================
+int		MainGame::get_square_size(void) {
+	return square_size;
+}
+
+int		MainGame::get_x_offset(void) {
+	return x_offset;
+}
+
+int		MainGame::get_y_offset(void) {
+	return y_offset;
+}
+// === END GETTER ==============================================================
 
 
 // === OPERATORS ===============================================================
 
 MainGame& MainGame::operator=(MainGame const & rhs) {
-	this->running = rhs.running;
+	this->canRun = rhs.canRun;
 	return *this;
 }
 
@@ -144,10 +174,10 @@ void	MainGame::regulate_frame_sleep(void) {
 void	MainGame::init_snake(void)
 {
 	snake_body = std::vector<std::tuple<int, int>>();
-	snake_body.push_back(std::make_tuple(MAP_H / 2, MAP_W / 2));
-	snake_body.push_back(std::make_tuple(MAP_H / 2, (MAP_W / 2) - 1));
-	snake_body.push_back(std::make_tuple(MAP_H / 2, (MAP_W / 2) - 2));
-	snake_body.push_back(std::make_tuple(MAP_H / 2, (MAP_W / 2) - 3));
+	snake_body.push_back(std::make_tuple(map_h / 2, map_w / 2));
+	snake_body.push_back(std::make_tuple(map_h / 2, (map_w / 2) - 1));
+	snake_body.push_back(std::make_tuple(map_h / 2, (map_w / 2) - 2));
+	snake_body.push_back(std::make_tuple(map_h / 2, (map_w / 2) - 3));
 
 }
 
@@ -156,6 +186,8 @@ void	MainGame::init_snake(void)
 
 // === PUBLIC FUNCS ============================================================
 int		MainGame::run(void) {
+	if (!canRun)
+		return EXIT_FAILURE;
 	int gui_ret;
 
 	// init vars
@@ -201,11 +233,20 @@ void	MainGame::button_pressed(const char *button)
 
 // === STATICVARS ==============================================================
 
-static std::string *generate_dlNames() {	// static here is "internal linkage"
+static std::string *generate_dlArgvNames() {	// static here is "internal linkage"
    std::string *p = new std::string[DL_COUNT];
    p[0] = DL1_NAME;
    p[1] = DL2_NAME;
    p[2] = DL3_NAME;
+   return p;
+}
+const std::string *MainGame::dlArgvNames = generate_dlArgvNames();
+
+static std::string *generate_dlNames() {	// static here is "internal linkage"
+   std::string *p = new std::string[DL_COUNT];
+   p[0] = std::string(DL_PREFIX) + DL1_NAME + DL_POSTFIX;
+   p[1] = std::string(DL_PREFIX) + DL2_NAME + DL_POSTFIX;
+   p[2] = std::string(DL_PREFIX) + DL3_NAME + DL_POSTFIX;
    return p;
 }
 const std::string *MainGame::dlNames = generate_dlNames();

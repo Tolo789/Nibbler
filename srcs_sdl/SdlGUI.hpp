@@ -23,6 +23,9 @@ class SdlGUI : public IDynamicLibrary {
 		SDL_Renderer	*renderer;
 		SDL_Rect		pos;
 
+		int		x_offset;
+		int		y_offset;
+		int		square_size;
 
 	public:
 		SdlGUI(MainGame *mainGame);
