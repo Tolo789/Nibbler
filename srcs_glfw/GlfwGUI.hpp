@@ -6,7 +6,7 @@
 /*   By: jichen-m <jichen-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/12 19:46:17 by jichen-m          #+#    #+#             */
-/*   Updated: 2018/09/18 18:13:36 by jichen-m         ###   ########.fr       */
+/*   Updated: 2018/09/18 18:22:02 by jichen-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ class GlfwGUI: public IDynamicLibrary
 		void	init_buffer(int x, int y);
 		void	init_shaders(void);
 		void	init_programme(void);
+		void	create_border(void);
 
 		GLFWwindow*	window;
 		float		counter;

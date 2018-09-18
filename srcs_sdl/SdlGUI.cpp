@@ -73,7 +73,7 @@ void	SdlGUI::get_user_input(void) {
 // === OVERRIDES ===============================================================
 void	SdlGUI::refresh_window(std::vector<std::tuple<int, int>> snake_body) {
 	//add/update/remove elems (snake, fruits, points) from window
-	counter = (counter + 30) % 255;
+	// counter = (counter + 30) % 255;
 	//set background color
 	SDL_SetRenderDrawColor( renderer, counter, counter, counter, 255 );
 	SDL_RenderClear(renderer);

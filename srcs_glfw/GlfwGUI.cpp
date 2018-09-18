@@ -6,7 +6,7 @@
 /*   By: jichen-m <jichen-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/12 19:46:10 by jichen-m          #+#    #+#             */
-/*   Updated: 2018/09/18 18:17:52 by jichen-m         ###   ########.fr       */
+/*   Updated: 2018/09/18 18:33:56 by jichen-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,45 @@ void	GlfwGUI::init_programme(void)
 	glLinkProgram(shader_programme);
 }
 
+void	GlfwGUI::create_border(void)
+{
+	float vertex_border[] = 
+	{
+		start_x, start_y, 0.0f,
+		-(start_x), start_y, 0.0f,
+
+		-(start_x), start_y, 0.0f,
+		-(start_x), -(start_y), 0.0f,
+
+		-(start_x), -(start_y), 0.0f,
+		start_x, -(start_y), 0.0f,
+				
+		start_x, -(start_y), 0.0f,
+		start_x, start_y, 0.0f
+	};
+
+	 //BUFFER
+	vbo = 0;
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_border), vertex_border, GL_STATIC_DRAW);
+
+	vao = 0;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+	init_shaders();
+	init_programme();
+	glUseProgram(shader_programme);
+	glBindVertexArray(vao);
+	//drawing all the vertex of the triangle
+	glDrawArrays(GL_LINE_LOOP, 0, 8);
+
+}
+
 // === END PRIVATE FUNCS =======================================================
 
 // === OVERRIDES ===============================================================
@@ -169,11 +208,13 @@ void	GlfwGUI::refresh_window(std::vector<std::tuple<int, int>> snake_body)
 {
 	(void) snake_body;
 	//only for test to see if each frame change color
-	this->counter = this->counter + 0.2f;
+	// this->counter = this->counter + 0.2f;
 	if (this->counter == 1.0f)
 		this->counter = 0.0f;
 	glClearColor(this->counter, this->counter, this->counter,1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	create_border();
 
 	for (std::tuple<int, int> &body_part : snake_body) // access by reference to avoid copying
 	{  

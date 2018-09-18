@@ -183,10 +183,10 @@ void	MainGame::regulate_frame_sleep(void) {
 void	MainGame::init_snake(void)
 {
 	snake_body = std::vector<std::tuple<int, int>>();
-	snake_body.push_back(std::make_tuple(map_h / 2, map_w / 2));
-	snake_body.push_back(std::make_tuple(map_h / 2, (map_w / 2) - 1));
-	snake_body.push_back(std::make_tuple(map_h / 2, (map_w / 2) - 2));
-	snake_body.push_back(std::make_tuple(map_h / 2, (map_w / 2) - 3));
+	snake_body.push_back(std::make_tuple(map_w / 2, map_h / 2));
+	snake_body.push_back(std::make_tuple(map_w / 2, (map_h / 2) - 1));
+	snake_body.push_back(std::make_tuple(map_w / 2, (map_h / 2) - 2));
+	snake_body.push_back(std::make_tuple(map_w / 2, (map_h / 2) - 3));
 
 }
 

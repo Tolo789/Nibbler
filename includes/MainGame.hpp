@@ -49,7 +49,7 @@
 # define KEY_D "D"
 # define KEY_ESCAPE "Escape"
 
-# define FRAME_TIME	1.0
+# define FRAME_TIME	0.1f
 
 typedef int intCustom;
 
