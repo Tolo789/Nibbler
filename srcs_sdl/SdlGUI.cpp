@@ -78,6 +78,30 @@ void	SdlGUI::refresh_window(std::vector<std::tuple<int, int>> snake_body) {
 	SDL_SetRenderDrawColor( renderer, counter, counter, counter, 255 );
 	SDL_RenderClear(renderer);
 
+	// Add map outlines
+	SDL_SetRenderDrawColor( renderer, 255, 255, 255, 255 );
+	pos.x = x_offset;
+	pos.y = y_offset - OUTLINE_TICKNESS;
+	pos.w = WINDOW_W - 2 * x_offset;
+	pos.h = OUTLINE_TICKNESS;
+	SDL_RenderFillRect(renderer, &pos); // upLine
+	pos.x = x_offset;
+	pos.y = WINDOW_H - y_offset;
+	pos.w = WINDOW_W - 2 * x_offset;
+	pos.h = OUTLINE_TICKNESS;
+	SDL_RenderFillRect(renderer, &pos); // downLine
+	pos.x = x_offset - OUTLINE_TICKNESS;
+	pos.y = y_offset;
+	pos.w = OUTLINE_TICKNESS;
+	pos.h = WINDOW_H - 2 * y_offset;
+	SDL_RenderFillRect(renderer, &pos); // leftLine
+	pos.x = WINDOW_W - x_offset;
+	pos.y = y_offset;
+	pos.w = OUTLINE_TICKNESS;
+	pos.h = WINDOW_H - 2 * y_offset;
+	SDL_RenderFillRect(renderer, &pos); // rightLine
+
+	// Draw snake
 	for (std::tuple<int, int> &body_part : snake_body) // access by reference to avoid copying
 	{  
 		//create a rect at pos 50,50 with a W=50/H=50

@@ -31,6 +31,7 @@
 # define WINDOW_MIN_Y_OFFSET 50
 # define MIN_SQUARE_SIZE 10
 # define MAX_SQUARE_SIZE 25
+# define OUTLINE_TICKNESS 2
 
 # define GUI_CREATOR_FUNC "getGUI"
 # define GUI_DESTRUCTOR_FUNC "deleteGUI"

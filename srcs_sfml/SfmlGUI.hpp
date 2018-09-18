@@ -26,13 +26,6 @@ class SfmlGUI : public IDynamicLibrary {
 		int		square_size;
 
 	public:
-		// class MyFLWindow : public Fl_Window {
-		// public:
-		// 	MyFLWindow(int a, int b);
-		// 	MyFLWindow(void);
-		// 	~MyFLWindow(void) {};
-		// 	// int handle(int event);
-		// };
 		SfmlGUI(MainGame *mainGame);
 		SfmlGUI(void);
 		~SfmlGUI(void);
