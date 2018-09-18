@@ -145,9 +145,9 @@ void	MainGame::init_snake(void)
 {
 	snake_body = std::vector<std::tuple<int, int>>();
 	snake_body.push_back(std::make_tuple(MAP_H / 2, MAP_W / 2));
+	snake_body.push_back(std::make_tuple(MAP_H / 2, (MAP_W / 2) - 1));
 	snake_body.push_back(std::make_tuple(MAP_H / 2, (MAP_W / 2) - 2));
-	snake_body.push_back(std::make_tuple(MAP_H / 2, (MAP_W / 2) - 4));
-	snake_body.push_back(std::make_tuple(MAP_H / 2, (MAP_W / 2) - 6));
+	snake_body.push_back(std::make_tuple(MAP_H / 2, (MAP_W / 2) - 3));
 
 }
 

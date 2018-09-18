@@ -23,6 +23,7 @@ class GlfwGUI: public IDynamicLibrary
 {
     private:
 		static void	key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+		static void error_callback(int error, const char* description);
 
 		GlfwGUI(GlfwGUI const & src);
 

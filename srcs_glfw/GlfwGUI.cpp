@@ -18,6 +18,7 @@ GlfwGUI::GlfwGUI(MainGame *_mainGame) //: tmpMainGame(_mainGame)
 {
 	this->mainGame = _mainGame;
 	std::cout << "GLFW window" << std::endl;
+	glfwSetErrorCallback(error_callback);
 	if (!glfwInit())
 	{
 		std::cout << "Failed to initialize GLFW" << std::endl;
@@ -27,7 +28,7 @@ GlfwGUI::GlfwGUI(MainGame *_mainGame) //: tmpMainGame(_mainGame)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	this->window = glfwCreateWindow(400, 400, "Nibbler GLFW", NULL, NULL);	// size of screen will change
+	this->window = glfwCreateWindow(600, 600, "Nibbler GLFW", NULL, NULL);	// size of screen will change
 	if (!this->window)
 	{
 		glfwTerminate();
@@ -80,6 +81,9 @@ void	GlfwGUI::refresh_window(std::vector<std::tuple<int, int>> snake_body)
 		this->counter = 0.0f;
 	glClearColor(this->counter, this->counter, this->counter,1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glColor3f(1.0f, 0.5f, 0.0f);
+		glRectf(-50.75f, 50.75f, 0.75f, -0.75f);
+
 	glfwSwapBuffers(this->window);
 }
 
@@ -103,6 +107,11 @@ void	GlfwGUI::close_window()
 	if (window)
 		glfwDestroyWindow(this->window);
 	glfwTerminate();
+}
+
+void GlfwGUI::error_callback(int error, const char* description)
+{
+	std::cerr << "Error n." << error << ": " << description << std::endl;
 }
 // === END OVERRIDES ===========================================================
 
