@@ -6,12 +6,14 @@
 /*   By: jichen-m <jichen-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/12 19:46:17 by jichen-m          #+#    #+#             */
-/*   Updated: 2018/09/17 17:31:42 by jichen-m         ###   ########.fr       */
+/*   Updated: 2018/09/18 16:31:38 by jichen-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GLFWGUI_HPP
 # define GLFWGUI_HPP
+
+# define GLFW_INCLUDE_GLCOREARB
 
 # include <iostream>
 # include "GLFW/glfw3.h"

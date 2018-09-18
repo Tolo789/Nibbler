@@ -2,9 +2,6 @@
 # define SFMLGUI_HPP
 
 # include <iostream>
-# include "FL/Fl.H"
-# include "FL/Fl_Window.H"
-# include "FL/Fl_Box.H"
 # include "SFML/Window.hpp"
 # include "SFML/Graphics.hpp"
 # include "IDynamicLibrary.hpp"
