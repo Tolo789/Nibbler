@@ -6,7 +6,7 @@
 /*   By: jichen-m <jichen-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/12 19:46:10 by jichen-m          #+#    #+#             */
-/*   Updated: 2018/09/18 16:34:29 by jichen-m         ###   ########.fr       */
+/*   Updated: 2018/09/18 18:17:52 by jichen-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,14 @@ GlfwGUI::GlfwGUI(MainGame *_mainGame)
 	x_offset = mainGame->get_x_offset();
 	y_offset = mainGame->get_y_offset();
 
-	
+	//get top left of game screen
+	start_x = -((WINDOW_W / 2.0f) - x_offset) / (WINDOW_W / 2.0f);
+	start_y = ((WINDOW_H / 2.0f) - y_offset) / (WINDOW_H / 2.0f);
+
+	//get the size of each square in the game screen
+	square_percent_y = start_y / (_mainGame->get_map_h() / 2.0f);
+	square_percent_x = (-start_x) / (_mainGame->get_map_w() / 2.0f);
+
 	this->counter = 0.0f;
 	return ;
 }
@@ -75,6 +82,83 @@ GlfwGUI& GlfwGUI::operator=(GlfwGUI const & rhs) {
 
 // === ENDOPERATORS ============================================================
 
+// === PRIVATE FUNCS ===========================================================
+
+void	GlfwGUI::init_buffer(int x, int y)
+{
+	float start_coor_X = start_x + (x * square_percent_x);
+	float start_coor_Y = start_y - (y * square_percent_y);
+
+	//POINTS
+	float points[] = {
+	start_coor_X, start_coor_Y,  0.0f,
+	start_coor_X, start_coor_Y - square_percent_y,  0.0f,
+	start_coor_X + square_percent_x, start_coor_Y,  0.0f,
+	
+	start_coor_X + square_percent_x, start_coor_Y,  0.0f,
+	start_coor_X + square_percent_x, start_coor_Y - square_percent_y, 0.0f,
+	start_coor_X, start_coor_Y - square_percent_y,  0.0f
+	};
+
+	 //BUFFER
+	vbo = 0;
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
+
+	vao = 0;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+}
+
+void	GlfwGUI::init_shaders(void)
+{
+	//shader pour les vertex
+	vertex_shader =
+	"#version 400\n"
+	"in vec3 vp;"
+	"void main() {"
+	"  gl_Position = vec4(vp, 1.0);"
+	"}";
+
+	//shader pour dessiner ce qu'il y a entre les vertex
+	fragment_shader =
+	"#version 400\n"
+	"out vec4 frag_colour;"
+	"void main() {"
+	"  frag_colour = vec4(1.0, 1.0, 1.0, 1.0);"
+	"}";
+
+	vs = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vs, 1, &vertex_shader, NULL);
+	glCompileShader(vs);
+	fs = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fs, 1, &fragment_shader, NULL);
+	glCompileShader(fs);
+
+	//check if shaders compile fail
+	GLint status;
+	glGetShaderiv(vs, GL_COMPILE_STATUS, &status);
+	if(status != GL_TRUE)
+		std::cout << "Vertex Shader compile failed" << std::endl;
+	glGetShaderiv(fs, GL_COMPILE_STATUS, &status);
+	if(status != GL_TRUE)
+		std::cout << "Fragment Shader compile failed" << std::endl;
+}
+
+void	GlfwGUI::init_programme(void)
+{
+	shader_programme = glCreateProgram();
+	glAttachShader(shader_programme, fs);
+	glAttachShader(shader_programme, vs);
+	glLinkProgram(shader_programme);
+}
+
+// === END PRIVATE FUNCS =======================================================
+
 // === OVERRIDES ===============================================================
 void	GlfwGUI::get_user_input(void)
 {
@@ -85,73 +169,22 @@ void	GlfwGUI::refresh_window(std::vector<std::tuple<int, int>> snake_body)
 {
 	(void) snake_body;
 	//only for test to see if each frame change color
-	// this->counter = this->counter + 0.2f;
-	// if (this->counter == 1.0f)
-	// 	this->counter = 0.0f;
-	// glClearColor(this->counter, this->counter, this->counter,1.0f);
-	// glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	// 	glColor3f(1.0f, 0.5f, 0.0f);
-	// 	glRectf(-50.75f, 50.75f, 0.75f, -0.75f);
+	this->counter = this->counter + 0.2f;
+	if (this->counter == 1.0f)
+		this->counter = 0.0f;
+	glClearColor(this->counter, this->counter, this->counter,1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-	 //POINTS
-        float points[] = {
-        0.5f, 0.5f,  0.0f,
-        -0.5f, 0.5f,  0.0f,
-        -0.5f, -0.5f,  0.0f,
-		
-		0.5f,  0.5f,  0.0f,
-        0.5f, -0.5f,  0.0f,
-        -0.5f, -0.5f,  0.0f
-        };
-
-        //BUFFER
-        GLuint vbo = 0;
-        glGenBuffers(1, &vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
-
-        GLuint vao = 0;
-        glGenVertexArrays(1, &vao);
-        glBindVertexArray(vao);
-        glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-
-        //SHADERS
-        const char* vertex_shader =
-        "#version 400\n"
-        "in vec3 vp;"
-        "void main() {"
-        "  gl_Position = vec4(vp, 1.0);"
-        "}";
-
-        const char* fragment_shader =
-        "#version 400\n"
-        "out vec4 frag_colour;"
-        "void main() {"
-        "  frag_colour = vec4(1.0, 1.0, 1.0, 1.0);"
-        "}";
-
-        GLuint vs = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vs, 1, &vertex_shader, NULL);
-        glCompileShader(vs);
-        GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fs, 1, &fragment_shader, NULL);
-        glCompileShader(fs);
-
-        GLuint shader_programme = glCreateProgram();
-        glAttachShader(shader_programme, fs);
-        glAttachShader(shader_programme, vs);
-        glLinkProgram(shader_programme);
-		
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	for (std::tuple<int, int> &body_part : snake_body) // access by reference to avoid copying
+	{  
+		init_buffer(std::get<0>(body_part), std::get<1>(body_part));
+		init_shaders();
+		init_programme();
 		glUseProgram(shader_programme);
 		glBindVertexArray(vao);
-		// draw points 0-3 from the currently bound VAO with current in-use shader
+		//drawing all the vertex of the triangle
 		glDrawArrays(GL_TRIANGLES, 0, 6);
-
-
+	}
 	glfwSwapBuffers(this->window);
 }
 

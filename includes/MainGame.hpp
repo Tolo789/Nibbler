@@ -100,6 +100,9 @@ class MainGame {
 		int		get_square_size(void);
 		int		get_x_offset(void);
 		int		get_y_offset(void);
+		int		get_map_w(void);
+		int		get_map_h(void);
+	
 
 		bool	canRun;
 };

@@ -55,6 +55,15 @@ int		MainGame::get_x_offset(void) {
 int		MainGame::get_y_offset(void) {
 	return y_offset;
 }
+
+int		MainGame::get_map_w(void) {
+	return map_w;
+}
+
+int		MainGame::get_map_h(void) {
+	return map_h;
+}
+
 // === END GETTER ==============================================================
 
 

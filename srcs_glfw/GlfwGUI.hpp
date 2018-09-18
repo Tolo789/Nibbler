@@ -6,7 +6,7 @@
 /*   By: jichen-m <jichen-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/12 19:46:17 by jichen-m          #+#    #+#             */
-/*   Updated: 2018/09/18 16:31:38 by jichen-m         ###   ########.fr       */
+/*   Updated: 2018/09/18 18:13:36 by jichen-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,31 @@ class GlfwGUI: public IDynamicLibrary
 
 		GlfwGUI& operator=(GlfwGUI const & rhs);
 
+		void	init_buffer(int x, int y);
+		void	init_shaders(void);
+		void	init_programme(void);
+
 		GLFWwindow*	window;
 		float		counter;
 		int		x_offset;
 		int		y_offset;
 		int		square_size;
+		float	start_x;
+		float	start_y;
+		float	square_percent_y;
+		float	square_percent_x;
+
+
+		GLuint		vbo;
+		GLuint		vao;
+		const char	*vertex_shader;
+		const char	*fragment_shader;
+		GLuint		vs;
+		GLuint		fs;
+		GLuint		shader_programme;
+
+
+
 
     public:
 		static MainGame *mainGame;
