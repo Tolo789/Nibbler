@@ -24,6 +24,7 @@ GlfwGUI::GlfwGUI(MainGame *_mainGame)
 		std::cout << "Failed to initialize GLFW" << std::endl;
 		throw new IDynamicLibrary::DynamicLibraryException();
 	}
+	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
