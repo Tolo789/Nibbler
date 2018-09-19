@@ -62,7 +62,7 @@ install:
 	brew install sdl2
 	cp -r ~/.brew/Cellar/sdl2/2.0.8/include/ ./$(INCLUDES_DIR)
 	brew install sdl2_ttf
-	cp ~/.brew/Cellar/sdl2_ttf/2.0.14/include/SDL2/ ./$(INCLUDES_DIR)/SDL2
+	cp ~/.brew/Cellar/sdl2_ttf/2.0.14/include/SDL2/SDL_ttf.h ./$(INCLUDES_DIR)/SDL2
 	brew install glfw
 	cp -r ~/.brew/Cellar/glfw/3.2.1/include/GLFW ./$(INCLUDES_DIR)
 	brew install sfml
