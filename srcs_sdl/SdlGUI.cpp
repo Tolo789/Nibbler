@@ -103,18 +103,24 @@ void	SdlGUI::refresh_window(std::vector<std::tuple<int, int>> &snake_body, std::
 	SDL_RenderFillRect(renderer, &pos); // rightLine
 
 	// Draw snake
+	pos.w = square_size;	// set van only once since it wont change
+	pos.h = square_size;	// set van only once since it wont change
 	for (std::tuple<int, int> &body_part : snake_body) // access by reference to avoid copying
-	{  
+	{
 		//create a rect at pos 50,50 with a W=50/H=50
 		pos.x = x_offset + std::get<0>(body_part) * square_size;
 		pos.y = y_offset + std::get<1>(body_part) * square_size;
-		pos.w = square_size;
-		pos.h = square_size;
 		//set background color for the "Snake"
 		SDL_SetRenderDrawColor( renderer, 255, 55, 255, 255 );
 		//render Rect
 		SDL_RenderFillRect(renderer, &pos);
 	}
+
+	// Add fruit
+	pos.x = x_offset + std::get<0>(fruit_pos) * square_size;
+	pos.y = y_offset + std::get<1>(fruit_pos) * square_size;
+	SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255 );
+	SDL_RenderFillRect(renderer, &pos);
 	
 	//render Rect to the screen
 	SDL_RenderPresent(renderer);	

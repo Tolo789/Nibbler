@@ -281,7 +281,7 @@ int		MainGame::run(void) {
 	// init vars
 	currentLibrary = NULL;
 	running = true;
-	dl_index = 2; // TODO let choose starting library with argv
+	dl_index = 1; // TODO let choose starting library with argv
 	dl_pastIndex = -1;
 	timer = time(NULL);
 	fruit_pos = std::make_tuple(0, 0);
