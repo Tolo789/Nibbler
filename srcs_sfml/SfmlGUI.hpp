@@ -15,8 +15,11 @@ class SfmlGUI : public IDynamicLibrary {
 
 		SfmlGUI& operator=(SfmlGUI const & rhs);
 
+		void	draw_end_text(void);
+
 		MainGame *mainGame;
 		sf::RenderWindow window;
+		sf::Font font;
 
 		int		x_offset;
 		int		y_offset;

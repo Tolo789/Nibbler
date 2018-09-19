@@ -53,29 +53,13 @@ SdlGUI& SdlGUI::operator=(SdlGUI const & rhs) {
 // === ENDOPERATORS ============================================================
 
 // === PRIVATE FUNCS ===========================================================
-void	SdlGUI::get_user_input(void) {
-	SDL_Event	event;
-
-	/* Poll for events */
-	while( SDL_PollEvent( &event ) )
-	{
-		switch( event.type )
-		{
-			case SDL_KEYDOWN:
-				// std::cout << SDL_GetKeyName( event.key.keysym.sym ) << std::endl;
-				mainGame->button_pressed(SDL_GetKeyName(event.key.keysym.sym));
-				break;
-			default:
-				break;
-		}
-	}
-}
-
 void	SdlGUI::draw_end_text(void) {
 	// TTF_Font* font = TTF_OpenFont("fonts/Kasnake.ttf", 24); //this opens a font style and sets a size
 	TTF_Font* font = TTF_OpenFont("fonts/Snake Chan.ttf", 24); //this opens a font style and sets a size
-	if (!font)
+	if (!font) {
 		std::cerr << TTF_GetError() << std::endl;
+		return;
+	}
 	SDL_Color White = {0, 255, 0, 255};  // this is the color in rgb format, maxing out all would give you the color white, and it will be your text's color
 	SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, "Game Over", White); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
 	SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage); //now you can convert it into a texture
@@ -99,6 +83,24 @@ void	SdlGUI::draw_end_text(void) {
 // === END PRIVATE FUNCS =======================================================
 
 // === OVERRIDES ===============================================================
+void	SdlGUI::get_user_input(void) {
+	SDL_Event	event;
+
+	/* Poll for events */
+	while( SDL_PollEvent( &event ) )
+	{
+		switch( event.type )
+		{
+			case SDL_KEYDOWN:
+				// std::cout << SDL_GetKeyName( event.key.keysym.sym ) << std::endl;
+				mainGame->button_pressed(SDL_GetKeyName(event.key.keysym.sym));
+				break;
+			default:
+				break;
+		}
+	}
+}
+
 void	SdlGUI::refresh_window(std::vector<std::tuple<int, int>> &snake_body, std::tuple<int, int> &fruit_pos) {
 	//set background color
 	SDL_SetRenderDrawColor( renderer, counter, counter, counter, 255 );

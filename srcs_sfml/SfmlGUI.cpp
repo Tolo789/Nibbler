@@ -13,6 +13,13 @@ SfmlGUI::SfmlGUI(MainGame *mainGame) : mainGame(mainGame), window(sf::VideoMode(
 	x_offset = mainGame->get_x_offset();
 	y_offset = mainGame->get_y_offset();
 
+	// if (!font.loadFromFile("fonts/Snake Chan.ttf"))
+	if (!font.loadFromFile("fonts/Kasnake.ttf"))
+	{
+		std::cerr << "Error while loading font" << std::endl;
+		throw new IDynamicLibrary::DynamicLibraryException();
+	}
+
 	return ;
 }
 
@@ -39,6 +46,21 @@ SfmlGUI& SfmlGUI::operator=(SfmlGUI const & rhs) {
 }
 
 // === ENDOPERATORS ============================================================
+
+// === PRIVATE FUNCS ===========================================================
+void	SfmlGUI::draw_end_text(void) {
+	sf::Text text;
+	text.setFont(font); // font is a sf::Font
+	text.setString("Game Over");
+	text.setCharacterSize(WINDOW_MIN_Y_OFFSET / 2); // in pixels, not points!
+	text.setFillColor(sf::Color::Green);
+	text.setPosition(WINDOW_W / 2 - (4 * WINDOW_MIN_Y_OFFSET / 2), WINDOW_MIN_Y_OFFSET / 5);
+	// text.setStyle(sf::Text::Bold | sf::Text::Underlined);
+
+	// Must be between window.clear() and window.display()
+	window.draw(text);
+}
+// === END PRIVATE FUNCS =======================================================
 
 // === OVERRIDES ===============================================================
 
@@ -68,6 +90,9 @@ void	SfmlGUI::get_user_input(void) {
 
 void	SfmlGUI::refresh_window(std::vector<std::tuple<int, int>> &snake_body, std::tuple<int, int> &fruit_pos) {
 	window.clear(sf::Color::Black); // Can set background color here
+
+	draw_end_text();
+
 	// Add map outlines
 	sf::RectangleShape lineUp(sf::Vector2f(WINDOW_W - 2 * x_offset, OUTLINE_TICKNESS));
 	lineUp.setFillColor(sf::Color::White);
