@@ -66,9 +66,8 @@ void	SfmlGUI::get_user_input(void) {
 	}
 }
 
-void	SfmlGUI::refresh_window(std::vector<std::tuple<int, int>> snake_body) {
-	(void) snake_body;
-	std::cout << "SFML func called" << std::endl;
+void	SfmlGUI::refresh_window(std::vector<std::tuple<int, int>> &snake_body, std::tuple<int, int> &fruit_pos) {
+	(void) fruit_pos;
 
 	window.clear(sf::Color::Black); // Can set background color here
 	
@@ -102,6 +101,13 @@ void	SfmlGUI::refresh_window(std::vector<std::tuple<int, int>> snake_body) {
 		rectangle.setPosition(x_offset + std::get<0>(body_part) * square_size, y_offset + std::get<1>(body_part) * square_size);
 		window.draw(rectangle);
 	}
+
+	// Add fruit
+	sf::RectangleShape rectangle(sf::Vector2f(square_size, square_size));
+	rectangle.setFillColor(sf::Color::Red);
+	rectangle.setPosition(x_offset + std::get<0>(fruit_pos) * square_size, y_offset + std::get<1>(fruit_pos) * square_size);
+	window.draw(rectangle);
+
 
 	window.display();
 }

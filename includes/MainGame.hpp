@@ -1,13 +1,13 @@
 #ifndef MAIN_GAME_HPP
 # define MAIN_GAME_HPP
 
+# include <stdlib.h>
 # include <dlfcn.h>
+# include <time.h>
 # include <iostream>
 # include <list>
 # include <thread>
-# include <dlfcn.h>
 # include <iostream>
-# include <time.h>
 # include <chrono>
 # include "IDynamicLibrary.hpp"
 
@@ -81,6 +81,7 @@ class MainGame {
 		void	change_direction_to(int newDir);
 
 		void	init_snake(void);
+		void	set_fruit_pos(void);
 
 		// Graphic libraries vars
 		int		square_size;
@@ -100,6 +101,7 @@ class MainGame {
 		int		snake_direction;
 		int		snake_direction_requested;
 		std::vector<std::tuple<int, int>>	snake_body;
+		std::tuple<int, int>	fruit_pos;
 
 	public:
 		MainGame(int ac, char **av);

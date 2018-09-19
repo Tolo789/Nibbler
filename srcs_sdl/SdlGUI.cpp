@@ -71,7 +71,8 @@ void	SdlGUI::get_user_input(void) {
 // === END PRIVATE FUNCS =======================================================
 
 // === OVERRIDES ===============================================================
-void	SdlGUI::refresh_window(std::vector<std::tuple<int, int>> snake_body) {
+void	SdlGUI::refresh_window(std::vector<std::tuple<int, int>> &snake_body, std::tuple<int, int> &fruit_pos) {
+	(void) fruit_pos;
 	//add/update/remove elems (snake, fruits, points) from window
 	// counter = (counter + 30) % 255;
 	//set background color

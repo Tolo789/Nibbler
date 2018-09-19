@@ -106,9 +106,16 @@ void	MainGame::update_game_state(void) {
 	}
 
 	//snake moving forward
+	bool	hasEaten = false;
+	int		tailX;
+	int		tailY;
 	for (std::vector<std::tuple<int, int>>::reverse_iterator it = snake_body.rbegin(); it != snake_body.rend(); ++it ) {		
 		std::vector<std::tuple<int, int>>::reverse_iterator prevIt = it + 1;
 		if (prevIt != snake_body.rend()) {
+			if (it == snake_body.rbegin()) {
+				tailX = std::get<0>(*(it));
+				tailY = std::get<1>(*(it));
+			}
 			std::get<0>(*(it)) = std::get<0>(*(prevIt));
 			std::get<1>(*(it)) = std::get<1>(*(prevIt));
 		}
@@ -134,7 +141,24 @@ void	MainGame::update_game_state(void) {
 				std::get<0>(*(it)) = map_w - 1;
 			if (std::get<1>(*(it)) < 0)
 				std::get<1>(*(it)) = map_h -1;
+
+			// Check obstacles
+			for (std::vector<std::tuple<int, int>>::iterator it2 = snake_body.begin() + 1; it2 != snake_body.end(); ++it2 ) {
+				if (std::get<0>(*(it)) == std::get<0>(*it2) && std::get<1>(*(it)) == std::get<1>(*it2)) {
+					// COLLISION
+				}
+			}
+
+			// Check if fruit has been ate
+			if (std::get<0>(*(it)) == std::get<0>(fruit_pos) && std::get<1>(*(it)) == std::get<1>(fruit_pos)) {
+				hasEaten = true;
+			}
 		}
+	}
+
+	if (hasEaten) {
+		snake_body.push_back(std::make_tuple(tailX, tailY));
+		set_fruit_pos();
 	}
 }
 
@@ -183,7 +207,7 @@ int		MainGame::update_gui(void) {
 
 	// Draw window with game infos
 	if (currentLibrary)
-		currentLibrary->REFRESH_WINDOW_FUNC(snake_body); // TODO: give new snake pos + other infos
+		currentLibrary->REFRESH_WINDOW_FUNC(snake_body, fruit_pos); // TODO: give new snake pos + other infos
 
 	return EXIT_SUCCESS; 
 }
@@ -208,6 +232,8 @@ void	MainGame::init_snake(void)
 
 	snake_direction = (map_w > map_h) ? LEFT : UP;
 	snake_direction_requested = -1;
+
+	set_fruit_pos();
 }
 
 void	MainGame::change_direction_to(int newDir) {
@@ -217,6 +243,30 @@ void	MainGame::change_direction_to(int newDir) {
 	else if ((newDir == LEFT || newDir == RIGHT) && (snake_direction == UP || snake_direction == DOWN)) {
 		snake_direction_requested = newDir;
 	}
+}
+
+void	MainGame::set_fruit_pos(void) {
+	bool	is_good_pos;
+	int		tmpX;
+	int		tmpY;
+
+	do {
+		is_good_pos = true;
+		// generate random pos
+		tmpX = rand() % map_w;
+		tmpY = rand() % map_h;
+
+		// check that newPos doesnt collide with other game objs
+		for (std::vector<std::tuple<int, int>>::iterator it = snake_body.begin(); it != snake_body.end(); ++it ) {
+			if (std::get<0>(*it) == tmpX && std::get<1>(*it) == tmpY) {
+				is_good_pos = false;
+				break;
+			}
+		}
+
+	} while (!is_good_pos);
+	std::get<0>(fruit_pos) = tmpX;
+	std::get<1>(fruit_pos) = tmpY;
 }
 
 // === END PRIVATE FUNCS =======================================================
@@ -234,6 +284,7 @@ int		MainGame::run(void) {
 	dl_index = 2; // TODO let choose starting library with argv
 	dl_pastIndex = -1;
 	timer = time(NULL);
+	fruit_pos = std::make_tuple(0, 0);
 
 	//init snake
 	init_snake();
@@ -326,6 +377,8 @@ int		main(int ac, char **av) {
 	int	ret = 0;
 
 	try {
+		/* initialize random seed: */
+		srand (time(NULL));
 		MainGame mainGame(ac, av);
 		ret = mainGame.run();
 	}

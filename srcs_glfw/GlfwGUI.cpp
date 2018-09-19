@@ -204,9 +204,9 @@ void	GlfwGUI::get_user_input(void)
 	glfwPollEvents();
 }
 
-void	GlfwGUI::refresh_window(std::vector<std::tuple<int, int>> snake_body)
+void	GlfwGUI::refresh_window(std::vector<std::tuple<int, int>> &snake_body, std::tuple<int, int> &fruit_pos)
 {
-	(void) snake_body;
+	(void) fruit_pos;
 	//only for test to see if each frame change color
 	// this->counter = this->counter + 0.2f;
 	if (this->counter == 1.0f)

@@ -28,7 +28,7 @@ class SfmlGUI : public IDynamicLibrary {
 		~SfmlGUI(void);
 
 		void	get_user_input(void);
-		void	refresh_window(std::vector<std::tuple<int, int>>);
+		void	refresh_window(std::vector<std::tuple<int, int>> &snake_body, std::tuple<int, int> &fruit_pos);
 		void	close_window();
 
 		bool active;
