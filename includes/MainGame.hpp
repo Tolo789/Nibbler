@@ -47,6 +47,11 @@
 # define KEY_A "A"
 # define KEY_S "S"
 # define KEY_D "D"
+# define KEY_W_LOWER "w"
+# define KEY_A_LOWER "a"
+# define KEY_S_LOWER "s"
+# define KEY_D_LOWER "d"
+
 # define KEY_ESCAPE "Escape"
 
 # define UP 1
@@ -93,6 +98,7 @@ class MainGame {
 		int		map_w;
 		int		map_h;
 		int		snake_direction;
+		int		snake_direction_requested;
 		std::vector<std::tuple<int, int>>	snake_body;
 
 	public:

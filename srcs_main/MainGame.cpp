@@ -113,7 +113,10 @@ void	MainGame::update_game_state(void) {
 			std::get<1>(*(it)) = std::get<1>(*(prevIt));
 		}
 		else {
-			std::cout << "direction = " << snake_direction << std::endl;
+			if (snake_direction_requested > 0) {
+				snake_direction = snake_direction_requested;
+				snake_direction_requested = -1;
+			}
 			// Advance based on direction
 			if (snake_direction == UP)
 				std::get<1>(*(it)) = std::get<1>(*(it)) - 1;
@@ -204,14 +207,15 @@ void	MainGame::init_snake(void)
 	snake_body.push_back(std::make_tuple(map_w / 2, (map_h / 2) - 3));
 
 	snake_direction = (map_w > map_h) ? LEFT : UP;
+	snake_direction_requested = -1;
 }
 
 void	MainGame::change_direction_to(int newDir) {
 	if ((newDir == UP || newDir == DOWN) && (snake_direction == LEFT || snake_direction == RIGHT)) {
-		snake_direction = newDir;
+		snake_direction_requested = newDir;
 	}
 	else if ((newDir == LEFT || newDir == RIGHT) && (snake_direction == UP || snake_direction == DOWN)) {
-		snake_direction = newDir;
+		snake_direction_requested = newDir;
 	}
 }
 
@@ -252,7 +256,7 @@ void	MainGame::button_pressed(const char *button)
 {
 	std::string key = !button ? KEY_ESCAPE : std::string(button); // GLFW sends NULL pointer for Escape key..
 
-	std::cout << "key '" << key << "' was pressed" << std::endl;
+	// std::cout << "key '" << key << "' was pressed" << std::endl;
 	std::list<std::string>::const_iterator iter = std::find(change_library_keys.begin(), change_library_keys.end(), key);
 	if (iter != change_library_keys.end()) {
 		change_library_request(key);
@@ -260,7 +264,7 @@ void	MainGame::button_pressed(const char *button)
 	else {
 		for (const std::tuple<std::string, int> &change_direction_fun : change_direction_keys) // access by reference to avoid copying
 		{
-			if (std::get<0>(change_direction_fun).compare(key)) {
+			if (std::get<0>(change_direction_fun).compare(key) == 0) {
 				change_direction_to(std::get<1>(change_direction_fun));
 				return ;
 			}
@@ -307,6 +311,10 @@ static std::vector<std::tuple<std::string, int>> generate_direction_keys() {	// 
 	p.push_back(std::make_tuple(KEY_A, LEFT));
 	p.push_back(std::make_tuple(KEY_S, DOWN));
 	p.push_back(std::make_tuple(KEY_D, RIGHT));
+	p.push_back(std::make_tuple(KEY_W_LOWER, UP));
+	p.push_back(std::make_tuple(KEY_A_LOWER, LEFT));
+	p.push_back(std::make_tuple(KEY_S_LOWER, DOWN));
+	p.push_back(std::make_tuple(KEY_D_LOWER, RIGHT));
 	return p;
 }
 const std::vector<std::tuple<std::string, int>> MainGame::change_direction_keys = generate_direction_keys();
