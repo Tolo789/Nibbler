@@ -137,6 +137,16 @@ void	GlfwGUI::init_shaders(int type)
 		"  frag_colour = vec4(1.0, 1.0, 1.0, 1.0);"
 		"}";
 	}
+	else if (type == 2)
+	{
+		//shader pour dessiner ce qu'il y a entre les vertex
+		fragment_shader =
+		"#version 400\n"
+		"out vec4 frag_colour;"
+		"void main() {"
+		"  frag_colour = vec4(0.0, 0.9, 0.7, 1.0);"
+		"}";
+	}
 	else
 	{
 		//shader pour dessiner ce qu'il y a entre les vertex
@@ -175,19 +185,22 @@ void	GlfwGUI::init_programme(void)
 
 void	GlfwGUI::create_border(void)
 {
+	float epsilon_x = 1 / (WINDOW_W / 2.0f);
+	float epsilon_y = 1 / (WINDOW_H / 2.0f);
+
 	float vertex_border[] = 
 	{
-		start_x, start_y, 0.0f,
-		-(start_x), start_y, 0.0f,
+		start_x, start_y + epsilon_y, 0.0f, // top-left
+		-(start_x) + epsilon_x, start_y + epsilon_y, 0.0f, // top-right
 
-		-(start_x), start_y, 0.0f,
-		-(start_x), -(start_y), 0.0f,
+		-(start_x) + epsilon_x, start_y + epsilon_y, 0.0f, // top-right
+		-(start_x) + epsilon_x, -(start_y), 0.0f, // bottom-right
 
-		-(start_x), -(start_y), 0.0f,
-		start_x, -(start_y), 0.0f,
+		-(start_x) + epsilon_x, -(start_y), 0.0f, // bottom-right
+		start_x, -(start_y), 0.0f, // bottom-left
 				
-		start_x, -(start_y), 0.0f,
-		start_x, start_y, 0.0f
+		start_x, -(start_y), 0.0f, // bottom-left
+		start_x, start_y + epsilon_y, 0.0f // top-left
 	};
 	 //BUFFER
 	vbo = 0;
@@ -227,7 +240,7 @@ void	GlfwGUI::put_fruit(std::tuple<int, int> &fruit_pos)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
 	make_vao(vbo);
 
-	init_shaders(2);
+	init_shaders(3);
 	init_programme();
 	glUseProgram(shader_programme);
 	glBindVertexArray(vao);
@@ -243,7 +256,7 @@ void	GlfwGUI::get_user_input(void)
 	glfwPollEvents();
 }
 
-void	GlfwGUI::refresh_window(std::vector<std::tuple<int, int>> &snake_body, std::tuple<int, int> &fruit_pos)
+void	GlfwGUI::refresh_window(void)
 {
 	//only for test to see if each frame change color
 	// this->counter = this->counter + 0.2f;
@@ -252,10 +265,10 @@ void	GlfwGUI::refresh_window(std::vector<std::tuple<int, int>> &snake_body, std:
 	glClearColor(this->counter, this->counter, this->counter,1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	create_border();
-	for (std::tuple<int, int> &body_part : snake_body) // access by reference to avoid copying
+	for (std::tuple<int, int> &body_part : mainGame->get_snake_body()) // access by reference to avoid copying
 	{  
 		init_buffer(std::get<0>(body_part), std::get<1>(body_part));
-		init_shaders(1);
+		init_shaders(2);
 		init_programme();
 		glUseProgram(shader_programme);
 		glBindVertexArray(vao);
@@ -263,7 +276,7 @@ void	GlfwGUI::refresh_window(std::vector<std::tuple<int, int>> &snake_body, std:
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 	//add fruit
-	put_fruit(fruit_pos);
+	put_fruit(mainGame->get_fruit_pos());
 	glfwSwapBuffers(this->window);
 }
 

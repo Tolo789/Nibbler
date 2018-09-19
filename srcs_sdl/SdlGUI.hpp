@@ -34,8 +34,8 @@ class SdlGUI : public IDynamicLibrary {
 		~SdlGUI(void);
 
 		void	get_user_input(void);
-		void	refresh_window(std::vector<std::tuple<int, int>> &snake_body, std::tuple<int, int> &fruit_pos);
-		void	close_window();
+		void	refresh_window(void);
+		void	close_window(void);
 
         bool    active;
 		MainGame *mainGame;

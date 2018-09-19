@@ -6,12 +6,12 @@
 
 class IDynamicLibrary {
 	public:
-		IDynamicLibrary() {};
-		virtual ~IDynamicLibrary() {};
+		IDynamicLibrary(void) {};
+		virtual ~IDynamicLibrary(void) {};
 
-		virtual void	get_user_input () = 0;
-		virtual void	refresh_window (std::vector<std::tuple<int, int>> &snake_body, std::tuple<int, int> &fruit_pos) = 0;
-		virtual void	close_window () = 0;
+		virtual void	get_user_input (void) = 0;
+		virtual void	refresh_window (void) = 0;
+		virtual void	close_window (void) = 0;
 
 		class DynamicLibraryException : public std::exception {};
 };

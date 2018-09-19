@@ -96,8 +96,12 @@ class MainGame {
 
 		// Game model vars
 		bool	running;
-		int		map_w;
+		bool	collide_with_walls;
 		int		map_h;
+		int		map_w;
+		int		score;
+		bool	is_snake_alive;
+		bool	has_shown_death;
 		int		snake_direction;
 		int		snake_direction_requested;
 		std::vector<std::tuple<int, int>>	snake_body;
@@ -115,6 +119,10 @@ class MainGame {
 		int		get_y_offset(void);
 		int		get_map_w(void);
 		int		get_map_h(void);
+		int		get_score(void);
+		bool	get_if_is_snake_alive(void);
+		std::vector<std::tuple<int, int>>		&get_snake_body(void);
+		std::tuple<int, int>		&get_fruit_pos(void);
 	
 
 		bool	canRun;

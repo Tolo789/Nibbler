@@ -30,6 +30,7 @@ MainGame::MainGame(int ac, char **av) {
 	y_offset = (WINDOW_H - square_size * map_h) / 2;
 
 	running = false;
+	collide_with_walls = true; // TODO let choose option
 	canRun = true;
 }
 
@@ -65,6 +66,22 @@ int		MainGame::get_map_h(void) {
 	return map_h;
 }
 
+int		MainGame::get_score(void) {
+	return score;
+}
+
+bool	MainGame::get_if_is_snake_alive(void) {
+	return is_snake_alive;
+}
+
+std::vector<std::tuple<int, int>>		&MainGame::get_snake_body(void) {
+	return snake_body;
+}
+
+std::tuple<int, int>		&MainGame::get_fruit_pos(void) {
+	return fruit_pos;
+}
+
 // === END GETTER ==============================================================
 
 
@@ -96,8 +113,8 @@ void	MainGame::change_library_request(std::string key_code) {
 
 void	MainGame::update_game_state(void) {
 	// TODO: snake movement, collision detection, food spawn, etc
-	// std::cout << "Updating with user input" << dl_index << std::endl;
 	if (currentLibrary) {
+		// std::cout << "Updating with user input" << dl_index << std::endl;
 		currentLibrary->GET_USER_INPUT_FUNC();
 	}
 	if (dl_index == 0) {
@@ -105,60 +122,98 @@ void	MainGame::update_game_state(void) {
 		running = false;
 	}
 
-	//snake moving forward
-	bool	hasEaten = false;
-	int		tailX;
-	int		tailY;
-	for (std::vector<std::tuple<int, int>>::reverse_iterator it = snake_body.rbegin(); it != snake_body.rend(); ++it ) {		
-		std::vector<std::tuple<int, int>>::reverse_iterator prevIt = it + 1;
-		if (prevIt != snake_body.rend()) {
-			if (it == snake_body.rbegin()) {
-				tailX = std::get<0>(*(it));
-				tailY = std::get<1>(*(it));
+	if (is_snake_alive) {
+		// Check if with next move the snake will still be alive
+		int	headX = std::get<0>(snake_body[0]);
+		int	headY = std::get<1>(snake_body[0]);
+		if (snake_direction == UP)
+			headY -= 1;
+		else if (snake_direction == DOWN)
+			headY += 1;
+		else if (snake_direction == LEFT)
+			headX -= 1;
+		else if (snake_direction == RIGHT)
+			headX += 1;
+		// Check if he goes outside the map
+		if (collide_with_walls) {
+			if (headX == map_w || headY == map_h ||
+				headX < 0 || headY < 0) {
+				is_snake_alive = false;
+				return;
 			}
-			std::get<0>(*(it)) = std::get<0>(*(prevIt));
-			std::get<1>(*(it)) = std::get<1>(*(prevIt));
 		}
 		else {
-			if (snake_direction_requested > 0) {
-				snake_direction = snake_direction_requested;
-				snake_direction_requested = -1;
-			}
-			// Advance based on direction
-			if (snake_direction == UP)
-				std::get<1>(*(it)) = std::get<1>(*(it)) - 1;
-			else if (snake_direction == DOWN)
-				std::get<1>(*(it)) = std::get<1>(*(it)) + 1;
-			else if (snake_direction == LEFT)
-				std::get<0>(*(it)) = std::get<0>(*(it)) - 1;
-			else if (snake_direction == RIGHT)
-				std::get<0>(*(it)) = std::get<0>(*(it)) + 1;
+			headX %= map_w;
+			headY %= map_h;
+			if (headX < 0)
+				headX = map_w - 1;
+			if (headY < 0)
+				headY = map_h -1;
+		}
 
-			// Check if he goes outside the map
-			std::get<0>(*(it)) %= map_w;
-			std::get<1>(*(it)) %= map_h;
-			if (std::get<0>(*(it)) < 0)
-				std::get<0>(*(it)) = map_w - 1;
-			if (std::get<1>(*(it)) < 0)
-				std::get<1>(*(it)) = map_h -1;
-
-			// Check obstacles
-			for (std::vector<std::tuple<int, int>>::iterator it2 = snake_body.begin() + 1; it2 != snake_body.end(); ++it2 ) {
-				if (std::get<0>(*(it)) == std::get<0>(*it2) && std::get<1>(*(it)) == std::get<1>(*it2)) {
-					// COLLISION
-				}
-			}
-
-			// Check if fruit has been ate
-			if (std::get<0>(*(it)) == std::get<0>(fruit_pos) && std::get<1>(*(it)) == std::get<1>(fruit_pos)) {
-				hasEaten = true;
+		// Check obstacles
+		for (std::vector<std::tuple<int, int>>::iterator it2 = snake_body.begin() + 1; it2 != snake_body.end(); ++it2 ) {
+			if (headX == std::get<0>(*it2) && headY == std::get<1>(*it2)) {
+				is_snake_alive = false;
+				return;
 			}
 		}
-	}
 
-	if (hasEaten) {
-		snake_body.push_back(std::make_tuple(tailX, tailY));
-		set_fruit_pos();
+		//snake actual moving
+		bool	hasEaten = false;
+		int		tailX;
+		int		tailY;
+		std::vector<std::tuple<int, int>>::reverse_iterator prevIt;
+		for (std::vector<std::tuple<int, int>>::reverse_iterator it = snake_body.rbegin(); it != snake_body.rend(); ++it ) {
+			prevIt = it + 1;
+			if (prevIt != snake_body.rend()) {
+				if (it == snake_body.rbegin()) {
+					tailX = std::get<0>(*(it));
+					tailY = std::get<1>(*(it));
+				}
+				std::get<0>(*(it)) = std::get<0>(*(prevIt));
+				std::get<1>(*(it)) = std::get<1>(*(prevIt));
+			}
+			else {
+				if (snake_direction_requested > 0) {
+					snake_direction = snake_direction_requested;
+					snake_direction_requested = -1;
+				}
+				// Advance based on direction
+				if (snake_direction == UP)
+					std::get<1>(*(it)) = std::get<1>(*(it)) - 1;
+				else if (snake_direction == DOWN)
+					std::get<1>(*(it)) = std::get<1>(*(it)) + 1;
+				else if (snake_direction == LEFT)
+					std::get<0>(*(it)) = std::get<0>(*(it)) - 1;
+				else if (snake_direction == RIGHT)
+					std::get<0>(*(it)) = std::get<0>(*(it)) + 1;
+
+				// Teleport snake to other side of the map
+				if (!collide_with_walls) {
+					std::get<0>(*(it)) %= map_w;
+					std::get<1>(*(it)) %= map_h;
+					if (std::get<0>(*(it)) < 0)
+						std::get<0>(*(it)) = map_w - 1;
+					if (std::get<1>(*(it)) < 0)
+						std::get<1>(*(it)) = map_h -1;
+				}
+
+				// Check if fruit has been ate
+				if (std::get<0>(*(it)) == std::get<0>(fruit_pos) && std::get<1>(*(it)) == std::get<1>(fruit_pos)) {
+					hasEaten = true;
+				}
+			}
+		}
+
+		if (hasEaten) {
+			snake_body.push_back(std::make_tuple(tailX, tailY));
+
+			if (snake_body.size() == (size_t) map_w * map_h) // Just in case a player is so good that the area is filled
+				is_snake_alive = false;
+			else
+				set_fruit_pos();
+		}
 	}
 }
 
@@ -182,6 +237,7 @@ int		MainGame::update_gui(void) {
 		}
 		if (dl_index != 0) {
 			std::cout << "Opening new GUI" << std::endl;
+			has_shown_death = false;
 
 			// Open dynamic library
 			dl_handle = dlopen(dlNames[dl_index - 1].c_str(), RTLD_LAZY | RTLD_LOCAL);
@@ -206,8 +262,11 @@ int		MainGame::update_gui(void) {
 	}
 
 	// Draw window with game infos
-	if (currentLibrary)
-		currentLibrary->REFRESH_WINDOW_FUNC(snake_body, fruit_pos); // TODO: give new snake pos + other infos
+	if (currentLibrary && !has_shown_death) {
+		currentLibrary->REFRESH_WINDOW_FUNC();
+		if (!is_snake_alive)
+			has_shown_death = true;
+	}
 
 	return EXIT_SUCCESS; 
 }
@@ -224,13 +283,16 @@ void	MainGame::regulate_frame_sleep(void) {
 
 void	MainGame::init_snake(void)
 {
+	is_snake_alive = true;
+	has_shown_death = false;
+
 	snake_body = std::vector<std::tuple<int, int>>();
 	snake_body.push_back(std::make_tuple(map_w / 2, map_h / 2));
 	snake_body.push_back(std::make_tuple(map_w / 2, (map_h / 2) - 1));
 	snake_body.push_back(std::make_tuple(map_w / 2, (map_h / 2) - 2));
 	snake_body.push_back(std::make_tuple(map_w / 2, (map_h / 2) - 3));
 
-	snake_direction = (map_w > map_h) ? LEFT : UP;
+	snake_direction = (map_w > map_h) ? LEFT : DOWN;
 	snake_direction_requested = -1;
 
 	set_fruit_pos();
@@ -250,7 +312,7 @@ void	MainGame::set_fruit_pos(void) {
 	int		tmpX;
 	int		tmpY;
 
-	if (snake_body.size() == (size_t) map_w * map_h) // Just in case a player is so good that the area is filled
+	if (!is_snake_alive)
 		return;
 	do {
 		is_good_pos = true;
@@ -286,6 +348,7 @@ int		MainGame::run(void) {
 	dl_index = 1; // TODO let choose starting library with argv
 	dl_pastIndex = -1;
 	timer = time(NULL);
+	score = 0;
 	fruit_pos = std::make_tuple(0, 0);
 
 	//init snake

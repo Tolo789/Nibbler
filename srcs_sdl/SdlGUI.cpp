@@ -101,12 +101,13 @@ void	SdlGUI::get_user_input(void) {
 	}
 }
 
-void	SdlGUI::refresh_window(std::vector<std::tuple<int, int>> &snake_body, std::tuple<int, int> &fruit_pos) {
+void	SdlGUI::refresh_window(void) {
 	//set background color
 	SDL_SetRenderDrawColor( renderer, counter, counter, counter, 255 );
 	SDL_RenderClear(renderer);
 
-	draw_end_text();
+	if (!mainGame->get_if_is_snake_alive())
+		draw_end_text();
 
 	// Add map outlines
 	SDL_SetRenderDrawColor( renderer, 255, 255, 255, 255 );
@@ -134,7 +135,7 @@ void	SdlGUI::refresh_window(std::vector<std::tuple<int, int>> &snake_body, std::
 	// Draw snake
 	pos.w = square_size;	// set van only once since it wont change
 	pos.h = square_size;	// set van only once since it wont change
-	for (std::tuple<int, int> &body_part : snake_body) // access by reference to avoid copying
+	for (std::tuple<int, int> &body_part : mainGame->get_snake_body()) // access by reference to avoid copying
 	{
 		//create a rect at pos 50,50 with a W=50/H=50
 		pos.x = x_offset + std::get<0>(body_part) * square_size;
@@ -146,8 +147,8 @@ void	SdlGUI::refresh_window(std::vector<std::tuple<int, int>> &snake_body, std::
 	}
 
 	// Add fruit
-	pos.x = x_offset + std::get<0>(fruit_pos) * square_size;
-	pos.y = y_offset + std::get<1>(fruit_pos) * square_size;
+	pos.x = x_offset + std::get<0>(mainGame->get_fruit_pos()) * square_size;
+	pos.y = y_offset + std::get<1>(mainGame->get_fruit_pos()) * square_size;
 	SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255 );
 	SDL_RenderFillRect(renderer, &pos);
 	

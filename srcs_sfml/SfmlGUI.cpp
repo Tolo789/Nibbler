@@ -88,10 +88,11 @@ void	SfmlGUI::get_user_input(void) {
 	}
 }
 
-void	SfmlGUI::refresh_window(std::vector<std::tuple<int, int>> &snake_body, std::tuple<int, int> &fruit_pos) {
+void	SfmlGUI::refresh_window(void) {
 	window.clear(sf::Color::Black); // Can set background color here
 
-	draw_end_text();
+	if (!mainGame->get_if_is_snake_alive())
+		draw_end_text();
 
 	// Add map outlines
 	sf::RectangleShape lineUp(sf::Vector2f(WINDOW_W - 2 * x_offset, OUTLINE_TICKNESS));
@@ -116,7 +117,7 @@ void	SfmlGUI::refresh_window(std::vector<std::tuple<int, int>> &snake_body, std:
 	// window.draw(line, 2, sf::Lines);
 
 	// Add snake
-	for (std::tuple<int, int> &body_part : snake_body) // access by reference to avoid copying
+	for (std::tuple<int, int> &body_part : mainGame->get_snake_body()) // access by reference to avoid copying
 	{
 		sf::RectangleShape rectangle(sf::Vector2f(square_size, square_size));
 		rectangle.setFillColor(sf::Color::Green);
@@ -127,7 +128,8 @@ void	SfmlGUI::refresh_window(std::vector<std::tuple<int, int>> &snake_body, std:
 	// Add fruit
 	sf::RectangleShape rectangle(sf::Vector2f(square_size, square_size));
 	rectangle.setFillColor(sf::Color::Red);
-	rectangle.setPosition(x_offset + std::get<0>(fruit_pos) * square_size, y_offset + std::get<1>(fruit_pos) * square_size);
+	rectangle.setPosition(x_offset + std::get<0>(mainGame->get_fruit_pos()) * square_size,
+						y_offset + std::get<1>(mainGame->get_fruit_pos()) * square_size);
 	window.draw(rectangle);
 
 
