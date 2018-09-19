@@ -27,6 +27,7 @@
 		"map": "cpp",
 		"set": "cpp",
 		"system_error": "cpp",
-		"vector": "cpp"
+		"vector": "cpp",
+		"__locale": "cpp"
 	}
 }

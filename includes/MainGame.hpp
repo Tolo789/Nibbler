@@ -49,16 +49,19 @@
 # define KEY_D "D"
 # define KEY_ESCAPE "Escape"
 
-# define FRAME_TIME	0.1f
+# define UP 1
+# define DOWN 2
+# define LEFT 3
+# define RIGHT 4
 
-typedef int intCustom;
+# define FRAME_TIME	0.1f
 
 class MainGame {
 	private:
 		static const std::string 	*dlArgvNames;
 		static const std::string 	*dlNames;
 		static const std::list<std::string> change_library_keys;
-		// static const std::list<std::string> change_direction_keys;
+		static const std::vector<std::tuple<std::string, int>> change_direction_keys;
 
 		MainGame(void);
 		MainGame(MainGame const & src);
@@ -70,6 +73,7 @@ class MainGame {
 		void	update_game_state(void);
 		int		update_gui(void);
 		void	regulate_frame_sleep(void);
+		void	change_direction_to(int newDir);
 
 		void	init_snake(void);
 
@@ -88,6 +92,7 @@ class MainGame {
 		bool	running;
 		int		map_w;
 		int		map_h;
+		int		snake_direction;
 		std::vector<std::tuple<int, int>>	snake_body;
 
 	public:

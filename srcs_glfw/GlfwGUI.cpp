@@ -233,7 +233,6 @@ void GlfwGUI::key_callback(GLFWwindow* window, int key, int scancode, int action
 {
     if (action == GLFW_RELEASE)
 	{
-		std::cout << "key was pressed" << std::endl;
 		mainGame->button_pressed(glfwGetKeyName(key, scancode));
 	}
 	(void)key;

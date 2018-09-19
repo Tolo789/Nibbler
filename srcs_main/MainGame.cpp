@@ -28,6 +28,7 @@ MainGame::MainGame(int ac, char **av) {
 	square_size = (maxSizeH < maxSizeW) ? maxSizeH : maxSizeW;
 	x_offset = (WINDOW_W - square_size * map_w) / 2;
 	y_offset = (WINDOW_H - square_size * map_h) / 2;
+
 	running = false;
 	canRun = true;
 }
@@ -95,7 +96,7 @@ void	MainGame::change_library_request(std::string key_code) {
 
 void	MainGame::update_game_state(void) {
 	// TODO: snake movement, collision detection, food spawn, etc
-	std::cout << "Updating with user input" << dl_index << std::endl;
+	// std::cout << "Updating with user input" << dl_index << std::endl;
 	if (currentLibrary) {
 		currentLibrary->GET_USER_INPUT_FUNC();
 	}
@@ -105,19 +106,33 @@ void	MainGame::update_game_state(void) {
 	}
 
 	//snake moving forward
-	// for (std::vector<std::tuple<int, int>>::iterator it = snake_body.end() ; it != snake_body.begin(); --it)
-	// {
-	// 	if (it == snake_body.begin())
-	// 	{
-	// 		std::get<0>(*(it)) = std::get<0>(*(it)) + 1;
-	// 	}
-	// 	else
-	// 	{
-	// 		std::get<0>(*(it)) = std::get<0>(*(--it));
-	// 		std::get<1>(*(it)) = std::get<1>(*(--it));
-	// 	}
-		
-	// }
+	for (std::vector<std::tuple<int, int>>::reverse_iterator it = snake_body.rbegin(); it != snake_body.rend(); ++it ) {		
+		std::vector<std::tuple<int, int>>::reverse_iterator prevIt = it + 1;
+		if (prevIt != snake_body.rend()) {
+			std::get<0>(*(it)) = std::get<0>(*(prevIt));
+			std::get<1>(*(it)) = std::get<1>(*(prevIt));
+		}
+		else {
+			std::cout << "direction = " << snake_direction << std::endl;
+			// Advance based on direction
+			if (snake_direction == UP)
+				std::get<1>(*(it)) = std::get<1>(*(it)) - 1;
+			else if (snake_direction == DOWN)
+				std::get<1>(*(it)) = std::get<1>(*(it)) + 1;
+			else if (snake_direction == LEFT)
+				std::get<0>(*(it)) = std::get<0>(*(it)) - 1;
+			else if (snake_direction == RIGHT)
+				std::get<0>(*(it)) = std::get<0>(*(it)) + 1;
+
+			// Check if he goes outside the map
+			std::get<0>(*(it)) %= map_w;
+			std::get<1>(*(it)) %= map_h;
+			if (std::get<0>(*(it)) < 0)
+				std::get<0>(*(it)) = map_w - 1;
+			if (std::get<1>(*(it)) < 0)
+				std::get<1>(*(it)) = map_h -1;
+		}
+	}
 }
 
 int		MainGame::update_gui(void) {
@@ -188,6 +203,16 @@ void	MainGame::init_snake(void)
 	snake_body.push_back(std::make_tuple(map_w / 2, (map_h / 2) - 2));
 	snake_body.push_back(std::make_tuple(map_w / 2, (map_h / 2) - 3));
 
+	snake_direction = (map_w > map_h) ? LEFT : UP;
+}
+
+void	MainGame::change_direction_to(int newDir) {
+	if ((newDir == UP || newDir == DOWN) && (snake_direction == LEFT || snake_direction == RIGHT)) {
+		snake_direction = newDir;
+	}
+	else if ((newDir == LEFT || newDir == RIGHT) && (snake_direction == UP || snake_direction == DOWN)) {
+		snake_direction = newDir;
+	}
 }
 
 // === END PRIVATE FUNCS =======================================================
@@ -211,7 +236,7 @@ int		MainGame::run(void) {
 
 	// Start game loop
 	while (running) {
-		std::cout << "-- Frame --" << std::endl;
+		// std::cout << "-- Frame --" << std::endl;
 		update_game_state();
 
 		gui_ret = update_gui();
@@ -227,14 +252,20 @@ void	MainGame::button_pressed(const char *button)
 {
 	std::string key = !button ? KEY_ESCAPE : std::string(button); // GLFW sends NULL pointer for Escape key..
 
+	std::cout << "key '" << key << "' was pressed" << std::endl;
 	std::list<std::string>::const_iterator iter = std::find(change_library_keys.begin(), change_library_keys.end(), key);
 	if (iter != change_library_keys.end()) {
 		change_library_request(key);
 	}
 	else {
+		for (const std::tuple<std::string, int> &change_direction_fun : change_direction_keys) // access by reference to avoid copying
+		{
+			if (std::get<0>(change_direction_fun).compare(key)) {
+				change_direction_to(std::get<1>(change_direction_fun));
+				return ;
+			}
+		}
 		std::cout << "value not useful.." << std::endl;
-
-		// iter = change_direction_keys.find(button_pressed);
 	}
 }
 
@@ -261,15 +292,24 @@ static std::string *generate_dlNames() {	// static here is "internal linkage"
 const std::string *MainGame::dlNames = generate_dlNames();
 
 static std::list<std::string> generate_library_keys() {	// static here is "internal linkage"
-   std::list<std::string> p;
+	std::list<std::string> p;
 	p.push_front(KEY_0);
 	p.push_front(KEY_1);
 	p.push_front(KEY_2);
 	p.push_front(KEY_3);
-   return p;
+	return p;
 }
 const std::list<std::string> MainGame::change_library_keys = generate_library_keys();
 
+static std::vector<std::tuple<std::string, int>> generate_direction_keys() {	// static here is "internal linkage"
+	std::vector<std::tuple<std::string, int>> p;
+	p.push_back(std::make_tuple(KEY_W, UP));
+	p.push_back(std::make_tuple(KEY_A, LEFT));
+	p.push_back(std::make_tuple(KEY_S, DOWN));
+	p.push_back(std::make_tuple(KEY_D, RIGHT));
+	return p;
+}
+const std::vector<std::tuple<std::string, int>> MainGame::change_direction_keys = generate_direction_keys();
 // === END STATICVARS ==========================================================
 
 // === OTHERS ==================================================================
