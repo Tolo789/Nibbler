@@ -250,6 +250,8 @@ void	MainGame::set_fruit_pos(void) {
 	int		tmpX;
 	int		tmpY;
 
+	if (snake_body.size() == (size_t) map_w * map_h) // Just in case a player is so good that the area is filled
+		return;
 	do {
 		is_good_pos = true;
 		// generate random pos

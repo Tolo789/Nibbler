@@ -20,15 +20,15 @@
 # define DL_PREFIX "dl_"
 # define DL_POSTFIX ".so"
 
-# define MIN_MAP_W 44
-# define MIN_MAP_H 36
-# define MAX_MAP_W 110
-# define MAX_MAP_H 90
+# define MIN_MAP_W 40
+# define MIN_MAP_H 40
+# define MAX_MAP_W 100
+# define MAX_MAP_H 100
 
-# define WINDOW_W 1200
-# define WINDOW_H 1000
+# define WINDOW_W 1100
+# define WINDOW_H 1200
 # define WINDOW_MIN_X_OFFSET 50
-# define WINDOW_MIN_Y_OFFSET 50
+# define WINDOW_MIN_Y_OFFSET 100
 # define MIN_SQUARE_SIZE 10
 # define MAX_SQUARE_SIZE 25
 # define OUTLINE_TICKNESS 2

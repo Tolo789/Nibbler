@@ -4,9 +4,9 @@
 # include <iostream>
 # include <thread>
 # include "SDL2/SDL.h"
+# include "SDL2/SDL_ttf.h"
 # include "IDynamicLibrary.hpp"
 # include "MainGame.hpp"
-
 
 class SdlGUI : public IDynamicLibrary {
     private:
@@ -14,6 +14,7 @@ class SdlGUI : public IDynamicLibrary {
 
 		SdlGUI& operator=(SdlGUI const & rhs);
 
+		void	draw_end_text(void);
 
 		SDL_Window *screen;
 		// SDL_Surface* screenSurface;

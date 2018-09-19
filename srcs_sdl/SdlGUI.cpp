@@ -6,16 +6,18 @@ SdlGUI::SdlGUI(MainGame *mainGame) : mainGame(mainGame) {
 	std::cout << "SDL window" << std::endl;
 
 	renderer = NULL;
-	SDL_Init(SDL_INIT_VIDEO);
+	if (SDL_Init(SDL_INIT_VIDEO) == -1 || TTF_Init() == -1) {
+		std::cout << "Failed to initialize SDL" << std::endl;
+		throw new IDynamicLibrary::DynamicLibraryException();
+	}
 
 	screen = SDL_CreateWindow("Nibbler SDL",
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_W, WINDOW_H, 0);
 	if (!screen) {
-		std::cout << "Failed to initialize SDL" << std::endl;
+		std::cout << "Failed to create SDL window" << std::endl;
 		throw new IDynamicLibrary::DynamicLibraryException();
 	}
 	renderer = SDL_CreateRenderer(screen, -1, SDL_RENDERER_ACCELERATED);
-	// screenSurface = SDL_GetWindowSurface( screen );
 
 	square_size = mainGame->get_square_size();
 	x_offset = mainGame->get_x_offset();
@@ -60,7 +62,7 @@ void	SdlGUI::get_user_input(void) {
 		switch( event.type )
 		{
 			case SDL_KEYDOWN:
-				std::cout << SDL_GetKeyName( event.key.keysym.sym ) << std::endl;
+				// std::cout << SDL_GetKeyName( event.key.keysym.sym ) << std::endl;
 				mainGame->button_pressed(SDL_GetKeyName(event.key.keysym.sym));
 				break;
 			default:
@@ -68,16 +70,41 @@ void	SdlGUI::get_user_input(void) {
 		}
 	}
 }
+
+void	SdlGUI::draw_end_text(void) {
+	// TTF_Font* font = TTF_OpenFont("fonts/Kasnake.ttf", 24); //this opens a font style and sets a size
+	TTF_Font* font = TTF_OpenFont("fonts/Snake Chan.ttf", 24); //this opens a font style and sets a size
+	if (!font)
+		std::cerr << TTF_GetError() << std::endl;
+	SDL_Color White = {0, 255, 0, 255};  // this is the color in rgb format, maxing out all would give you the color white, and it will be your text's color
+	SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, "Game Over", White); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
+	SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage); //now you can convert it into a texture
+
+	SDL_Rect Message_rect; // Draw the text inside this rect
+	Message_rect.w = (WINDOW_W - 2 * WINDOW_MIN_X_OFFSET) / 2;
+	Message_rect.h = (WINDOW_MIN_Y_OFFSET - 0) / 2;
+	Message_rect.x = (WINDOW_W - Message_rect.w) / 2;
+	Message_rect.y = (WINDOW_MIN_Y_OFFSET - Message_rect.h) / 2;
+
+	//Mind you that (0,0) is on the top left of the window/screen, think a rect as the text's box, that way it would be very simple to understance
+
+	//Now since it's a texture, you have to put RenderCopy in your game loop area, the area where the whole code executes
+	SDL_RenderCopy(renderer, Message, NULL, &Message_rect); //you put the renderer's name first, the Message, the crop size(you can ignore this if you don't want to dabble with cropping), and the rect which is the size and coordinate of your texture
+
+	//Don't forget too free your font, surface and texture
+	TTF_CloseFont(font);
+	SDL_FreeSurface(surfaceMessage);
+	SDL_DestroyTexture(Message);
+}
 // === END PRIVATE FUNCS =======================================================
 
 // === OVERRIDES ===============================================================
 void	SdlGUI::refresh_window(std::vector<std::tuple<int, int>> &snake_body, std::tuple<int, int> &fruit_pos) {
-	(void) fruit_pos;
-	//add/update/remove elems (snake, fruits, points) from window
-	// counter = (counter + 30) % 255;
 	//set background color
 	SDL_SetRenderDrawColor( renderer, counter, counter, counter, 255 );
 	SDL_RenderClear(renderer);
+
+	draw_end_text();
 
 	// Add map outlines
 	SDL_SetRenderDrawColor( renderer, 255, 255, 255, 255 );

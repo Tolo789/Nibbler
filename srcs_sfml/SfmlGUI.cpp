@@ -67,10 +67,7 @@ void	SfmlGUI::get_user_input(void) {
 }
 
 void	SfmlGUI::refresh_window(std::vector<std::tuple<int, int>> &snake_body, std::tuple<int, int> &fruit_pos) {
-	(void) fruit_pos;
-
 	window.clear(sf::Color::Black); // Can set background color here
-	
 	// Add map outlines
 	sf::RectangleShape lineUp(sf::Vector2f(WINDOW_W - 2 * x_offset, OUTLINE_TICKNESS));
 	lineUp.setFillColor(sf::Color::White);

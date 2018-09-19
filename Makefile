@@ -44,7 +44,7 @@ CFLAGS = -Wall -Wextra -Werror -I $(INCLUDES_DIR) -std=c++11
 
 DLFLAGS = $(CFLAGS) -shared -fPIC
 
-DL1_FLAGS = $(DLFLAGS) `pkg-config --libs sdl2`
+DL1_FLAGS = $(DLFLAGS) `pkg-config --libs sdl2` `pkg-config --libs SDL2_ttf`
 
 DL2_FLAGS = $(DLFLAGS) `pkg-config --libs glfw3` -framework OpenGL
 
@@ -61,6 +61,8 @@ install:
 	brew install pkg-config
 	brew install sdl2
 	cp -r ~/.brew/Cellar/sdl2/2.0.8/include/ ./$(INCLUDES_DIR)
+	brew install sdl2_ttf
+	cp ~/.brew/Cellar/sdl2_ttf/2.0.14/include/SDL2/ ./$(INCLUDES_DIR)/SDL2
 	brew install glfw
 	cp -r ~/.brew/Cellar/glfw/3.2.1/include/GLFW ./$(INCLUDES_DIR)
 	brew install sfml
