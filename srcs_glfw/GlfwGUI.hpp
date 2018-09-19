@@ -6,7 +6,7 @@
 /*   By: jichen-m <jichen-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/12 19:46:17 by jichen-m          #+#    #+#             */
-/*   Updated: 2018/09/18 18:22:02 by jichen-m         ###   ########.fr       */
+/*   Updated: 2018/09/19 15:50:48 by jichen-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,11 @@ class GlfwGUI: public IDynamicLibrary
 		GlfwGUI& operator=(GlfwGUI const & rhs);
 
 		void	init_buffer(int x, int y);
-		void	init_shaders(void);
+		void	init_shaders(int type);
 		void	init_programme(void);
 		void	create_border(void);
+		void	put_fruit(std::tuple<int, int> &fruit_pos);
+		void	make_vao(GLuint	&vbo);
 
 		GLFWwindow*	window;
 		float		counter;
