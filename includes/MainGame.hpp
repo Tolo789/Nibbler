@@ -67,8 +67,11 @@
 # define RIGHT 4
 
 # define FRAME_TIME	0.1f
-# define SPAWN_DELAY 10
-# define LIFE_TIME 5
+# define SPAWN_DELAY 10.0
+# define LIFE_TIME 5.0
+
+# define FRUIT_POINT 10
+# define SPECIAL_FRUIT_POINT 50
 
 class MainGame {
 	private:
@@ -93,7 +96,7 @@ class MainGame {
 
 		void	init_snakes(void);
 		bool	will_snake_be_alive(void);
-		void	move_snake(std::vector<std::tuple<int, int>> &snake_body, int &snake_dir);
+		void	move_snake(std::vector<std::tuple<int, int>> &snake_body, int &snake_dir, int &score);
 		void	set_fruit_pos(void);
 		void	set_special_fruit_pos(void);
 
@@ -128,6 +131,7 @@ class MainGame {
 		std::tuple<int, int>	special_fruit_pos;
 		time_t		spawntime;
 		time_t		deletetime;
+		std::chrono::high_resolution_clock::time_point creation_precise_time;
 
 	public:
 		MainGame(int ac, char **av);
@@ -143,7 +147,9 @@ class MainGame {
 		int		get_map_h(void);
 		bool	is_two_player_game();
 		int		get_score(void);
+		int		get_score2(void);
 		bool	get_if_is_snake_alive(void);
+		std::string	get_special_fruit_timer(void);
 		std::vector<std::tuple<int, int>>		&get_snake1_body(void);
 		std::vector<std::tuple<int, int>>		&get_snake2_body(void);
 		std::tuple<int, int>		&get_fruit_pos(void);

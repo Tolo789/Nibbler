@@ -94,6 +94,10 @@ int		MainGame::get_score(void) {
 	return score1;
 }
 
+int		MainGame::get_score2(void) {
+	return score2;
+}
+
 bool	MainGame::get_if_is_snake_alive(void) {
 	return is_snake_alive;
 }
@@ -112,6 +116,18 @@ std::tuple<int, int>		&MainGame::get_fruit_pos(void) {
 
 std::tuple<int, int>		&MainGame::get_special_fruit_pos(void) {
 	return special_fruit_pos;
+}
+
+std::string		MainGame::get_special_fruit_timer(void)
+{
+	if (std::get<0>(special_fruit_pos) < 0)
+		return NULL;
+	else
+	{
+		std::chrono::high_resolution_clock::time_point current_time = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> time_span = std::chrono::duration_cast<std::chrono::duration<double>>(current_time - creation_precise_time);
+		return (std::to_string((LIFE_TIME - time_span.count())).substr(0, 4));
+	}
 }
 
 // === END GETTER ==============================================================
@@ -176,9 +192,9 @@ void	MainGame::update_game_state(void) {
 			return;
 		}
 		//snakes actual moving
-		move_snake(snake1_body, snake1_direction);
+		move_snake(snake1_body, snake1_direction, score1);
 		if (two_player_game) {
-			move_snake(snake2_body, snake2_direction);
+			move_snake(snake2_body, snake2_direction, score2);
 		}
 		set_special_fruit_pos();
 	}
@@ -259,10 +275,10 @@ void	MainGame::init_snakes(void)
 	snake2_body = std::vector<std::tuple<int, int>>();
 
 	if (two_player_game) {
-		snake1_body.push_back(std::make_tuple(0, 4));
 		snake1_body.push_back(std::make_tuple(0, 3));
 		snake1_body.push_back(std::make_tuple(0, 2));
 		snake1_body.push_back(std::make_tuple(0, 1));
+		snake1_body.push_back(std::make_tuple(0, 0));
 
 		snake1_direction = DOWN;
 		snake1_direction_requested = -1;
@@ -380,7 +396,7 @@ bool	MainGame::will_snake_be_alive(void) {
 	return true;
 }
 
-void	MainGame::move_snake(std::vector<std::tuple<int, int>> &snake_body, int &snake_dir) {
+void	MainGame::move_snake(std::vector<std::tuple<int, int>> &snake_body, int &snake_dir, int &score) {
 	bool	hasEat = false;
 	bool	hasEatSpecial = false;
 	int		tailX;
@@ -436,12 +452,14 @@ void	MainGame::move_snake(std::vector<std::tuple<int, int>> &snake_body, int &sn
 			std::get<0>(fruit_pos) = -1;
 			std::get<1>(fruit_pos) = -1;
 		}
+		score += FRUIT_POINT;
 	}
 	if (hasEatSpecial) {
 		snake_body.push_back(std::make_tuple(tailX, tailY));
 		spawntime = time(NULL) + SPAWN_DELAY;
 		std::get<0>(special_fruit_pos) = -1;
 		std::get<1>(special_fruit_pos) = -1;
+		score += SPECIAL_FRUIT_POINT;
 	}
 }
 
@@ -540,6 +558,7 @@ void	MainGame::set_special_fruit_pos(void)
 			std::get<0>(special_fruit_pos) = tmpX;
 			std::get<1>(special_fruit_pos) = tmpY;
 			deletetime = time(NULL) + LIFE_TIME;
+			creation_precise_time = std::chrono::high_resolution_clock::now();
 		}
 	}
 }

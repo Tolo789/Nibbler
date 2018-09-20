@@ -14,7 +14,12 @@ SfmlGUI::SfmlGUI(MainGame *mainGame) : mainGame(mainGame), window(sf::VideoMode(
 	y_offset = mainGame->get_y_offset();
 
 	// if (!font.loadFromFile("fonts/Snake Chan.ttf"))
-	if (!font.loadFromFile("fonts/Kasnake.ttf"))
+	if (!fontEnd.loadFromFile("fonts/Kasnake.ttf"))
+	{
+		std::cerr << "Error while loading font" << std::endl;
+		throw new IDynamicLibrary::DynamicLibraryException();
+	}
+	if (!fontScore.loadFromFile("fonts/Montague.ttf"))
 	{
 		std::cerr << "Error while loading font" << std::endl;
 		throw new IDynamicLibrary::DynamicLibraryException();
@@ -50,16 +55,45 @@ SfmlGUI& SfmlGUI::operator=(SfmlGUI const & rhs) {
 // === PRIVATE FUNCS ===========================================================
 void	SfmlGUI::draw_end_text(void) {
 	sf::Text text;
-	text.setFont(font); // font is a sf::Font
+	text.setFont(fontEnd); // font is a sf::Font
 	text.setString("Game Over");
 	text.setCharacterSize(WINDOW_MIN_Y_OFFSET / 2); // in pixels, not points!
 	text.setFillColor(sf::Color::Green);
-	text.setPosition(WINDOW_W / 2 - (4 * WINDOW_MIN_Y_OFFSET / 2), WINDOW_MIN_Y_OFFSET / 5);
+	text.setPosition(WINDOW_W / 3, WINDOW_H - y_offset + (y_offset / 4));
 	// text.setStyle(sf::Text::Bold | sf::Text::Underlined);
 
 	// Must be between window.clear() and window.display()
 	window.draw(text);
 }
+
+void	SfmlGUI::draw_score(int score, std::string player)
+{
+	sf::Text text;
+	text.setFont(fontScore); // font is a sf::Font
+	text.setString(std::string("Player ") + player + ": " + std::to_string(score));
+	text.setCharacterSize(WINDOW_MIN_Y_OFFSET / 4); // in pixels
+	text.setFillColor(sf::Color::White);
+	text.setPosition(x_offset + 10, (player.compare("1") == 0) ? y_offset - (3 * WINDOW_MIN_Y_OFFSET / 4) : y_offset - (2 * WINDOW_MIN_Y_OFFSET / 4));
+	// text.setStyle(sf::Text::Bold | sf::Text::Underlined);
+
+	// Must be between window.clear() and window.display()
+	window.draw(text);
+}
+
+void	SfmlGUI::draw_special_timer(std::string toprint)
+{
+	sf::Text text;
+	text.setFont(fontScore); // font is a sf::Font
+	text.setString(toprint);
+	text.setCharacterSize(WINDOW_MIN_Y_OFFSET / 3); // in pixels, not points!
+	text.setFillColor(sf::Color::White);
+	text.setPosition(WINDOW_W - x_offset - 70, y_offset - (2 * WINDOW_MIN_Y_OFFSET / 3));
+	// text.setStyle(sf::Text::Bold | sf::Text::Underlined);
+
+	// Must be between window.clear() and window.display()
+	window.draw(text);
+}
+
 // === END PRIVATE FUNCS =======================================================
 
 // === OVERRIDES ===============================================================
@@ -101,6 +135,8 @@ void	SfmlGUI::refresh_window(void) {
 	if (!mainGame->get_if_is_snake_alive())
 		draw_end_text();
 
+	draw_score(mainGame->get_score(), "1");
+
 	// Add map outlines
 	sf::RectangleShape lineUp(sf::Vector2f(WINDOW_W - 2 * x_offset, OUTLINE_TICKNESS));
 	lineUp.setFillColor(sf::Color::White);
@@ -138,6 +174,7 @@ void	SfmlGUI::refresh_window(void) {
 			rectangle.setPosition(x_offset + std::get<0>(body_part) * square_size, y_offset + std::get<1>(body_part) * square_size);
 			window.draw(rectangle);
 		}
+		draw_score(mainGame->get_score2(), "2");
 	}
 
 	// Add fruit
@@ -154,6 +191,7 @@ void	SfmlGUI::refresh_window(void) {
 		rectangle.setPosition(x_offset + std::get<0>(mainGame->get_special_fruit_pos()) * square_size,
 							y_offset + std::get<1>(mainGame->get_special_fruit_pos()) * square_size);
 		window.draw(rectangle);
+		draw_special_timer(mainGame->get_special_fruit_timer());
 	}
 	window.display();
 }
