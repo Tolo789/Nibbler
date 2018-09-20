@@ -69,20 +69,27 @@ void	SfmlGUI::get_user_input(void) {
 	while (window.pollEvent(event))
 	{
 		if (event.type == sf::Event::KeyPressed) {
-			char str[2];
-			str[0] = 0;
-			str[1] = 0;
+			std::string str;
 			// SFML doesnt have any internal func to convert KeyCode to string
 			if (event.key.code == sf::Keyboard::Escape)
 				mainGame->button_pressed(NULL);
 			else {
 				if (event.key.code >= sf::Keyboard::A && event.key.code <= sf::Keyboard::Z)
-					str[0] = 'A' + (event.key.code - sf::Keyboard::A);
+					str = std::string(1, 'A' + (event.key.code - sf::Keyboard::A));
 				else if (event.key.code >= sf::Keyboard::Num0 && event.key.code <= sf::Keyboard::Num9)
-					str[0] = '0' + (event.key.code - sf::Keyboard::Num0);
+					str = std::string(1, '0' + (event.key.code - sf::Keyboard::Num0));
 				else if (event.key.code >= sf::Keyboard::Numpad0 && event.key.code <= sf::Keyboard::Numpad9)
-					str[0] = '0' + (event.key.code - sf::Keyboard::Numpad0);
-				mainGame->button_pressed(str);
+					str = std::string(1, '0' + (event.key.code - sf::Keyboard::Numpad0));
+
+				else if (event.key.code == sf::Keyboard::Left)
+					str = std::string(KEY_LEFT);
+				else if (event.key.code == sf::Keyboard::Up)
+					str = std::string(KEY_UP);
+				else if (event.key.code == sf::Keyboard::Right)
+					str = std::string(KEY_RIGHT);
+				else if (event.key.code == sf::Keyboard::Down)
+					str = std::string(KEY_DOWN);
+				mainGame->button_pressed(str.c_str());
 			}
 		}
 	}

@@ -301,7 +301,26 @@ void	GlfwGUI::refresh_window(void)
 void GlfwGUI::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if (action == GLFW_RELEASE)
-		mainGame->button_pressed(glfwGetKeyName(key, scancode));
+	{
+		switch(key)
+		{
+			case GLFW_KEY_RIGHT:
+				mainGame->button_pressed(KEY_RIGHT);
+				break;
+			case GLFW_KEY_LEFT:
+				mainGame->button_pressed(KEY_LEFT);
+				break;
+			case GLFW_KEY_UP:
+				mainGame->button_pressed(KEY_UP);
+				break;
+			case GLFW_KEY_DOWN:
+				mainGame->button_pressed(KEY_DOWN);
+				break;
+			default:
+				mainGame->button_pressed(glfwGetKeyName(key, scancode));
+				break;
+		}
+	}
 	(void)key;
 	(void)scancode;
 	(void)action;

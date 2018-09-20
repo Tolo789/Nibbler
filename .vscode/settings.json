@@ -28,6 +28,8 @@
 		"set": "cpp",
 		"system_error": "cpp",
 		"vector": "cpp",
-		"__locale": "cpp"
+		"__locale": "cpp",
+		"memory": "cpp",
+		"__string": "cpp"
 	}
 }

@@ -430,12 +430,12 @@ void	MainGame::move_snake(std::vector<std::tuple<int, int>> &snake_body, int &sn
 		}
 }
 
-void	MainGame::change_direction_to(int newDir) {
-	if ((newDir == UP || newDir == DOWN) && (snake1_direction == LEFT || snake1_direction == RIGHT)) {
-		snake1_direction_requested = newDir;
+void	MainGame::change_direction_to(int &snake_direction, int &snake_direction_requested, int newDir) {
+	if ((newDir == UP || newDir == DOWN) && (snake_direction == LEFT || snake_direction == RIGHT)) {
+		snake_direction_requested = newDir;
 	}
-	else if ((newDir == LEFT || newDir == RIGHT) && (snake1_direction == UP || snake1_direction == DOWN)) {
-		snake1_direction_requested = newDir;
+	else if ((newDir == LEFT || newDir == RIGHT) && (snake_direction == UP || snake_direction == DOWN)) {
+		snake_direction_requested = newDir;
 	}
 }
 
@@ -520,14 +520,21 @@ void	MainGame::button_pressed(const char *button)
 		change_library_request(key);
 	}
 	else {
-		for (const std::tuple<std::string, int> &change_direction_fun : change_direction_keys) // access by reference to avoid copying
+		for (const std::tuple<std::string, int> &change_direction_pair : change_direction_keys) // access by reference to avoid copying
 		{
-			if (std::get<0>(change_direction_fun).compare(key) == 0) {
-				change_direction_to(std::get<1>(change_direction_fun));
+			if (std::get<0>(change_direction_pair).compare(key) == 0) {
+				change_direction_to(snake1_direction, snake1_direction_requested, std::get<1>(change_direction_pair));
 				return ;
 			}
 		}
-		std::cout << "value not useful.." << std::endl;
+		for (const std::tuple<std::string, int> &change_direction_pair : change_direction_keys2) // access by reference to avoid copying
+		{
+			if (std::get<0>(change_direction_pair).compare(key) == 0) {
+				change_direction_to(snake2_direction, snake2_direction_requested, std::get<1>(change_direction_pair));
+				return ;
+			}
+		}
+		// std::cout << "value not useful.." << std::endl;
 	}
 }
 
@@ -576,6 +583,16 @@ static std::vector<std::tuple<std::string, int>> generate_direction_keys() {	// 
 	return p;
 }
 const std::vector<std::tuple<std::string, int>> MainGame::change_direction_keys = generate_direction_keys();
+
+static std::vector<std::tuple<std::string, int>> generate_direction_keys2() {	// static here is "internal linkage"
+	std::vector<std::tuple<std::string, int>> p;
+	p.push_back(std::make_tuple(KEY_UP, UP));
+	p.push_back(std::make_tuple(KEY_LEFT, LEFT));
+	p.push_back(std::make_tuple(KEY_DOWN, DOWN));
+	p.push_back(std::make_tuple(KEY_RIGHT, RIGHT));
+	return p;
+}
+const std::vector<std::tuple<std::string, int>> MainGame::change_direction_keys2 = generate_direction_keys2();
 // === END STATICVARS ==========================================================
 
 // === OTHERS ==================================================================

@@ -54,6 +54,10 @@
 # define KEY_A_LOWER "a"
 # define KEY_S_LOWER "s"
 # define KEY_D_LOWER "d"
+# define KEY_LEFT "Left"
+# define KEY_UP "Up"
+# define KEY_RIGHT "Right"
+# define KEY_DOWN "Down"
 
 # define KEY_ESCAPE "Escape"
 
@@ -70,6 +74,7 @@ class MainGame {
 		static const std::string 	*dlNames;
 		static const std::list<std::string> change_library_keys;
 		static const std::vector<std::tuple<std::string, int>> change_direction_keys;
+		static const std::vector<std::tuple<std::string, int>> change_direction_keys2;
 
 		MainGame(void);
 		MainGame(MainGame const & src);
@@ -82,7 +87,7 @@ class MainGame {
 		void	update_game_state(void);
 		int		update_gui(void);
 		void	regulate_frame_sleep(void);
-		void	change_direction_to(int newDir);
+		void	change_direction_to(int &snake_direction, int &snake_direction_requested, int newDir);
 
 		void	init_snakes(void);
 		bool	will_snake_be_alive(void);
