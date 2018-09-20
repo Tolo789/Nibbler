@@ -137,7 +137,7 @@ void	SfmlGUI::refresh_window(void) {
 }
 
 void	SfmlGUI::close_window() {
-	std::cout << "Destroing SFML window" << std::endl;
+	// std::cout << "Destroing SFML window" << std::endl;
 	window.close();
 }
 // === END OVERRIDES ===========================================================

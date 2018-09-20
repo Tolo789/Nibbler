@@ -12,10 +12,13 @@
 # include "IDynamicLibrary.hpp"
 
 # define MIN_ARGC 3
+# define MAX_ARGC 5
+# define NO_WALL_OPTION "-w"
+# define TWO_PLAYER_OPTION "-p"
 
 # define DL_COUNT 3
-# define DL1_NAME "sdl"
-# define DL2_NAME "glfw"
+# define DL1_NAME "glfw"
+# define DL2_NAME "sdl"
 # define DL3_NAME "sfml"
 # define DL_PREFIX "dl_"
 # define DL_POSTFIX ".so"
@@ -73,14 +76,17 @@ class MainGame {
 
 		MainGame& operator=(MainGame const & rhs);
 
-		int		dlerror_wrapper();
+		int		dlerror_wrapper(void);
+		void	print_usage(void);
 		void	change_library_request(std::string key_code);
 		void	update_game_state(void);
 		int		update_gui(void);
 		void	regulate_frame_sleep(void);
 		void	change_direction_to(int newDir);
 
-		void	init_snake(void);
+		void	init_snakes(void);
+		bool	will_snake_be_alive(void);
+		void	move_snake(std::vector<std::tuple<int, int>> &snake_body, int &snake_dir);
 		void	set_fruit_pos(void);
 
 		// Graphic libraries vars
@@ -99,12 +105,17 @@ class MainGame {
 		bool	collide_with_walls;
 		int		map_h;
 		int		map_w;
-		int		score;
+		bool	two_player_game;
+		int		score1;
+		int		score2;
 		bool	is_snake_alive;
 		bool	has_shown_death;
-		int		snake_direction;
-		int		snake_direction_requested;
-		std::vector<std::tuple<int, int>>	snake_body;
+		int		snake1_direction;
+		int		snake1_direction_requested;
+		int		snake2_direction;
+		int		snake2_direction_requested;
+		std::vector<std::tuple<int, int>>	snake1_body;
+		std::vector<std::tuple<int, int>>	snake2_body;
 		std::tuple<int, int>	fruit_pos;
 
 	public:

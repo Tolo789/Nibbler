@@ -3,7 +3,7 @@
 // === CONSTRUCTOR =============================================================
 
 SdlGUI::SdlGUI(MainGame *mainGame) : mainGame(mainGame) {
-	std::cout << "SDL window" << std::endl;
+	// std::cout << "SDL window" << std::endl;
 
 	renderer = NULL;
 	if (SDL_Init(SDL_INIT_VIDEO) == -1 || TTF_Init() == -1) {
@@ -157,7 +157,7 @@ void	SdlGUI::refresh_window(void) {
 }
 
 void	SdlGUI::close_window() {
-	std::cout << "Destroing SDL window" << std::endl;
+	// std::cout << "Destroing SDL window" << std::endl;
 	if (screen)
 		SDL_DestroyWindow(screen);
 	SDL_Quit();

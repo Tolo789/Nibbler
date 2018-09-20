@@ -17,7 +17,7 @@
 GlfwGUI::GlfwGUI(MainGame *_mainGame)
 {
 	this->mainGame = _mainGame;
-	std::cout << "GLFW window" << std::endl;
+	// std::cout << "GLFW window" << std::endl;
 	glfwSetErrorCallback(error_callback);
 	if (!glfwInit())
 	{
@@ -293,7 +293,7 @@ void GlfwGUI::key_callback(GLFWwindow* window, int key, int scancode, int action
 
 void	GlfwGUI::close_window()
 {
-    std::cout << "Destroing Glfw window" << std::endl;
+    // std::cout << "Destroing Glfw window" << std::endl;
 	if (window)
 		glfwDestroyWindow(this->window);
 	glfwTerminate();
