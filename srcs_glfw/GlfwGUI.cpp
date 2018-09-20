@@ -6,7 +6,7 @@
 /*   By: jichen-m <jichen-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/12 19:46:10 by jichen-m          #+#    #+#             */
-/*   Updated: 2018/09/19 19:52:47 by jichen-m         ###   ########.fr       */
+/*   Updated: 2018/09/20 15:53:41 by jichen-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ void	GlfwGUI::init_shaders(int type)
 	"  gl_Position = vec4(vp, 1.0);"
 	"}";
 
-	if (type == 1)
+	if (type == WHITE_SHADER)
 	{
 		//shader pour dessiner ce qu'il y a entre les vertex
 		fragment_shader =
@@ -137,7 +137,7 @@ void	GlfwGUI::init_shaders(int type)
 		"  frag_colour = vec4(1.0, 1.0, 1.0, 1.0);"
 		"}";
 	}
-	else if (type == 2)
+	else if (type == GREEN_SHADER)
 	{
 		//shader pour dessiner ce qu'il y a entre les vertex
 		fragment_shader =
@@ -147,7 +147,7 @@ void	GlfwGUI::init_shaders(int type)
 		"  frag_colour = vec4(0.0, 0.9, 0.7, 1.0);"
 		"}";
 	}
-	else
+	else if (type == RED_SHADER)
 	{
 		//shader pour dessiner ce qu'il y a entre les vertex
 		fragment_shader =
@@ -155,6 +155,16 @@ void	GlfwGUI::init_shaders(int type)
 		"out vec4 frag_colour;"
 		"void main() {"
 		"  frag_colour = vec4(1.0, 0.0, 0.0, 1.0);"
+		"}";
+	}
+	else
+	{
+		//shader pour dessiner ce qu'il y a entre les vertex
+		fragment_shader =
+		"#version 400\n"
+		"out vec4 frag_colour;"
+		"void main() {"
+		"  frag_colour = vec4(0.0, 0.9, 0.0, 1.0);"
 		"}";
 	}
 
@@ -250,6 +260,40 @@ void	GlfwGUI::put_fruit(std::tuple<int, int> &fruit_pos)
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
+void	GlfwGUI::put_special_fruit(std::tuple<int, int> &special_fruit_pos)
+{
+	if (std::get<0>(special_fruit_pos) < 0 || std::get<1>(special_fruit_pos) < 0)
+		return ;
+	float start_coor_X = start_x + (std::get<0>(special_fruit_pos) * square_percent_x);
+	float start_coor_Y = start_y - (std::get<1>(special_fruit_pos) * square_percent_y);
+
+	//POINTS
+	float points[] = {
+	start_coor_X, start_coor_Y,  0.0f,
+	start_coor_X, start_coor_Y - square_percent_y,  0.0f,
+	start_coor_X + square_percent_x, start_coor_Y,  0.0f,
+
+	start_coor_X + square_percent_x, start_coor_Y,  0.0f,
+	start_coor_X + square_percent_x, start_coor_Y - square_percent_y, 0.0f,
+	start_coor_X, start_coor_Y - square_percent_y,  0.0f
+	};
+
+	 //BUFFER
+	vbo = 0;
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
+	make_vao(vbo);
+
+	init_shaders(4);
+	init_programme();
+	glUseProgram(shader_programme);
+	glBindVertexArray(vao);
+	//drawing all the vertex of the triangle
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
+
 // === END PRIVATE FUNCS =======================================================
 
 // === OVERRIDES ===============================================================
@@ -295,6 +339,7 @@ void	GlfwGUI::refresh_window(void)
 
 	//add fruit
 	put_fruit(mainGame->get_fruit_pos());
+	put_special_fruit(mainGame->get_special_fruit_pos());
 	glfwSwapBuffers(this->window);
 }
 

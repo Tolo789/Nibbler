@@ -6,7 +6,7 @@
 /*   By: jichen-m <jichen-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/12 19:46:17 by jichen-m          #+#    #+#             */
-/*   Updated: 2018/09/19 19:50:43 by jichen-m         ###   ########.fr       */
+/*   Updated: 2018/09/20 15:52:30 by jichen-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,12 @@
 # include "GLFW/glfw3.h"
 # include "IDynamicLibrary.hpp"
 # include "MainGame.hpp"
+
+# define WHITE_SHADER 1
+# define GREEN_SHADER 2
+# define RED_SHADER 3
+# define BLUE_SHADER 4
+
 
 class GlfwGUI: public IDynamicLibrary
 {
@@ -35,6 +41,7 @@ class GlfwGUI: public IDynamicLibrary
 		void	init_programme(void);
 		void	create_border(void);
 		void	put_fruit(std::tuple<int, int> &fruit_pos);
+		void	put_special_fruit(std::tuple<int, int> &fruit_pos);
 		void	make_vao(GLuint	&vbo);
 
 		GLFWwindow*	window;

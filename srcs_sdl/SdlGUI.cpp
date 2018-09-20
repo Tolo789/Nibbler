@@ -163,6 +163,14 @@ void	SdlGUI::refresh_window(void) {
 	pos.y = y_offset + std::get<1>(mainGame->get_fruit_pos()) * square_size;
 	SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255 );
 	SDL_RenderFillRect(renderer, &pos);
+
+	if (std::get<0>(mainGame->get_special_fruit_pos()) >= 0 && std::get<1>(mainGame->get_special_fruit_pos()) >= 0)
+	{
+		pos.x = x_offset + std::get<0>(mainGame->get_special_fruit_pos()) * square_size;
+		pos.y = y_offset + std::get<1>(mainGame->get_special_fruit_pos()) * square_size;
+		SDL_SetRenderDrawColor( renderer, 0, 255, 0, 255 );
+		SDL_RenderFillRect(renderer, &pos);
+	}
 	
 	//render Rect to the screen
 	SDL_RenderPresent(renderer);	

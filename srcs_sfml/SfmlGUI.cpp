@@ -124,9 +124,9 @@ void	SfmlGUI::refresh_window(void) {
 	// window.draw(line, 2, sf::Lines);
 
 	// Add snake
+	sf::RectangleShape rectangle(sf::Vector2f(square_size, square_size));
 	for (std::tuple<int, int> &body_part : mainGame->get_snake1_body()) // access by reference to avoid copying
 	{
-		sf::RectangleShape rectangle(sf::Vector2f(square_size, square_size));
 		rectangle.setFillColor(sf::Color::Green);
 		rectangle.setPosition(x_offset + std::get<0>(body_part) * square_size, y_offset + std::get<1>(body_part) * square_size);
 		window.draw(rectangle);
@@ -134,7 +134,6 @@ void	SfmlGUI::refresh_window(void) {
 	if (mainGame->is_two_player_game()) {
 		for (std::tuple<int, int> &body_part : mainGame->get_snake2_body()) // access by reference to avoid copying
 		{
-			sf::RectangleShape rectangle(sf::Vector2f(square_size, square_size));
 			rectangle.setFillColor(sf::Color::Cyan);
 			rectangle.setPosition(x_offset + std::get<0>(body_part) * square_size, y_offset + std::get<1>(body_part) * square_size);
 			window.draw(rectangle);
@@ -142,13 +141,20 @@ void	SfmlGUI::refresh_window(void) {
 	}
 
 	// Add fruit
-	sf::RectangleShape rectangle(sf::Vector2f(square_size, square_size));
+	// sf::RectangleShape rectangle(sf::Vector2f(square_size, square_size));
 	rectangle.setFillColor(sf::Color::Red);
 	rectangle.setPosition(x_offset + std::get<0>(mainGame->get_fruit_pos()) * square_size,
 						y_offset + std::get<1>(mainGame->get_fruit_pos()) * square_size);
 	window.draw(rectangle);
 
-
+	if (std::get<0>(mainGame->get_special_fruit_pos()) >= 0 && std::get<1>(mainGame->get_special_fruit_pos()) >= 0)
+	{
+		// sf::RectangleShape rectangle1(sf::Vector2f(square_size, square_size));
+		rectangle.setFillColor(sf::Color::Magenta);
+		rectangle.setPosition(x_offset + std::get<0>(mainGame->get_special_fruit_pos()) * square_size,
+							y_offset + std::get<1>(mainGame->get_special_fruit_pos()) * square_size);
+		window.draw(rectangle);
+	}
 	window.display();
 }
 

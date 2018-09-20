@@ -67,6 +67,8 @@
 # define RIGHT 4
 
 # define FRAME_TIME	0.1f
+# define SPAWN_DELAY 10
+# define LIFE_TIME 5
 
 class MainGame {
 	private:
@@ -93,6 +95,7 @@ class MainGame {
 		bool	will_snake_be_alive(void);
 		void	move_snake(std::vector<std::tuple<int, int>> &snake_body, int &snake_dir);
 		void	set_fruit_pos(void);
+		void	set_special_fruit_pos(void);
 
 		// Graphic libraries vars
 		int		square_size;
@@ -122,6 +125,9 @@ class MainGame {
 		std::vector<std::tuple<int, int>>	snake1_body;
 		std::vector<std::tuple<int, int>>	snake2_body;
 		std::tuple<int, int>	fruit_pos;
+		std::tuple<int, int>	special_fruit_pos;
+		time_t		spawntime;
+		time_t		deletetime;
 
 	public:
 		MainGame(int ac, char **av);
@@ -141,6 +147,7 @@ class MainGame {
 		std::vector<std::tuple<int, int>>		&get_snake1_body(void);
 		std::vector<std::tuple<int, int>>		&get_snake2_body(void);
 		std::tuple<int, int>		&get_fruit_pos(void);
+		std::tuple<int, int>		&get_special_fruit_pos(void);
 	
 
 		bool	canRun;
