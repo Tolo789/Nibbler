@@ -117,12 +117,21 @@ void	SfmlGUI::refresh_window(void) {
 	// window.draw(line, 2, sf::Lines);
 
 	// Add snake
-	for (std::tuple<int, int> &body_part : mainGame->get_snake_body()) // access by reference to avoid copying
+	for (std::tuple<int, int> &body_part : mainGame->get_snake1_body()) // access by reference to avoid copying
 	{
 		sf::RectangleShape rectangle(sf::Vector2f(square_size, square_size));
 		rectangle.setFillColor(sf::Color::Green);
 		rectangle.setPosition(x_offset + std::get<0>(body_part) * square_size, y_offset + std::get<1>(body_part) * square_size);
 		window.draw(rectangle);
+	}
+	if (mainGame->is_two_player_game()) {
+		for (std::tuple<int, int> &body_part : mainGame->get_snake2_body()) // access by reference to avoid copying
+		{
+			sf::RectangleShape rectangle(sf::Vector2f(square_size, square_size));
+			rectangle.setFillColor(sf::Color::Cyan);
+			rectangle.setPosition(x_offset + std::get<0>(body_part) * square_size, y_offset + std::get<1>(body_part) * square_size);
+			window.draw(rectangle);
+		}
 	}
 
 	// Add fruit

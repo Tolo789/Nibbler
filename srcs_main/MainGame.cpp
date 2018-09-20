@@ -87,6 +87,10 @@ int		MainGame::get_map_h(void) {
 	return map_h;
 }
 
+bool	MainGame::is_two_player_game(void) {
+	return two_player_game;
+}
+
 int		MainGame::get_score(void) {
 	return score1;
 }
@@ -95,8 +99,12 @@ bool	MainGame::get_if_is_snake_alive(void) {
 	return is_snake_alive;
 }
 
-std::vector<std::tuple<int, int>>		&MainGame::get_snake_body(void) {
+std::vector<std::tuple<int, int>>		&MainGame::get_snake1_body(void) {
 	return snake1_body;
+}
+
+std::vector<std::tuple<int, int>>		&MainGame::get_snake2_body(void) {
+	return snake2_body;
 }
 
 std::tuple<int, int>		&MainGame::get_fruit_pos(void) {
@@ -372,7 +380,7 @@ void	MainGame::move_snake(std::vector<std::tuple<int, int>> &snake_body, int &sn
 		int		tailX;
 		int		tailY;
 		std::vector<std::tuple<int, int>>::reverse_iterator prevIt;
-		for (std::vector<std::tuple<int, int>>::reverse_iterator it = snake1_body.rbegin(); it != snake1_body.rend(); ++it ) {
+		for (std::vector<std::tuple<int, int>>::reverse_iterator it = snake_body.rbegin(); it != snake_body.rend(); ++it ) {
 			prevIt = it + 1;
 			if (prevIt != snake_body.rend()) {
 				if (it == snake_body.rbegin()) {

@@ -135,7 +135,7 @@ void	SdlGUI::refresh_window(void) {
 	// Draw snake
 	pos.w = square_size;	// set van only once since it wont change
 	pos.h = square_size;	// set van only once since it wont change
-	for (std::tuple<int, int> &body_part : mainGame->get_snake_body()) // access by reference to avoid copying
+	for (std::tuple<int, int> &body_part : mainGame->get_snake1_body()) // access by reference to avoid copying
 	{
 		//create a rect at pos 50,50 with a W=50/H=50
 		pos.x = x_offset + std::get<0>(body_part) * square_size;
@@ -144,6 +144,18 @@ void	SdlGUI::refresh_window(void) {
 		SDL_SetRenderDrawColor( renderer, 255, 55, 255, 255 );
 		//render Rect
 		SDL_RenderFillRect(renderer, &pos);
+	}
+	if (mainGame->is_two_player_game()) {
+		for (std::tuple<int, int> &body_part : mainGame->get_snake2_body()) // access by reference to avoid copying
+		{
+			//create a rect at pos 50,50 with a W=50/H=50
+			pos.x = x_offset + std::get<0>(body_part) * square_size;
+			pos.y = y_offset + std::get<1>(body_part) * square_size;
+			//set background color for the "Snake"
+			SDL_SetRenderDrawColor( renderer, 55, 55, 255, 255 );
+			//render Rect
+			SDL_RenderFillRect(renderer, &pos);
+		}
 	}
 
 	// Add fruit

@@ -130,9 +130,11 @@ class MainGame {
 		int		get_y_offset(void);
 		int		get_map_w(void);
 		int		get_map_h(void);
+		bool	is_two_player_game();
 		int		get_score(void);
 		bool	get_if_is_snake_alive(void);
-		std::vector<std::tuple<int, int>>		&get_snake_body(void);
+		std::vector<std::tuple<int, int>>		&get_snake1_body(void);
+		std::vector<std::tuple<int, int>>		&get_snake2_body(void);
 		std::tuple<int, int>		&get_fruit_pos(void);
 	
 

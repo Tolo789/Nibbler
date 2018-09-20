@@ -219,6 +219,8 @@ void	GlfwGUI::create_border(void)
 
 void	GlfwGUI::put_fruit(std::tuple<int, int> &fruit_pos)
 {
+	if (std::get<0>(fruit_pos) < 0 || std::get<1>(fruit_pos) < 0)
+		return ;
 	float start_coor_X = start_x + (std::get<0>(fruit_pos) * square_percent_x);
 	float start_coor_Y = start_y - (std::get<1>(fruit_pos) * square_percent_y);
 
@@ -265,8 +267,10 @@ void	GlfwGUI::refresh_window(void)
 	glClearColor(this->counter, this->counter, this->counter,1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	create_border();
-	for (std::tuple<int, int> &body_part : mainGame->get_snake_body()) // access by reference to avoid copying
-	{  
+
+	// Add snakes
+	for (std::tuple<int, int> &body_part : mainGame->get_snake1_body()) // access by reference to avoid copying
+	{
 		init_buffer(std::get<0>(body_part), std::get<1>(body_part));
 		init_shaders(2);
 		init_programme();
@@ -275,6 +279,20 @@ void	GlfwGUI::refresh_window(void)
 		//drawing all the vertex of the triangle
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
+	if (mainGame->is_two_player_game()) {
+		for (std::tuple<int, int> &body_part : mainGame->get_snake2_body()) // access by reference to avoid copying
+		{
+			init_buffer(std::get<0>(body_part), std::get<1>(body_part));
+			init_shaders(2);
+			init_programme();
+			glUseProgram(shader_programme);
+			glBindVertexArray(vao);
+			//drawing all the vertex of the triangle
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+		}
+	}
+
+
 	//add fruit
 	put_fruit(mainGame->get_fruit_pos());
 	glfwSwapBuffers(this->window);
