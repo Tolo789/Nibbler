@@ -55,7 +55,7 @@ SdlGUI& SdlGUI::operator=(SdlGUI const & rhs) {
 // === PRIVATE FUNCS ===========================================================
 void	SdlGUI::draw_end_text(void) {
 	// TTF_Font* font = TTF_OpenFont("fonts/Kasnake.ttf", 24); //this opens a font style and sets a size
-	TTF_Font* font = TTF_OpenFont("fonts/Snake Chan.ttf", 24); //this opens a font style and sets a size
+	TTF_Font* font = TTF_OpenFont("fonts/Pixel.ttf", WINDOW_MIN_Y_OFFSET / 2); //this opens a font style and sets a size
 	if (!font) {
 		std::cerr << TTF_GetError() << std::endl;
 		return;
@@ -65,10 +65,10 @@ void	SdlGUI::draw_end_text(void) {
 	SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage); //now you can convert it into a texture
 
 	SDL_Rect Message_rect; // Draw the text inside this rect
-	Message_rect.w = (WINDOW_W - 2 * WINDOW_MIN_X_OFFSET) / 2;
-	Message_rect.h = (WINDOW_MIN_Y_OFFSET - 0) / 2;
-	Message_rect.x = (WINDOW_W - Message_rect.w) / 2;
-	Message_rect.y = (WINDOW_MIN_Y_OFFSET - Message_rect.h) / 2;
+	Message_rect.w = WINDOW_W / 3;
+	Message_rect.h = WINDOW_MIN_Y_OFFSET / 2;
+	Message_rect.x = WINDOW_W / 3;
+	Message_rect.y = WINDOW_H - y_offset + (y_offset / 4);
 
 	//Mind you that (0,0) is on the top left of the window/screen, think a rect as the text's box, that way it would be very simple to understance
 
@@ -80,6 +80,66 @@ void	SdlGUI::draw_end_text(void) {
 	SDL_FreeSurface(surfaceMessage);
 	SDL_DestroyTexture(Message);
 }
+
+void	SdlGUI::draw_score(int score, std::string player)
+{
+	// TTF_Font* font = TTF_OpenFont("fonts/Kasnake.ttf", 24); //this opens a font style and sets a size
+	TTF_Font* font = TTF_OpenFont("fonts/Pixel.ttf", WINDOW_MIN_Y_OFFSET / 4); //this opens a font style and sets a size
+	if (!font) {
+		std::cerr << TTF_GetError() << std::endl;
+		return;
+	}
+	SDL_Color White = {255, 255, 255, 255};  // this is the color in rgb format, maxing out all would give you the color white, and it will be your text's color
+	std::string str = std::string("Player ") + player + ": " + std::to_string(score);
+	SDL_Surface* surfaceMessage = TTF_RenderText_Blended(font, str.c_str(), White); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
+	SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage); //now you can convert it into a texture
+
+	SDL_Rect Message_rect; // Draw the text inside this rect
+	Message_rect.w = WINDOW_W / 6;
+	Message_rect.h = WINDOW_MIN_Y_OFFSET / 4;
+	Message_rect.x = x_offset + 10;
+	Message_rect.y = (player.compare("1") == 0) ?  y_offset - (3 * WINDOW_MIN_Y_OFFSET / 4) : y_offset - (2 * WINDOW_MIN_Y_OFFSET / 4);
+
+	//Mind you that (0,0) is on the top left of the window/screen, think a rect as the text's box, that way it would be very simple to understance
+
+	//Now since it's a texture, you have to put RenderCopy in your game loop area, the area where the whole code executes
+	SDL_RenderCopy(renderer, Message, NULL, &Message_rect); //you put the renderer's name first, the Message, the crop size(you can ignore this if you don't want to dabble with cropping), and the rect which is the size and coordinate of your texture
+
+	//Don't forget too free your font, surface and texture
+	TTF_CloseFont(font);
+	SDL_FreeSurface(surfaceMessage);
+	SDL_DestroyTexture(Message);
+}
+
+void	SdlGUI::draw_special_timer(std::string toprint)
+{
+		// TTF_Font* font = TTF_OpenFont("fonts/Kasnake.ttf", 24); //this opens a font style and sets a size
+	TTF_Font* font = TTF_OpenFont("fonts/Pixel.ttf", WINDOW_MIN_Y_OFFSET / 3); //this opens a font style and sets a size
+	if (!font) {
+		std::cerr << TTF_GetError() << std::endl;
+		return;
+	}
+	SDL_Color White = {255, 255, 255, 255};  // this is the color in rgb format, maxing out all would give you the color white, and it will be your text's color
+	SDL_Surface* surfaceMessage = TTF_RenderText_Blended(font, toprint.c_str(), White); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
+	SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage); //now you can convert it into a texture
+
+	SDL_Rect Message_rect; // Draw the text inside this rect
+	Message_rect.w = 70;
+	Message_rect.h = WINDOW_MIN_Y_OFFSET / 3;
+	Message_rect.x = WINDOW_W - x_offset - 70;
+	Message_rect.y = y_offset - (2 * WINDOW_MIN_Y_OFFSET / 3);
+
+	//Mind you that (0,0) is on the top left of the window/screen, think a rect as the text's box, that way it would be very simple to understance
+
+	//Now since it's a texture, you have to put RenderCopy in your game loop area, the area where the whole code executes
+	SDL_RenderCopy(renderer, Message, NULL, &Message_rect); //you put the renderer's name first, the Message, the crop size(you can ignore this if you don't want to dabble with cropping), and the rect which is the size and coordinate of your texture
+
+	//Don't forget too free your font, surface and texture
+	TTF_CloseFont(font);
+	SDL_FreeSurface(surfaceMessage);
+	SDL_DestroyTexture(Message);
+}
+
 // === END PRIVATE FUNCS =======================================================
 
 // === OVERRIDES ===============================================================
@@ -108,6 +168,7 @@ void	SdlGUI::refresh_window(void) {
 
 	if (!mainGame->get_if_is_snake_alive())
 		draw_end_text();
+	draw_score(mainGame->get_score(), "1");
 
 	// Add map outlines
 	SDL_SetRenderDrawColor( renderer, 255, 255, 255, 255 );
@@ -156,6 +217,7 @@ void	SdlGUI::refresh_window(void) {
 			//render Rect
 			SDL_RenderFillRect(renderer, &pos);
 		}
+		draw_score(mainGame->get_score2(), "2");
 	}
 
 	// Add fruit
@@ -170,6 +232,7 @@ void	SdlGUI::refresh_window(void) {
 		pos.y = y_offset + std::get<1>(mainGame->get_special_fruit_pos()) * square_size;
 		SDL_SetRenderDrawColor( renderer, 0, 255, 0, 255 );
 		SDL_RenderFillRect(renderer, &pos);
+		draw_special_timer(mainGame->get_special_fruit_timer());
 	}
 	
 	//render Rect to the screen

@@ -30,6 +30,9 @@
 		"vector": "cpp",
 		"__locale": "cpp",
 		"memory": "cpp",
-		"__string": "cpp"
+		"__string": "cpp",
+		"locale": "cpp",
+		"ostream": "cpp",
+		"utility": "cpp"
 	}
 }

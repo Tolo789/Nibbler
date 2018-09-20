@@ -15,6 +15,9 @@ class SdlGUI : public IDynamicLibrary {
 		SdlGUI& operator=(SdlGUI const & rhs);
 
 		void	draw_end_text(void);
+		void	draw_score(int score, std::string player);
+		void	draw_special_timer(std::string toprint);
+
 
 		SDL_Window *screen;
 		// SDL_Surface* screenSurface;
