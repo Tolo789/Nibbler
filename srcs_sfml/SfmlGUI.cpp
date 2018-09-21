@@ -203,6 +203,16 @@ void	SfmlGUI::refresh_window(void) {
 		window.draw(rectangle);
 		draw_special_timer(mainGame->get_special_fruit_timer());
 	}
+
+	//add obstacles
+	for (std::tuple<int, int> &obstacle : mainGame->get_obstacles()) // access by reference to avoid copying
+	{
+		rectangle.setFillColor(sf::Color(185, 185, 146, 255));
+		rectangle.setPosition(x_offset + std::get<0>(obstacle) * square_size, y_offset + std::get<1>(obstacle) * square_size);
+		window.draw(rectangle);
+	}
+
+	//put everyting to screen
 	window.display();
 }
 

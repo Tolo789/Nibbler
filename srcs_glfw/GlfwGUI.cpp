@@ -137,7 +137,7 @@ void	GlfwGUI::init_shaders(int type)
 		"  frag_colour = vec4(1.0, 1.0, 1.0, 1.0);"
 		"}";
 	}
-	else if (type == GREEN_SHADER)
+	else if (type == CYAN_SHADER)
 	{
 		//shader pour dessiner ce qu'il y a entre les vertex
 		fragment_shader =
@@ -157,7 +157,7 @@ void	GlfwGUI::init_shaders(int type)
 		"  frag_colour = vec4(1.0, 0.0, 0.0, 1.0);"
 		"}";
 	}
-	else
+	else if (type == GREEN_SHADER)
 	{
 		//shader pour dessiner ce qu'il y a entre les vertex
 		fragment_shader =
@@ -165,6 +165,26 @@ void	GlfwGUI::init_shaders(int type)
 		"out vec4 frag_colour;"
 		"void main() {"
 		"  frag_colour = vec4(0.0, 0.9, 0.0, 1.0);"
+		"}";
+	}
+	else if (type == YELLOW_SHADER)
+	{
+		//shader pour dessiner ce qu'il y a entre les vertex
+		fragment_shader =
+		"#version 400\n"
+		"out vec4 frag_colour;"
+		"void main() {"
+		"  frag_colour = vec4(1.0, 1.0, 0.0, 1.0);"
+		"}";
+	}
+	else if (type == GRAY_SHADER)
+	{
+		//shader pour dessiner ce qu'il y a entre les vertex
+		fragment_shader =
+		"#version 400\n"
+		"out vec4 frag_colour;"
+		"void main() {"
+		"  frag_colour = vec4(185.0/255.0, 185.0/255.0, 146.0/255.0, 1.0);"
 		"}";
 	}
 
@@ -252,7 +272,7 @@ void	GlfwGUI::put_fruit(std::tuple<int, int> &fruit_pos)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
 	make_vao(vbo);
 
-	init_shaders(3);
+	init_shaders(RED_SHADER);
 	init_programme();
 	glUseProgram(shader_programme);
 	glBindVertexArray(vao);
@@ -285,7 +305,7 @@ void	GlfwGUI::put_special_fruit(std::tuple<int, int> &special_fruit_pos)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
 	make_vao(vbo);
 
-	init_shaders(4);
+	init_shaders(YELLOW_SHADER);
 	init_programme();
 	glUseProgram(shader_programme);
 	glBindVertexArray(vao);
@@ -319,11 +339,11 @@ void	GlfwGUI::refresh_window(void)
  		init_buffer(std::get<0>(body_part), std::get<1>(body_part));
 		if (snake_head == 0)
 		{
-			init_shaders(1);
+			init_shaders(WHITE_SHADER);
 			snake_head = 1;
 		}
 		else
-			init_shaders(2);
+			init_shaders(GREEN_SHADER);
 		init_programme();
 		glUseProgram(shader_programme);
 		glBindVertexArray(vao);
@@ -337,11 +357,11 @@ void	GlfwGUI::refresh_window(void)
 			init_buffer(std::get<0>(body_part), std::get<1>(body_part));
 			if (snake_head == 0)
 			{
-				init_shaders(1);
+				init_shaders(WHITE_SHADER);
 				snake_head = 1;
 			}
 			else
-				init_shaders(2);
+				init_shaders(CYAN_SHADER);
 			init_programme();
 			glUseProgram(shader_programme);
 			glBindVertexArray(vao);
@@ -354,6 +374,21 @@ void	GlfwGUI::refresh_window(void)
 	//add fruit
 	put_fruit(mainGame->get_fruit_pos());
 	put_special_fruit(mainGame->get_special_fruit_pos());
+
+	//add obstacles
+	for (std::tuple<int, int> &obstacle : mainGame->get_obstacles()) // access by reference to avoid copying
+	{
+ 		init_buffer(std::get<0>(obstacle), std::get<1>(obstacle));
+		init_shaders(GRAY_SHADER);
+		init_programme();
+		glUseProgram(shader_programme);
+		glBindVertexArray(vao);
+		//drawing all the vertex of the triangle
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+	}
+
+
+	//put everything to screen
 	glfwSwapBuffers(this->window);
 }
 

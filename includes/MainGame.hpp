@@ -67,14 +67,15 @@
 # define RIGHT 4
 
 # define INITIAL_FRAME_TIME	0.1f
-# define MIN_FRAME_TIME	0.03f
+# define MIN_FRAME_TIME	0.04f
 # define FRAME_DECREASE_DELTA 0.01f
-# define POINT_DELTA_FRAME_DECRASE 50
+# define POINT_DELTA_FRAME_DECRASE 60
 # define SPAWN_DELAY 10.0
 # define LIFE_TIME 5.0
 
 # define FRUIT_POINT 10
 # define SPECIAL_FRUIT_POINT 50
+# define OBSTACLE_NUMBER 8
 
 class MainGame {
 	private:
@@ -98,6 +99,7 @@ class MainGame {
 		void	change_direction_to(int &snake_direction, int &snake_direction_requested, int newDir);
 
 		void	init_snakes(void);
+		void	init_obstacles(void);
 		bool	will_snake_be_alive(void);
 		void	move_snake(std::vector<std::tuple<int, int>> &snake_body, int &snake_dir, int &score);
 		void	set_fruit_pos(void);
@@ -137,6 +139,9 @@ class MainGame {
 		time_t		deletetime;
 		std::chrono::high_resolution_clock::time_point creation_precise_time;
 
+		std::vector<std::tuple<int, int>>	obstacles;
+
+
 	public:
 		MainGame(int ac, char **av);
 		~MainGame(void);
@@ -158,6 +163,7 @@ class MainGame {
 		std::vector<std::tuple<int, int>>		&get_snake2_body(void);
 		std::tuple<int, int>		&get_fruit_pos(void);
 		std::tuple<int, int>		&get_special_fruit_pos(void);
+		std::vector<std::tuple<int, int>>		&get_obstacles(void);
 
 
 		bool	canRun;

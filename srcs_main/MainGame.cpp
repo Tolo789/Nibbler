@@ -130,6 +130,10 @@ std::string		MainGame::get_special_fruit_timer(void)
 	}
 }
 
+std::vector<std::tuple<int, int>>		&MainGame::get_obstacles(void) {
+	return obstacles;
+}
+
 // === END GETTER ==============================================================
 
 
@@ -303,7 +307,6 @@ void	MainGame::init_snakes(void)
 	std::get<0>(special_fruit_pos) = -1;
 	std::get<1>(special_fruit_pos) = -1;
 	spawntime = time(NULL) + SPAWN_DELAY;
-	set_fruit_pos();
 }
 
 bool	MainGame::will_snake_be_alive(void) {
@@ -368,6 +371,12 @@ bool	MainGame::will_snake_be_alive(void) {
 			return false;
 		}
 	}
+	// Check if snake1 collide with obstacle
+	for (it = obstacles.begin(); it != obstacles.end(); ++it ) {
+		if (headX == std::get<0>(*it) && headY == std::get<1>(*it)) {
+			return false;
+		}
+	}
 
 	if (two_player_game) {
 		if (headX == head2X && headY == head2Y)
@@ -391,6 +400,12 @@ bool	MainGame::will_snake_be_alive(void) {
 				return false;
 			}
 		}
+		// Check snake2 colide with obstacle	
+		for (it = obstacles.begin(); it != obstacles.end(); ++it ) {
+		if (head2X == std::get<0>(*it) && head2Y == std::get<1>(*it)) {
+			return false;
+		}
+	}
 	}
 
 	return true;
@@ -461,8 +476,6 @@ void	MainGame::move_snake(std::vector<std::tuple<int, int>> &snake_body, int &sn
 		std::get<1>(special_fruit_pos) = -1;
 		score += SPECIAL_FRUIT_POINT;
 	}
-
-	// Update frame time
 	if ((hasEat || hasEatSpecial) && frame_time > MIN_FRAME_TIME) {
 		frame_time = INITIAL_FRAME_TIME - (FRAME_DECREASE_DELTA * ((score1 + score2) / POINT_DELTA_FRAME_DECRASE));
 		// std::cout << frame_time << " -> " << (frame_time < MIN_FRAME_TIME ? MIN_FRAME_TIME : frame_time) << '\n';
@@ -496,6 +509,12 @@ void	MainGame::set_fruit_pos(void) {
 		// check that newPos doesnt collide with other game objs
 		std::vector<std::tuple<int, int>>::iterator it;
 		for (it = snake1_body.begin(); it != snake1_body.end(); ++it ) {
+			if (std::get<0>(*it) == tmpX && std::get<1>(*it) == tmpY) {
+				is_good_pos = false;
+				break;
+			}
+		}
+		for (it = obstacles.begin(); it != obstacles.end(); ++it ) {
 			if (std::get<0>(*it) == tmpX && std::get<1>(*it) == tmpY) {
 				is_good_pos = false;
 				break;
@@ -554,7 +573,13 @@ void	MainGame::set_special_fruit_pos(void)
 						break;
 					}
 				}
-				if (is_good_pos && two_player_game) {
+				for (it = obstacles.begin(); it != obstacles.end(); ++it ) {
+					if (std::get<0>(*it) == tmpX && std::get<1>(*it) == tmpY) {
+						is_good_pos = false;
+						break;
+					}
+				}
+				if (is_good_pos) {
 					for (it = snake2_body.begin(); it != snake2_body.end(); ++it ) {
 						if (std::get<0>(*it) == tmpX && std::get<1>(*it) == tmpY) {
 							is_good_pos = false;
@@ -568,6 +593,43 @@ void	MainGame::set_special_fruit_pos(void)
 			deletetime = time(NULL) + LIFE_TIME;
 			creation_precise_time = std::chrono::high_resolution_clock::now();
 		}
+	}
+}
+
+void	MainGame::init_obstacles(void)
+{
+	bool	is_good_pos;
+	int		tmpX;
+	int		tmpY;
+
+	obstacles = std::vector<std::tuple<int, int>>();
+	for (int i = 0; i < OBSTACLE_NUMBER; i++)
+	{
+		do {
+			is_good_pos = true;
+			// generate random pos
+			tmpX = rand() % map_w;
+			tmpY = rand() % map_h;
+
+			// check that newPos doesnt collide with other game objs
+			std::vector<std::tuple<int, int>>::iterator it;
+			for (it = snake1_body.begin(); it != snake1_body.end(); ++it ) {
+				if (std::get<0>(*it) == tmpX && std::get<1>(*it) == tmpY) {
+					is_good_pos = false;
+					break;
+				}
+			}
+			if (is_good_pos) {
+				for (it = snake2_body.begin(); it != snake2_body.end(); ++it ) {
+					if (std::get<0>(*it) == tmpX && std::get<1>(*it) == tmpY) {
+						is_good_pos = false;
+						break;
+					}
+				}
+			}
+
+		} while (!is_good_pos);
+		obstacles.push_back(std::make_tuple(tmpX, tmpY));
 	}
 }
 
@@ -593,6 +655,10 @@ int		MainGame::run(void) {
 
 	//init snake
 	init_snakes();
+	//init obstacles
+	init_obstacles();
+
+	set_fruit_pos();
 
 	// Start game loop
 	while (running) {

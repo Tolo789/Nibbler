@@ -23,7 +23,9 @@
 # define WHITE_SHADER 1
 # define GREEN_SHADER 2
 # define RED_SHADER 3
-# define BLUE_SHADER 4
+# define CYAN_SHADER 4
+# define YELLOW_SHADER 5
+# define GRAY_SHADER 6
 
 
 class GlfwGUI: public IDynamicLibrary

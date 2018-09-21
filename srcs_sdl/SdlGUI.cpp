@@ -251,6 +251,18 @@ void	SdlGUI::refresh_window(void) {
 		draw_special_timer(mainGame->get_special_fruit_timer());
 	}
 
+	// add obstacles
+	for (std::tuple<int, int> &obstacle : mainGame->get_obstacles()) // access by reference to avoid copying
+	{
+		//create a rect at pos 50,50 with a W=50/H=50
+		pos.x = x_offset + std::get<0>(obstacle) * square_size;
+		pos.y = y_offset + std::get<1>(obstacle) * square_size;
+		//set background color for the "Snake"
+		SDL_SetRenderDrawColor( renderer, 185, 185, 146, 255 );
+		//render Rect
+		SDL_RenderFillRect(renderer, &pos);
+	}
+
 	//render Rect to the screen
 	SDL_RenderPresent(renderer);
 }
