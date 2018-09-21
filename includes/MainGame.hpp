@@ -28,8 +28,8 @@
 # define MAX_MAP_W 100
 # define MAX_MAP_H 100
 
-# define WINDOW_W 1100
-# define WINDOW_H 1200
+# define WINDOW_W 600
+# define WINDOW_H 700
 # define WINDOW_MIN_X_OFFSET 50
 # define WINDOW_MIN_Y_OFFSET 100
 # define MIN_SQUARE_SIZE 10

@@ -130,6 +130,7 @@ void	SfmlGUI::get_user_input(void) {
 }
 
 void	SfmlGUI::refresh_window(void) {
+	int	snake_head = 0;
 	window.clear(sf::Color::Black); // Can set background color here
 
 	if (!mainGame->get_if_is_snake_alive())
@@ -163,14 +164,27 @@ void	SfmlGUI::refresh_window(void) {
 	sf::RectangleShape rectangle(sf::Vector2f(square_size, square_size));
 	for (std::tuple<int, int> &body_part : mainGame->get_snake1_body()) // access by reference to avoid copying
 	{
-		rectangle.setFillColor(sf::Color::Green);
+		if (snake_head == 0)
+		{
+			rectangle.setFillColor(sf::Color::Blue);
+			snake_head = 1;
+		}
+		else
+			rectangle.setFillColor(sf::Color::Green);
 		rectangle.setPosition(x_offset + std::get<0>(body_part) * square_size, y_offset + std::get<1>(body_part) * square_size);
 		window.draw(rectangle);
 	}
 	if (mainGame->is_two_player_game()) {
+		snake_head = 0;
 		for (std::tuple<int, int> &body_part : mainGame->get_snake2_body()) // access by reference to avoid copying
 		{
-			rectangle.setFillColor(sf::Color::Cyan);
+			if (snake_head == 0)
+			{
+				rectangle.setFillColor(sf::Color::Yellow);
+				snake_head = 1;
+			}
+			else
+				rectangle.setFillColor(sf::Color::Cyan);
 			rectangle.setPosition(x_offset + std::get<0>(body_part) * square_size, y_offset + std::get<1>(body_part) * square_size);
 			window.draw(rectangle);
 		}

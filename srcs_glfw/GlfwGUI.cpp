@@ -304,6 +304,7 @@ void	GlfwGUI::get_user_input(void)
 
 void	GlfwGUI::refresh_window(void)
 {
+	int	snake_head = 0;
 	//only for test to see if each frame change color
 	// this->counter = this->counter + 0.2f;
 	if (this->counter == 1.0f)
@@ -315,8 +316,14 @@ void	GlfwGUI::refresh_window(void)
 	// Add snakes
 	for (std::tuple<int, int> &body_part : mainGame->get_snake1_body()) // access by reference to avoid copying
 	{
-		init_buffer(std::get<0>(body_part), std::get<1>(body_part));
-		init_shaders(2);
+ 		init_buffer(std::get<0>(body_part), std::get<1>(body_part));
+		if (snake_head == 0)
+		{
+			init_shaders(1);
+			snake_head = 1;
+		}
+		else
+			init_shaders(2);
 		init_programme();
 		glUseProgram(shader_programme);
 		glBindVertexArray(vao);
@@ -324,10 +331,17 @@ void	GlfwGUI::refresh_window(void)
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 	if (mainGame->is_two_player_game()) {
+		snake_head = 0;
 		for (std::tuple<int, int> &body_part : mainGame->get_snake2_body()) // access by reference to avoid copying
 		{
 			init_buffer(std::get<0>(body_part), std::get<1>(body_part));
-			init_shaders(2);
+			if (snake_head == 0)
+			{
+				init_shaders(1);
+				snake_head = 1;
+			}
+			else
+				init_shaders(2);
 			init_programme();
 			glUseProgram(shader_programme);
 			glBindVertexArray(vao);

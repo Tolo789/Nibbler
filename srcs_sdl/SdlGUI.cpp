@@ -162,6 +162,7 @@ void	SdlGUI::get_user_input(void) {
 }
 
 void	SdlGUI::refresh_window(void) {
+	int	snake_head = 0;
 	//set background color
 	SDL_SetRenderDrawColor( renderer, counter, counter, counter, 255 );
 	SDL_RenderClear(renderer);
@@ -202,18 +203,31 @@ void	SdlGUI::refresh_window(void) {
 		pos.x = x_offset + std::get<0>(body_part) * square_size;
 		pos.y = y_offset + std::get<1>(body_part) * square_size;
 		//set background color for the "Snake"
-		SDL_SetRenderDrawColor( renderer, 255, 55, 255, 255 );
+		if (snake_head == 0)
+		{
+			SDL_SetRenderDrawColor( renderer, 70, 200, 200, 50 );
+			snake_head = 1;
+		}
+		else
+			SDL_SetRenderDrawColor( renderer, 255, 55, 255, 255 );
 		//render Rect
 		SDL_RenderFillRect(renderer, &pos);
 	}
 	if (mainGame->is_two_player_game()) {
+		snake_head = 0;
 		for (std::tuple<int, int> &body_part : mainGame->get_snake2_body()) // access by reference to avoid copying
 		{
 			//create a rect at pos 50,50 with a W=50/H=50
 			pos.x = x_offset + std::get<0>(body_part) * square_size;
 			pos.y = y_offset + std::get<1>(body_part) * square_size;
 			//set background color for the "Snake"
-			SDL_SetRenderDrawColor( renderer, 55, 55, 255, 255 );
+			if (snake_head == 0)
+			{
+				SDL_SetRenderDrawColor( renderer, 255, 55, 255, 255 );
+				snake_head = 1;
+			}
+			else
+				SDL_SetRenderDrawColor( renderer, 55, 55, 255, 255 );
 			//render Rect
 			SDL_RenderFillRect(renderer, &pos);
 		}
