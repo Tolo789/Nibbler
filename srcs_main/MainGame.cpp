@@ -402,10 +402,10 @@ bool	MainGame::will_snake_be_alive(void) {
 		}
 		// Check snake2 colide with obstacle	
 		for (it = obstacles.begin(); it != obstacles.end(); ++it ) {
-		if (head2X == std::get<0>(*it) && head2Y == std::get<1>(*it)) {
-			return false;
+			if (head2X == std::get<0>(*it) && head2Y == std::get<1>(*it)) {
+				return false;
+			}
 		}
-	}
 	}
 
 	return true;
