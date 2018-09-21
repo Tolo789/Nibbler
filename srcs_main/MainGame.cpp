@@ -259,8 +259,8 @@ int		MainGame::update_gui(void) {
 void	MainGame::regulate_frame_sleep(void) {
 	// Timer logic, make thread sleep if needed
 	past_frame_length = difftime(timer, time(NULL));
-	if (past_frame_length < FRAME_TIME) {
-		std::this_thread::sleep_for (std::chrono::milliseconds(static_cast<int>((FRAME_TIME - past_frame_length) * 1000)));
+	if (past_frame_length < frame_time) {
+		std::this_thread::sleep_for (std::chrono::milliseconds(static_cast<int>((frame_time - past_frame_length) * 1000)));
 	}
 	// std::cout << "frame" << std::endl;
 	timer = time(NULL);
@@ -461,6 +461,14 @@ void	MainGame::move_snake(std::vector<std::tuple<int, int>> &snake_body, int &sn
 		std::get<1>(special_fruit_pos) = -1;
 		score += SPECIAL_FRUIT_POINT;
 	}
+
+	// Update frame time
+	if ((hasEat || hasEatSpecial) && frame_time > MIN_FRAME_TIME) {
+		frame_time = INITIAL_FRAME_TIME - (FRAME_DECREASE_DELTA * ((score1 + score2) / POINT_DELTA_FRAME_DECRASE));
+		// std::cout << frame_time << " -> " << (frame_time < MIN_FRAME_TIME ? MIN_FRAME_TIME : frame_time) << '\n';
+		if (frame_time < MIN_FRAME_TIME)
+			frame_time = MIN_FRAME_TIME;
+	}
 }
 
 void	MainGame::change_direction_to(int &snake_direction, int &snake_direction_requested, int newDir) {
@@ -546,7 +554,7 @@ void	MainGame::set_special_fruit_pos(void)
 						break;
 					}
 				}
-				if (is_good_pos) {
+				if (is_good_pos && two_player_game) {
 					for (it = snake2_body.begin(); it != snake2_body.end(); ++it ) {
 						if (std::get<0>(*it) == tmpX && std::get<1>(*it) == tmpY) {
 							is_good_pos = false;
@@ -573,6 +581,7 @@ int		MainGame::run(void) {
 	int gui_ret;
 
 	// init vars
+	frame_time = INITIAL_FRAME_TIME;
 	currentLibrary = NULL;
 	running = true;
 	dl_index = 1; // TODO let choose starting library with argv

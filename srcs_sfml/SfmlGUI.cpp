@@ -158,17 +158,13 @@ void	SfmlGUI::refresh_window(void) {
 	lineRight.setPosition(WINDOW_W - x_offset, y_offset);
 	window.draw(lineRight);
 
-	// TODO: Add map inlines (?)
-	// sf::Vertex line[] = {sf::Vertex(sf::Vector2f(x, y)), sf::Vertex(sf::Vector2f(x2, y2))};
-	// window.draw(line, 2, sf::Lines);
-
 	// Add snake
 	sf::RectangleShape rectangle(sf::Vector2f(square_size, square_size));
 	for (std::tuple<int, int> &body_part : mainGame->get_snake1_body()) // access by reference to avoid copying
 	{
 		if (snake_head == 0)
 		{
-			rectangle.setFillColor(sf::Color::Blue);
+			rectangle.setFillColor(sf::Color::Yellow);
 			snake_head = 1;
 		}
 		else
@@ -194,7 +190,6 @@ void	SfmlGUI::refresh_window(void) {
 	}
 
 	// Add fruit
-	// sf::RectangleShape rectangle(sf::Vector2f(square_size, square_size));
 	rectangle.setFillColor(sf::Color::Red);
 	rectangle.setPosition(x_offset + std::get<0>(mainGame->get_fruit_pos()) * square_size,
 						y_offset + std::get<1>(mainGame->get_fruit_pos()) * square_size);
@@ -202,7 +197,6 @@ void	SfmlGUI::refresh_window(void) {
 
 	if (std::get<0>(mainGame->get_special_fruit_pos()) >= 0 && std::get<1>(mainGame->get_special_fruit_pos()) >= 0)
 	{
-		// sf::RectangleShape rectangle1(sf::Vector2f(square_size, square_size));
 		rectangle.setFillColor(sf::Color::Magenta);
 		rectangle.setPosition(x_offset + std::get<0>(mainGame->get_special_fruit_pos()) * square_size,
 							y_offset + std::get<1>(mainGame->get_special_fruit_pos()) * square_size);

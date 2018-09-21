@@ -66,7 +66,10 @@
 # define LEFT 3
 # define RIGHT 4
 
-# define FRAME_TIME	0.1f
+# define INITIAL_FRAME_TIME	0.1f
+# define MIN_FRAME_TIME	0.03f
+# define FRAME_DECREASE_DELTA 0.01f
+# define POINT_DELTA_FRAME_DECRASE 50
 # define SPAWN_DELAY 10.0
 # define LIFE_TIME 5.0
 
@@ -112,6 +115,7 @@ class MainGame {
 		double	past_frame_length;
 
 		// Game model vars
+		float	frame_time;
 		bool	running;
 		bool	collide_with_walls;
 		int		map_h;
