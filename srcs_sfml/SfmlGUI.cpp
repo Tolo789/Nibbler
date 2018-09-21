@@ -5,8 +5,8 @@
 SfmlGUI::SfmlGUI(MainGame *mainGame) : mainGame(mainGame), window(sf::VideoMode(WINDOW_W, WINDOW_H), "Nibbler SFML", sf::Style::Titlebar) {
 	window.setKeyRepeatEnabled(false);
 	window.setPosition(sf::Vector2i(
-		(sf::VideoMode::getDesktopMode().width/2) - (WINDOW_W / 2),
-		(sf::VideoMode::getDesktopMode().height/2)- (WINDOW_H / 2))
+		(sf::VideoMode::getDesktopMode().width / 2) - (WINDOW_W / 2),
+		(sf::VideoMode::getDesktopMode().height / 2) - (WINDOW_H / 2))
 	);
 
 	square_size = mainGame->get_square_size();
@@ -82,6 +82,8 @@ void	SfmlGUI::draw_score(int score, std::string player)
 
 void	SfmlGUI::draw_special_timer(std::string toprint)
 {
+	if (toprint.empty())
+		return ;
 	sf::Text text;
 	text.setFont(fontScore); // font is a sf::Font
 	text.setString(toprint);

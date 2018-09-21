@@ -154,7 +154,7 @@ class MainGame {
 		std::vector<std::tuple<int, int>>		&get_snake2_body(void);
 		std::tuple<int, int>		&get_fruit_pos(void);
 		std::tuple<int, int>		&get_special_fruit_pos(void);
-	
+
 
 		bool	canRun;
 };

@@ -113,6 +113,8 @@ void	SdlGUI::draw_score(int score, std::string player)
 
 void	SdlGUI::draw_special_timer(std::string toprint)
 {
+	if (toprint.empty())
+		return ;
 		// TTF_Font* font = TTF_OpenFont("fonts/Kasnake.ttf", 24); //this opens a font style and sets a size
 	TTF_Font* font = TTF_OpenFont("fonts/Pixel.ttf", WINDOW_MIN_Y_OFFSET / 3); //this opens a font style and sets a size
 	if (!font) {
@@ -248,9 +250,9 @@ void	SdlGUI::refresh_window(void) {
 		SDL_RenderFillRect(renderer, &pos);
 		draw_special_timer(mainGame->get_special_fruit_timer());
 	}
-	
+
 	//render Rect to the screen
-	SDL_RenderPresent(renderer);	
+	SDL_RenderPresent(renderer);
 }
 
 void	SdlGUI::close_window() {
