@@ -28,8 +28,8 @@
 # define MAX_MAP_W 100
 # define MAX_MAP_H 100
 
-# define WINDOW_W 1100
-# define WINDOW_H 1200
+# define WINDOW_W 600
+# define WINDOW_H 700
 # define WINDOW_MIN_X_OFFSET 50
 # define WINDOW_MIN_Y_OFFSET 100
 # define MIN_SQUARE_SIZE 10
@@ -154,7 +154,7 @@ class MainGame {
 		std::vector<std::tuple<int, int>>		&get_snake2_body(void);
 		std::tuple<int, int>		&get_fruit_pos(void);
 		std::tuple<int, int>		&get_special_fruit_pos(void);
-	
+
 
 		bool	canRun;
 };

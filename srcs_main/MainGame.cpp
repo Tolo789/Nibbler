@@ -120,8 +120,8 @@ std::tuple<int, int>		&MainGame::get_special_fruit_pos(void) {
 
 std::string		MainGame::get_special_fruit_timer(void)
 {
-	if (std::get<0>(special_fruit_pos) < 0)
-		return NULL;
+	if (std::get<0>(special_fruit_pos) < 0 || !is_snake_alive)
+		return "";
 	else
 	{
 		std::chrono::high_resolution_clock::time_point current_time = std::chrono::high_resolution_clock::now();
@@ -253,7 +253,7 @@ int		MainGame::update_gui(void) {
 			has_shown_death = true;
 	}
 
-	return EXIT_SUCCESS; 
+	return EXIT_SUCCESS;
 }
 
 void	MainGame::regulate_frame_sleep(void) {
