@@ -91,7 +91,7 @@ void	SdlGUI::draw_score(int score, std::string player)
 	}
 	SDL_Color White = {255, 255, 255, 255};  // this is the color in rgb format, maxing out all would give you the color white, and it will be your text's color
 	std::string str = std::string("Player ") + player + ": " + std::to_string(score);
-	SDL_Surface* surfaceMessage = TTF_RenderText_Blended(font, str.c_str(), White); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
+	SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, str.c_str(), White); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
 	SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage); //now you can convert it into a texture
 
 	SDL_Rect Message_rect; // Draw the text inside this rect
@@ -122,7 +122,7 @@ void	SdlGUI::draw_special_timer(std::string toprint)
 		return;
 	}
 	SDL_Color White = {255, 255, 255, 255};  // this is the color in rgb format, maxing out all would give you the color white, and it will be your text's color
-	SDL_Surface* surfaceMessage = TTF_RenderText_Blended(font, toprint.c_str(), White); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
+	SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, toprint.c_str(), White); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
 	SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage); //now you can convert it into a texture
 
 	SDL_Rect Message_rect; // Draw the text inside this rect
