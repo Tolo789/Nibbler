@@ -646,7 +646,7 @@ int		MainGame::run(void) {
 	frame_time = INITIAL_FRAME_TIME;
 	currentLibrary = NULL;
 	running = true;
-	dl_index = 1; // TODO let choose starting library with argv
+	dl_index = 3; // TODO let choose starting library with argv
 	dl_pastIndex = -1;
 	timer = time(NULL);
 	score1 = 0;
@@ -670,6 +670,7 @@ int		MainGame::run(void) {
 			return gui_ret;
 
 		regulate_frame_sleep();
+		// running = false;
 	}
 	return gui_ret;
 }

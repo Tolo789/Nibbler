@@ -18,6 +18,11 @@ class SfmlGUI : public IDynamicLibrary {
 		void	draw_end_text(void);
 		void	draw_score(int score, std::string player);
 		void	draw_special_timer(std::string toprint);
+		void	draw_map_outline(void);
+		void	set_background_texture(void);
+		void	add_fruits(sf::RectangleShape &);
+		void	add_snakes(sf::RectangleShape &);
+		void	add_obstacles(void);
 
 		MainGame *mainGame;
 		sf::RenderWindow window;
@@ -27,6 +32,9 @@ class SfmlGUI : public IDynamicLibrary {
 		int		x_offset;
 		int		y_offset;
 		int		square_size;
+
+		sf::Texture	texture;
+		sf::Sprite	sprite;
 
 	public:
 		SfmlGUI(MainGame *mainGame);
