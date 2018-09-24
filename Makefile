@@ -58,7 +58,7 @@ DL2_FLAGS = $(DLFLAGS) `pkg-config --libs glfw3` -framework OpenGL
 
 DL3_FLAGS = $(DLFLAGS) `pkg-config --libs sfml-all`
 
-AUDIODL_FLAGS = $(DLFLAGS) -L/Users/cmutti/.brew/Cellar/rt-audio/5.0.0/lib -lrtAudio
+AUDIODL_FLAGS = $(DLFLAGS) -L /Users/jichen-m/.brew/Cellar/rt-audio/5.0.0/lib -lrtAudio
 
 CC = clang++
 

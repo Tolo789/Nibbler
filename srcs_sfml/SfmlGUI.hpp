@@ -22,7 +22,7 @@ class SfmlGUI : public IDynamicLibrary {
 		void	set_background_texture(void);
 		void	add_fruits(sf::RectangleShape &);
 		void	add_snakes(sf::RectangleShape &);
-		void	add_obstacles(void);
+		void	add_obstacles(sf::RectangleShape &);
 
 		MainGame *mainGame;
 		sf::RenderWindow window;
@@ -33,7 +33,15 @@ class SfmlGUI : public IDynamicLibrary {
 		int		y_offset;
 		int		square_size;
 
-		sf::Texture	texture;
+		sf::Texture	grass;
+		sf::Texture	apple;
+		sf::Texture	meat;
+		sf::Texture	head_down;
+		sf::Texture	head_up;
+		sf::Texture	head_left;
+		sf::Texture	head_right;
+		sf::Texture	snake_body;
+		sf::Texture	rock;
 		sf::Sprite	sprite;
 
 	public:

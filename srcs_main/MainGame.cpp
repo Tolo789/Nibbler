@@ -98,6 +98,14 @@ int		MainGame::get_score2(void) {
 	return score2;
 }
 
+int		MainGame::get_snake1_direction(void) {
+	return snake1_direction;
+}
+
+int		MainGame::get_snake2_direction(void) {
+	return snake2_direction;
+}
+
 bool	MainGame::get_if_is_snake_alive(void) {
 	return is_snake_alive;
 }

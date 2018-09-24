@@ -25,6 +25,16 @@ SfmlGUI::SfmlGUI(MainGame *mainGame) : mainGame(mainGame), window(sf::VideoMode(
 		throw new IDynamicLibrary::DynamicLibraryException();
 	}
 
+	// Load Texture
+	if (!grass.loadFromFile("./Textures/Grass.jpg") || !apple.loadFromFile("./Textures/Apple1.png") ||
+		!meat.loadFromFile("./Textures/Meat.png") || !head_down.loadFromFile("./Textures/HeadDOWN.png") ||
+		!head_up.loadFromFile("./Textures/HeadUP.png") || !head_left.loadFromFile("./Textures/HeadLEFT.png") ||
+		!head_right.loadFromFile("./Textures/HeadRIGHT.png") || !snake_body.loadFromFile("./Textures/SnakeBody.png") ||
+		!rock.loadFromFile("./Textures/Rock.png"))
+	{
+		std::cout << "Failed to load Texture in Sfml" << std::endl;
+		return ;
+	}
 	return ;
 }
 
@@ -118,37 +128,26 @@ void	SfmlGUI::draw_map_outline(void)
 
 void	SfmlGUI::set_background_texture(void)
 {
-	if (texture.loadFromFile("./Textures/Grass.jpg"))
-	{
-		texture.setRepeated(true);
-		sprite.setTexture(texture);
-		sprite.setTextureRect(sf::IntRect(0, 0, square_size * mainGame->get_map_w(), square_size * mainGame->get_map_h()));
-		sprite.setPosition(x_offset , y_offset);
-		window.draw(sprite);
-	}
+	grass.setRepeated(true);
+	sprite.setTexture(grass);
+	sprite.setTextureRect(sf::IntRect(0, 0, square_size * mainGame->get_map_w(), square_size * mainGame->get_map_h()));
+	sprite.setPosition(x_offset , y_offset);
+	window.draw(sprite);
 }
 
 void	SfmlGUI::add_fruits(sf::RectangleShape &rectangle)
 {
-	if (texture.loadFromFile("./Textures/Apple1.png"))
-	{
-		sprite.setTexture(texture);
-		sprite.setTextureRect(sf::IntRect(0, 0, square_size, square_size));
-		// sprite.setScale(1 / square_size, 1 / square_size);
-		sprite.setPosition(x_offset + std::get<0>(mainGame->get_fruit_pos()) * square_size,
-						y_offset + std::get<1>(mainGame->get_fruit_pos()) * square_size);
-		window.draw(sprite);
-	}
-
-	// rectangle.setFillColor(sf::Color::Red);
-	// rectangle.setPosition(x_offset + std::get<0>(mainGame->get_fruit_pos()) * square_size,
-	// 					y_offset + std::get<1>(mainGame->get_fruit_pos()) * square_size);
-	// window.draw(rectangle);
+	rectangle.setTexture(&apple, true);
+	rectangle.setFillColor(sf::Color::White);
+	rectangle.setPosition(x_offset + std::get<0>(mainGame->get_fruit_pos()) * square_size,
+					y_offset + std::get<1>(mainGame->get_fruit_pos()) * square_size);
+	window.draw(rectangle);
 
 	//add special fruit
 	if (std::get<0>(mainGame->get_special_fruit_pos()) >= 0 && std::get<1>(mainGame->get_special_fruit_pos()) >= 0)
 	{
-		rectangle.setFillColor(sf::Color::Magenta);
+		rectangle.setTexture(&meat, true);
+		rectangle.setFillColor(sf::Color::White);
 		rectangle.setPosition(x_offset + std::get<0>(mainGame->get_special_fruit_pos()) * square_size,
 							y_offset + std::get<1>(mainGame->get_special_fruit_pos()) * square_size);
 		window.draw(rectangle);
@@ -159,16 +158,34 @@ void	SfmlGUI::add_fruits(sf::RectangleShape &rectangle)
 void	SfmlGUI::add_snakes(sf::RectangleShape &rectangle)
 {
 	int	snake_head = 0;
-	
+	int snake1_direction;
+	// int snake2_direction;
+
+	snake1_direction = mainGame->get_snake1_direction();
 	for (std::tuple<int, int> &body_part : mainGame->get_snake1_body()) // access by reference to avoid copying
 	{
 		if (snake_head == 0)
 		{
-			rectangle.setFillColor(sf::Color::Yellow);
+			switch(snake1_direction)
+			{
+				case UP:
+					rectangle.setTexture(&head_up, true);
+					break ;
+				case DOWN:
+					rectangle.setTexture(&head_down, true);
+					break ;
+				case LEFT:
+					rectangle.setTexture(&head_left, true);
+					break ;
+				default:
+					rectangle.setTexture(&head_right, true);
+					break ;
+			}
 			snake_head = 1;
 		}
 		else
-			rectangle.setFillColor(sf::Color::Green);
+			rectangle.setTexture(&snake_body, true);
+		rectangle.setFillColor(sf::Color::White);
 		rectangle.setPosition(x_offset + std::get<0>(body_part) * square_size, y_offset + std::get<1>(body_part) * square_size);
 		window.draw(rectangle);
 	}
@@ -191,20 +208,14 @@ void	SfmlGUI::add_snakes(sf::RectangleShape &rectangle)
 	}
 }
 
-void	SfmlGUI::add_obstacles(void)
+void	SfmlGUI::add_obstacles(sf::RectangleShape &rectangle)
 {
 	for (std::tuple<int, int> &obstacle : mainGame->get_obstacles()) // access by reference to avoid copying
 	{
-		if (texture.loadFromFile("./Textures/Rock2.jpeg"))
-		{
-			sprite.setTexture(texture);
-			sprite.setTextureRect(sf::IntRect(0, 0, square_size, square_size));
-			sprite.setPosition(x_offset + std::get<0>(obstacle) * square_size, y_offset + std::get<1>(obstacle) * square_size);
-			window.draw(sprite);
-		}
-		// rectangle.setFillColor(sf::Color(185, 185, 146, 255));
-		// rectangle.setPosition(x_offset + std::get<0>(obstacle) * square_size, y_offset + std::get<1>(obstacle) * square_size);
-		// window.draw(rectangle);
+		rectangle.setTexture(&rock, true);
+		rectangle.setFillColor(sf::Color::White);
+		rectangle.setPosition(x_offset + std::get<0>(obstacle) * square_size, y_offset + std::get<1>(obstacle) * square_size);
+		window.draw(rectangle);
 	}
 }
 
@@ -264,8 +275,8 @@ void	SfmlGUI::refresh_window(void) {
 	// Add fruit
 	add_fruits(rectangle);
 
-	//add obstacles
-	add_obstacles();
+	// Add obstacles
+	add_obstacles(rectangle);
 
 	//put everyting to screen
 	window.display();

@@ -157,6 +157,8 @@ class MainGame {
 		bool	is_two_player_game();
 		int		get_score(void);
 		int		get_score2(void);
+		int		get_snake1_direction(void);
+		int		get_snake2_direction(void);
 		bool	get_if_is_snake_alive(void);
 		std::string	get_special_fruit_timer(void);
 		std::vector<std::tuple<int, int>>		&get_snake1_body(void);
