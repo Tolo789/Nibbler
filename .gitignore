@@ -36,5 +36,6 @@ nibbler
 includes/SDL2
 includes/SFML
 includes/GLFW
+includes/RtAudio
 
 *.DS_Store
