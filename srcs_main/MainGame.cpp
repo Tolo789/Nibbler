@@ -50,6 +50,22 @@ MainGame::MainGame(int ac, char **av) {
 	square_size = (maxSizeH < maxSizeW) ? maxSizeH : maxSizeW;
 	x_offset = (WINDOW_W - square_size * map_w) / 2;
 	y_offset = (WINDOW_H - square_size * map_h) / 2;
+
+	// Load Audio Library
+	audiodl_handle = dlopen((std::string(DL_PREFIX) + AUDIODL_NAME + DL_POSTFIX).c_str(), RTLD_LAZY | RTLD_LOCAL);
+	if (!audiodl_handle) {
+		dlerror_wrapper();
+		return ;
+	}
+	// Create interface class
+	IDynamicAudioLibrary	*(*AudioLibraryCreator)(void);
+	AudioLibraryCreator = (IDynamicAudioLibrary *(*)(void)) dlsym(audiodl_handle, AUDIODL_CREATOR_FUNC);
+	if (!AudioLibraryCreator) {
+		dlerror_wrapper();
+		return ;
+	}
+	audioLib = AudioLibraryCreator();
+
 	// Everything good
 	canRun = true;
 }
@@ -60,6 +76,19 @@ MainGame::MainGame(MainGame const & src) {
 }
 
 MainGame::~MainGame(void) {
+	// Close audio lib
+	if (audiodl_handle) {
+		void	*(*AudioLibraryDestructor)(IDynamicAudioLibrary *);
+		AudioLibraryDestructor = (void *(*)(IDynamicAudioLibrary*)) dlsym(audiodl_handle, AUDIODL_DESTRUCTOR_FUNC);
+		if (!AudioLibraryDestructor)
+			dlerror_wrapper();
+		else {
+			if (audioLib)
+				AudioLibraryDestructor(audioLib);
+
+			dlclose(audiodl_handle);
+		}
+	}
 	return ;
 }
 
@@ -193,6 +222,7 @@ void	MainGame::update_game_state(void) {
 		is_snake_alive = will_snake_be_alive();
 		if (!is_snake_alive) {
 			std::cout << "Game Over !" << std::endl;
+			audioLib->DEATH_SOUND_FUNC();
 			return;
 		}
 		//snakes actual moving
@@ -476,11 +506,14 @@ void	MainGame::move_snake(std::vector<std::tuple<int, int>> &snake_body, int &sn
 		std::get<1>(special_fruit_pos) = -1;
 		score += SPECIAL_FRUIT_POINT;
 	}
-	if ((hasEat || hasEatSpecial) && frame_time > MIN_FRAME_TIME) {
-		frame_time = INITIAL_FRAME_TIME - (FRAME_DECREASE_DELTA * ((score1 + score2) / POINT_DELTA_FRAME_DECRASE));
-		// std::cout << frame_time << " -> " << (frame_time < MIN_FRAME_TIME ? MIN_FRAME_TIME : frame_time) << '\n';
-		if (frame_time < MIN_FRAME_TIME)
-			frame_time = MIN_FRAME_TIME;
+	if (hasEat || hasEatSpecial) {
+		audioLib->EAT_SOUND_FUNC();
+		// Increase speed of game each time we eat a fruit
+		if (frame_time > MIN_FRAME_TIME) {
+			frame_time = INITIAL_FRAME_TIME - (FRAME_DECREASE_DELTA * ((score1 + score2) / POINT_DELTA_FRAME_DECRASE));
+			if (frame_time < MIN_FRAME_TIME)
+				frame_time = MIN_FRAME_TIME;
+		}
 	}
 }
 
@@ -653,12 +686,11 @@ int		MainGame::run(void) {
 	score2 = 0;
 	fruit_pos = std::make_tuple(0, 0);
 
-	//init snake
 	init_snakes();
-	//init obstacles
 	init_obstacles();
-
 	set_fruit_pos();
+
+	audioLib->START_SOUND_FUNC();
 
 	// Start game loop
 	while (running) {

@@ -1,21 +1,21 @@
-#include "RtAudioInterface.hpp"
+#include "SfmlAudio.hpp"
 
 // === CONSTRUCTOR =============================================================
 
 RtAudioInterface::RtAudioInterface(void) {
-	RtAudio audio;
-  // Determine the number of devices available
-  unsigned int devices = audio.getDeviceCount();
-  // Scan through devices for various capabilities
-  RtAudio::DeviceInfo info;
-  for ( unsigned int i=0; i<devices; i++ ) {
-    info = audio.getDeviceInfo( i );
-    if ( info.probed == true ) {
-      // Print, for example, the maximum number of output channels for each device
-      std::cout << "device = " << i;
-      std::cout << ": maximum output channels = " << info.outputChannels << "\n";
-    }
-  }
+	active = false;
+
+	if (!startBuffer.loadFromFile("sounds/start.wav")) {
+		return ;
+	}
+	if (!eatBuffer.loadFromFile("sounds/eat.wav")) {
+		return ;
+	}
+	if (!deathBuffer.loadFromFile("sounds/death.wav")) {
+		return ;
+	}
+
+	active = true;
 	return ;
 }
 
@@ -25,6 +25,8 @@ RtAudioInterface::RtAudioInterface(RtAudioInterface const & src) {
 }
 
 RtAudioInterface::~RtAudioInterface(void) {
+	if (!active)
+		return ;
 	return ;
 }
 
@@ -43,11 +45,27 @@ RtAudioInterface& RtAudioInterface::operator=(RtAudioInterface const & rhs) {
 // === END PRIVATE FUNCS =======================================================
 
 // === OVERRIDES ===============================================================
+void	RtAudioInterface::play_start_sound (void) {
+	if (!active)
+		return ;
+	sound.setBuffer(startBuffer);
+	sound.play();
+	return ;
+}
+
 void	RtAudioInterface::play_eat_sound (void) {
+	if (!active)
+		return ;
+	sound.setBuffer(eatBuffer);
+	sound.play();
 	return ;
 }
 
 void	RtAudioInterface::play_death_sound (void) {
+	if (!active)
+		return ;
+	sound.setBuffer(deathBuffer);
+	sound.play();
 	return ;
 }
 
