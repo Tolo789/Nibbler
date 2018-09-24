@@ -20,12 +20,15 @@ MainGame::MainGame(int ac, char **av) {
 	// Options parsing
 	collide_with_walls = true;
 	two_player_game = false;
+	obstacles_available = false;
 	int	i = 1;
 	while (i < ac - 2) {
 		if (std::string(NO_WALL_OPTION).compare(av[i]) == 0)
 			collide_with_walls = false;
 		else if (std::string(TWO_PLAYER_OPTION).compare(av[i]) == 0)
 			two_player_game = true;
+		else if (std::string(OBSTACLE_OPTION).compare(av[i]) == 0)
+			obstacles_available = true;
 		else {
 			std::cerr << "Unknown option given! (" << av[i] << ")" << std::endl;
 			print_usage();
@@ -117,6 +120,10 @@ int		MainGame::get_map_h(void) {
 
 bool	MainGame::is_two_player_game(void) {
 	return two_player_game;
+}
+
+bool	MainGame::get_obstacles_available(void) {
+	return obstacles_available;
 }
 
 int		MainGame::get_score(void) {
@@ -410,9 +417,12 @@ bool	MainGame::will_snake_be_alive(void) {
 		}
 	}
 	// Check if snake1 collide with obstacle
-	for (it = obstacles.begin(); it != obstacles.end(); ++it ) {
-		if (headX == std::get<0>(*it) && headY == std::get<1>(*it)) {
-			return false;
+	if (obstacles_available)
+	{
+		for (it = obstacles.begin(); it != obstacles.end(); ++it ) {
+			if (headX == std::get<0>(*it) && headY == std::get<1>(*it)) {
+				return false;
+			}
 		}
 	}
 
@@ -438,14 +448,16 @@ bool	MainGame::will_snake_be_alive(void) {
 				return false;
 			}
 		}
-		// Check snake2 colide with obstacle	
-		for (it = obstacles.begin(); it != obstacles.end(); ++it ) {
-			if (head2X == std::get<0>(*it) && head2Y == std::get<1>(*it)) {
-				return false;
+		// Check snake2 colide with obstacle
+		if (obstacles_available)
+		{
+			for (it = obstacles.begin(); it != obstacles.end(); ++it ) {
+				if (head2X == std::get<0>(*it) && head2Y == std::get<1>(*it)) {
+					return false;
+				}
 			}
 		}
 	}
-
 	return true;
 }
 
@@ -684,9 +696,10 @@ int		MainGame::run(void) {
 	int gui_ret;
 
 	// init vars
+	running = true;
+	restart_request = false;
 	frame_time = INITIAL_FRAME_TIME;
 	currentLibrary = NULL;
-	running = true;
 	dl_index = 3; // TODO let choose starting library with argv
 	dl_pastIndex = -1;
 	timer = time(NULL);
@@ -695,7 +708,8 @@ int		MainGame::run(void) {
 	fruit_pos = std::make_tuple(0, 0);
 
 	init_snakes();
-	init_obstacles();
+	if (obstacles_available)
+		init_obstacles();
 	set_fruit_pos();
 
 	audioLib->START_SOUND_FUNC();
@@ -707,10 +721,14 @@ int		MainGame::run(void) {
 
 		gui_ret = update_gui();
 		if (gui_ret != EXIT_SUCCESS || !running)
-			return gui_ret;
+			break ;
 
 		regulate_frame_sleep();
 		// running = false;
+	}
+	if (restart_request) {
+		std::cout << "Starting new game !" << std::endl;
+		return run();
 	}
 	return gui_ret;
 }
@@ -737,6 +755,14 @@ void	MainGame::button_pressed(const char *button)
 			if (std::get<0>(change_direction_pair).compare(key) == 0) {
 				change_direction_to(snake2_direction, snake2_direction_requested, std::get<1>(change_direction_pair));
 				return ;
+			}
+		}
+		if (!is_snake_alive)
+		{
+			if (key.compare("R") == 0 || key.compare("r") == 0)
+			{
+				change_library_request("0");
+				restart_request = true;
 			}
 		}
 		// std::cout << "value not useful.." << std::endl;

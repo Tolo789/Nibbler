@@ -276,7 +276,8 @@ void	SfmlGUI::refresh_window(void) {
 	add_fruits(rectangle);
 
 	// Add obstacles
-	add_obstacles(rectangle);
+	if (mainGame->get_obstacles_available())
+		add_obstacles(rectangle);
 
 	//put everyting to screen
 	window.display();

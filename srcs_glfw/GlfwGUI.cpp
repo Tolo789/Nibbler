@@ -6,7 +6,7 @@
 /*   By: jichen-m <jichen-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/12 19:46:10 by jichen-m          #+#    #+#             */
-/*   Updated: 2018/09/20 15:53:41 by jichen-m         ###   ########.fr       */
+/*   Updated: 2018/09/24 18:12:06 by jichen-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -376,17 +376,19 @@ void	GlfwGUI::refresh_window(void)
 	put_special_fruit(mainGame->get_special_fruit_pos());
 
 	//add obstacles
-	for (std::tuple<int, int> &obstacle : mainGame->get_obstacles()) // access by reference to avoid copying
+	if (mainGame->get_obstacles_available())
 	{
- 		init_buffer(std::get<0>(obstacle), std::get<1>(obstacle));
-		init_shaders(GRAY_SHADER);
-		init_programme();
-		glUseProgram(shader_programme);
-		glBindVertexArray(vao);
-		//drawing all the vertex of the triangle
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		for (std::tuple<int, int> &obstacle : mainGame->get_obstacles()) // access by reference to avoid copying
+		{
+			init_buffer(std::get<0>(obstacle), std::get<1>(obstacle));
+			init_shaders(GRAY_SHADER);
+			init_programme();
+			glUseProgram(shader_programme);
+			glBindVertexArray(vao);
+			//drawing all the vertex of the triangle
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+		}
 	}
-
 
 	//put everything to screen
 	glfwSwapBuffers(this->window);

@@ -16,6 +16,7 @@
 # define MAX_ARGC 5
 # define NO_WALL_OPTION "-w"
 # define TWO_PLAYER_OPTION "-p"
+# define OBSTACLE_OPTION "-o"
 
 # define DL_COUNT 3
 # define DL1_NAME "glfw"
@@ -131,6 +132,7 @@ class MainGame {
 		int		map_h;
 		int		map_w;
 		bool	two_player_game;
+		bool	obstacles_available;
 		int		score1;
 		int		score2;
 		bool	is_snake_alive;
@@ -139,6 +141,7 @@ class MainGame {
 		int		snake1_direction_requested;
 		int		snake2_direction;
 		int		snake2_direction_requested;
+		bool	restart_request;
 		std::vector<std::tuple<int, int>>	snake1_body;
 		std::vector<std::tuple<int, int>>	snake2_body;
 		std::tuple<int, int>	fruit_pos;
@@ -164,7 +167,8 @@ class MainGame {
 		int		get_y_offset(void);
 		int		get_map_w(void);
 		int		get_map_h(void);
-		bool	is_two_player_game();
+		bool	is_two_player_game(void);
+		bool	get_obstacles_available(void);
 		int		get_score(void);
 		int		get_score2(void);
 		int		get_snake1_direction(void);
