@@ -37,3 +37,4 @@ includes/SDL2
 includes/SFML
 includes/GLFW
 
+*.DS_Store
