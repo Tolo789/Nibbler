@@ -6,7 +6,7 @@ DL2_NAME = dl_glfw.so
 
 DL3_NAME = dl_sfml.so
 
-AUDIODL_NAME = dl_rtaudiom.so
+AUDIODL_NAME = dl_sfml_audio.so
 
 
 SDIR_MAIN = ./srcs_main/
@@ -17,7 +17,7 @@ SDIR_DL2 = ./srcs_glfw/
 
 SDIR_DL3 = ./srcs_sfml/
 
-SDIR_AUDIODL = ./srcs_rtaudio/
+SDIR_AUDIODL = ./srcs_sfml_audio/
 
 
 INCLUDES_DIR = includes
@@ -31,7 +31,7 @@ SRC_DL2 = 	$(SDIR_DL2)GlfwGUI.cpp $(SRC_MAIN)
 
 SRC_DL3 = 	$(SDIR_DL3)SfmlGUI.cpp $(SRC_MAIN)
 
-SRC_AUDIODL = 	$(SDIR_AUDIODL)RtAudioInterface.cpp
+SRC_AUDIODL = 	$(SDIR_AUDIODL)SfmlAudio.cpp
 
 
 OBJ_MAIN = $(SRC_MAIN:.cpp=.o)
@@ -58,7 +58,7 @@ DL2_FLAGS = $(DLFLAGS) `pkg-config --libs glfw3` -framework OpenGL
 
 DL3_FLAGS = $(DLFLAGS) `pkg-config --libs sfml-all`
 
-AUDIODL_FLAGS = $(DLFLAGS) -L /Users/jichen-m/.brew/Cellar/rt-audio/5.0.0/lib -lrtAudio
+AUDIODL_FLAGS = $(DLFLAGS) `pkg-config --libs sfml-all`
 
 CC = clang++
 
@@ -79,9 +79,6 @@ install:
 	cp -r ~/.brew/Cellar/sfml/2.4.2_1/include/SFML ./$(INCLUDES_DIR)
 	export LD_LIBRARY_PATH=~/.brew/Cellar/sfml/2.4.2_1/lib
 	echo "export LD_LIBRARY_PATH=~/.brew/Cellar/sfml/2.4.2_1/lib" >> ~/.zshrc
-	brew install rt-audio
-	mkdir includes/RtAudio
-	cp -r ~/.brew/Cellar/rt-audio/5.0.0/include/RtAudio.h ./$(INCLUDES_DIR)/RtAudio
 
 reinstall_all: brew_reset install
 	@echo "				reinstall all"
@@ -110,7 +107,7 @@ $(NAME): $(OBJ_MAIN)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	@/bin/rm -f $(OBJ_MAIN) $(OBJ_DL1) $(OBJ_DL2) $(OBJ_DL3)
+	@/bin/rm -f $(OBJ_MAIN) $(OBJ_DL1) $(OBJ_DL2) $(OBJ_DL3) $(OBJ_AUDIODL)
 	@echo "				All project's .o deleted"
 
 fclean: clean

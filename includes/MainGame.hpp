@@ -10,6 +10,7 @@
 # include <iostream>
 # include <chrono>
 # include "IDynamicLibrary.hpp"
+# include "IDynamicAudioLibrary.hpp"
 
 # define MIN_ARGC 3
 # define MAX_ARGC 5
@@ -20,6 +21,7 @@
 # define DL1_NAME "glfw"
 # define DL2_NAME "sdl"
 # define DL3_NAME "sfml"
+# define AUDIODL_NAME "sfml_audio"
 # define DL_PREFIX "dl_"
 # define DL_POSTFIX ".so"
 
@@ -41,6 +43,12 @@
 # define GET_USER_INPUT_FUNC get_user_input
 # define REFRESH_WINDOW_FUNC refresh_window
 # define CLOSE_WINDOW_FUNC close_window
+
+# define AUDIODL_CREATOR_FUNC "getAudioInterface"
+# define AUDIODL_DESTRUCTOR_FUNC "deleteAudioInterface"
+# define START_SOUND_FUNC play_start_sound
+# define EAT_SOUND_FUNC play_eat_sound
+# define DEATH_SOUND_FUNC play_death_sound
 
 # define KEY_0 "0"
 # define KEY_1 "1"
@@ -138,9 +146,11 @@ class MainGame {
 		time_t		spawntime;
 		time_t		deletetime;
 		std::chrono::high_resolution_clock::time_point creation_precise_time;
-
 		std::vector<std::tuple<int, int>>	obstacles;
 
+		// Audio vars
+		void	*audiodl_handle;
+		IDynamicAudioLibrary *audioLib;
 
 	public:
 		MainGame(int ac, char **av);

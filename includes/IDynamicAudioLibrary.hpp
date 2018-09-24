@@ -8,6 +8,7 @@ class IDynamicAudioLibrary {
 		IDynamicAudioLibrary(void) {};
 		virtual ~IDynamicAudioLibrary(void) {};
 
+		virtual void	play_start_sound (void) = 0;
 		virtual void	play_eat_sound (void) = 0;
 		virtual void	play_death_sound (void) = 0;
 
