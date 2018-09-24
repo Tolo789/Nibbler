@@ -9,6 +9,7 @@ MainGame::MainGame(void) {
 MainGame::MainGame(int ac, char **av) {
 	canRun = false;
 	running = false;
+	audiodl_handle = NULL;
 
 	// First basic check
 	if (ac < MIN_ARGC || ac > MAX_ARGC) {
@@ -36,7 +37,6 @@ MainGame::MainGame(int ac, char **av) {
 		}
 		i++;
 	}
-
 	// Map size parsing
 	map_w = atoi(av[i]);
 	map_h = atoi(av[i + 1]);
@@ -202,6 +202,7 @@ void	MainGame::print_usage(void) {
 	std::cout << "Usage: ./nibbler [-option1] [-option2] map_width map_height" << std::endl;
 	std::cout << "Available options:" << std::endl << "\t" << NO_WALL_OPTION << " -> disable wall collision" << std::endl;
 	std::cout  << "\t" << TWO_PLAYER_OPTION << " -> two player game" << std::endl;
+	std::cout  << "\t" << OBSTACLE_OPTION << " -> enable obstacles" << std::endl;
 }
 
 void	MainGame::change_library_request(std::string key_code) {

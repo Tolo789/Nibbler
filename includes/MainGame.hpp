@@ -13,7 +13,7 @@
 # include "IDynamicAudioLibrary.hpp"
 
 # define MIN_ARGC 3
-# define MAX_ARGC 5
+# define MAX_ARGC 6
 # define NO_WALL_OPTION "-w"
 # define TWO_PLAYER_OPTION "-p"
 # define OBSTACLE_OPTION "-o"
