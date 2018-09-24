@@ -41,6 +41,11 @@ class SfmlGUI : public IDynamicLibrary {
 		sf::Texture	head_left;
 		sf::Texture	head_right;
 		sf::Texture	snake_body;
+		sf::Texture	head_down2;
+		sf::Texture	head_up2;
+		sf::Texture	head_left2;
+		sf::Texture	head_right2;
+		sf::Texture	snake_body2;
 		sf::Texture	rock;
 		sf::Sprite	sprite;
 

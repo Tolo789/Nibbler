@@ -64,9 +64,6 @@ CC = clang++
 
 all: $(ALL)
 
-# brew_reset:
-# 	rm -rf $HOME/.brew && git clone --depth=1 https://github.com/Homebrew/brew $HOME/.brew && export PATH=$HOME/.brew/bin:$PATH && brew update && echo "export PATH=$HOME/.brew/bin:$PATH" >> ~/.zshrc
-
 install:
 	brew install pkg-config
 	brew install sdl2
@@ -79,9 +76,6 @@ install:
 	cp -r ~/.brew/Cellar/sfml/2.4.2_1/include/SFML ./$(INCLUDES_DIR)
 	export LD_LIBRARY_PATH=~/.brew/Cellar/sfml/2.4.2_1/lib
 	echo "export LD_LIBRARY_PATH=~/.brew/Cellar/sfml/2.4.2_1/lib" >> ~/.zshrc
-
-reinstall_all: brew_reset install
-	@echo "				reinstall all"
 
 $(DL1_NAME): $(OBJ_DL1)
 	$(CC) $(DL1_FLAGS) -o $(DL1_NAME) $(OBJ_DL1)
