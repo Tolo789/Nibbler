@@ -27,10 +27,13 @@ SfmlGUI::SfmlGUI(MainGame *mainGame) : mainGame(mainGame), window(sf::VideoMode(
 
 	// Load Texture
 	if (!grass.loadFromFile("./Textures/Grass.jpg") || !apple.loadFromFile("./Textures/Apple1.png") ||
-		!meat.loadFromFile("./Textures/Meat.png") || !head_down.loadFromFile("./Textures/HeadDOWN.png") ||
-		!head_up.loadFromFile("./Textures/HeadUP.png") || !head_left.loadFromFile("./Textures/HeadLEFT.png") ||
-		!head_right.loadFromFile("./Textures/HeadRIGHT.png") || !snake_body.loadFromFile("./Textures/SnakeBody.png") ||
-		!rock.loadFromFile("./Textures/Rock.png"))
+		!meat.loadFromFile("./Textures/Meat.png") || !rock.loadFromFile("./Textures/Rock.png") ||
+		!head_down.loadFromFile("./Textures/HeadDOWN.png") || !head_down2.loadFromFile("./Textures/HeadDOWN2.png") ||
+		!head_up.loadFromFile("./Textures/HeadUP.png") || !head_up2.loadFromFile("./Textures/HeadUP2.png") ||
+		!head_left.loadFromFile("./Textures/HeadLEFT.png") || !head_left2.loadFromFile("./Textures/HeadLEFT2.png") ||
+		!head_right.loadFromFile("./Textures/HeadRIGHT.png") || !head_right2.loadFromFile("./Textures/HeadRIGHT2.png") ||
+		!snake_body.loadFromFile("./Textures/SnakeBody.png") || !snake_body2.loadFromFile("./Textures/SnakeBody2.png")
+		)
 	{
 		std::cout << "Failed to load Texture in Sfml" << std::endl;
 		return ;
@@ -157,16 +160,15 @@ void	SfmlGUI::add_fruits(sf::RectangleShape &rectangle)
 
 void	SfmlGUI::add_snakes(sf::RectangleShape &rectangle)
 {
-	int	snake_head = 0;
-	int snake1_direction;
-	// int snake2_direction;
+	bool	snake_head = true;
+	int snake_direction;
 
-	snake1_direction = mainGame->get_snake1_direction();
+	snake_direction = mainGame->get_snake1_direction();
 	for (std::tuple<int, int> &body_part : mainGame->get_snake1_body()) // access by reference to avoid copying
 	{
-		if (snake_head == 0)
+		if (snake_head)
 		{
-			switch(snake1_direction)
+			switch(snake_direction)
 			{
 				case UP:
 					rectangle.setTexture(&head_up, true);
@@ -181,7 +183,7 @@ void	SfmlGUI::add_snakes(sf::RectangleShape &rectangle)
 					rectangle.setTexture(&head_right, true);
 					break ;
 			}
-			snake_head = 1;
+			snake_head = false;
 		}
 		else
 			rectangle.setTexture(&snake_body, true);
@@ -190,16 +192,31 @@ void	SfmlGUI::add_snakes(sf::RectangleShape &rectangle)
 		window.draw(rectangle);
 	}
 	if (mainGame->is_two_player_game()) {
-		snake_head = 0;
+		snake_direction = mainGame->get_snake2_direction();
+		snake_head = true;
 		for (std::tuple<int, int> &body_part : mainGame->get_snake2_body()) // access by reference to avoid copying
 		{
-			if (snake_head == 0)
+			if (snake_head)
 			{
-				rectangle.setFillColor(sf::Color::Yellow);
-				snake_head = 1;
+				switch(snake_direction)
+				{
+					case UP:
+						rectangle.setTexture(&head_up2, true);
+						break ;
+					case DOWN:
+						rectangle.setTexture(&head_down2, true);
+						break ;
+					case LEFT:
+						rectangle.setTexture(&head_left2, true);
+						break ;
+					default:
+						rectangle.setTexture(&head_right2, true);
+						break ;
+				}
+				snake_head = false;
 			}
 			else
-				rectangle.setFillColor(sf::Color::Cyan);
+				rectangle.setTexture(&snake_body2, true);
 			rectangle.setPosition(x_offset + std::get<0>(body_part) * square_size, y_offset + std::get<1>(body_part) * square_size);
 			window.draw(rectangle);
 		}

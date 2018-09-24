@@ -186,7 +186,7 @@ MainGame& MainGame::operator=(MainGame const & rhs) {
 // === PRIVATE FUNCS ===========================================================
 
 int		MainGame::dlerror_wrapper() {
-	std::cerr << "My Custom Error: " << dlerror() << std::endl;
+	std::cerr << "Dynamic Library Error: " << dlerror() << std::endl;
 	running = false;
 	return EXIT_FAILURE;
 }
