@@ -69,6 +69,17 @@ MainGame::MainGame(int ac, char **av) {
 	}
 	audioLib = AudioLibraryCreator();
 
+	// Print game instructions
+	std::cout << "\tNIBBLER" << std::endl;
+	std::cout << "Use following keys to change GUI:" << std::endl;
+	std::cout << " - '" << KEY_1 << "' for GLFW" << std::endl;
+	std::cout << " - '" << KEY_2 << "' for SDL" << std::endl;
+	std::cout << " - '" << KEY_3 << "' for SFML" << std::endl;
+	std::cout << "Move snake with WASD keys" << std::endl;
+	if (two_player_game)
+		std::cout << "Move second snake with arrow keys" << std::endl;
+	std::cout << "Close game at any moment with '" << KEY_0 << "'" << std::endl;
+
 	// Everything good
 	canRun = true;
 }
@@ -237,7 +248,7 @@ void	MainGame::update_game_state(void) {
 		}
 		is_snake_alive = will_snake_be_alive();
 		if (!is_snake_alive) {
-			std::cout << "Game Over !" << std::endl;
+			std::cout << "Game Over ! (Press 'R' to restart)" << std::endl;
 			audioLib->DEATH_SOUND_FUNC();
 			return;
 		}
@@ -701,7 +712,7 @@ int		MainGame::run(void) {
 	restart_request = false;
 	frame_time = INITIAL_FRAME_TIME;
 	currentLibrary = NULL;
-	dl_index = 3; // TODO let choose starting library with argv
+	dl_index = 1;
 	dl_pastIndex = -1;
 	timer = time(NULL);
 	score1 = 0;
