@@ -4,6 +4,15 @@
 # Objective
 Create a Snake-like game in C++ with at least 3 different GUIs. These GUIs being shared libraries.
 
+### GLFW window
+![Alt text](/screenshots/GLFWscreenshot.png?raw=true "GLFW")
+
+### SLD window
+![Alt text](/screenshots/SDLscreenshot.png?raw=true "SDL")
+
+### SFML window
+![Alt text](/screenshots/SFMLscreenshot.png?raw=true "SFML")
+
 # Project's Constraints
 The project must follow the following constraints:
 - Since the GUIs are shared libraries the user must be able to switch between GUI seamlessy while in game.
