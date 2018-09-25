@@ -26,7 +26,7 @@ SfmlGUI::SfmlGUI(MainGame *mainGame) : mainGame(mainGame), window(sf::VideoMode(
 	}
 
 	// Load Texture
-	if (!grass.loadFromFile("./Textures/Grass.jpg") || !apple.loadFromFile("./Textures/Apple1.png") ||
+	if (!grass.loadFromFile("./Textures/Grass.png") || !apple.loadFromFile("./Textures/Apple1.png") ||
 		!meat.loadFromFile("./Textures/Meat.png") || !rock.loadFromFile("./Textures/Rock.png") ||
 		!head_down.loadFromFile("./Textures/HeadDOWN.png") || !head_down2.loadFromFile("./Textures/HeadDOWN2.png") ||
 		!head_up.loadFromFile("./Textures/HeadUP.png") || !head_up2.loadFromFile("./Textures/HeadUP2.png") ||
@@ -38,6 +38,21 @@ SfmlGUI::SfmlGUI(MainGame *mainGame) : mainGame(mainGame), window(sf::VideoMode(
 		std::cout << "Failed to load Texture in Sfml" << std::endl;
 		return ;
 	}
+	apple.setSmooth(true);
+	rock.setSmooth(true);
+	meat.setSmooth(true);
+
+	head_down.setSmooth(true);
+	head_up.setSmooth(true);
+	head_left.setSmooth(true);
+	head_right.setSmooth(true);
+	snake_body.setSmooth(true);
+
+	head_down2.setSmooth(true);
+	head_up2.setSmooth(true);
+	head_left2.setSmooth(true);
+	head_right2.setSmooth(true);
+	snake_body2.setSmooth(true);
 	return ;
 }
 
