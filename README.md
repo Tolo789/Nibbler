@@ -43,5 +43,7 @@ Move second snake with Arrow keys.
 
 Close game at any moment with '0'.
 
+Press 'R' when dead to restart the game.
+
 # Disclaimer
 We do not own any of the assets used for this game, all ownership and credit goes to the respective creators. 
