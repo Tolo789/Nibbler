@@ -32,8 +32,8 @@
 *.app
 
 # Dynamic Libraries includes
-includes/SDL2
-includes/SFML
-includes/GLFW
+*/includes/SDL2
+*/includes/SFML
+*/includes/GLFW
 
 *.DS_Store
